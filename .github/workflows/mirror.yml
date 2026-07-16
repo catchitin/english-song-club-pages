@@ -1,0 +1,65 @@
+name: Mirror GAS pages to GitHub Pages
+
+# 英唱社公開網頁靜態鏡像：
+# GAS HtmlService 的 Google iframe 外殼在手機（LINE WebView／行動 Safari）常逾時打不開，
+# 所以反向由 Actions 定時 curl /exec 抓「真正的內頁 HTML」發佈成靜態 Pages（手機可開、CDN 秒開）。
+# GAS 端零改動、零 token；抓不到（GAS 節流/冷啟動）就讓 job 失敗，Pages 保留上一版，不會發半套。
+
+on:
+  schedule:
+    - cron: '17 * * * *'   # 每小時；GitHub cron 有幾分鐘漂移屬正常
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Fetch pages from GAS
+        env:
+          EXEC: https://script.google.com/macros/s/AKfycbyWnEPtYygRHFXCit_siswpLjD-SjF-H47P72xEW2Ybah-mok2UcSZdJMKFUpApVPL1/exec
+          UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36
+        run: |
+          set -e
+          mkdir -p out
+          views="home songs board appreciate top themes hall rules more leave"
+          for v in $views; do
+            ok=0
+            for try in 1 2 3; do
+              if curl -sL --max-time 120 -A "$UA" -o "out/$v.html" "$EXEC?p=$v"; then
+                # GAS 節流/錯誤頁很小；正常頁至少數十 KB，且必須是 HTML
+                size=$(wc -c < "out/$v.html")
+                if [ "$size" -gt 20000 ] && head -c 300 "out/$v.html" | grep -qi '<!doctype html\|<html'; then ok=1; break; fi
+              fi
+              echo "retry $try for $v"; sleep 20
+            done
+            [ "$ok" = 1 ] || { echo "FAILED to fetch $v"; exit 1; }
+            echo "fetched $v ($(wc -c < out/$v.html) bytes)"
+          done
+      - name: Rewrite internal links to static pages
+        run: |
+          set -e
+          cd out
+          for v in home songs board appreciate top themes hall rules more leave; do
+            # 站內導覽連結改指靜態頁；帶其他參數的連結（?p=me&m=…）保留原 GAS 網址
+            sed -i -E "s|https://script\\.google\\.com/macros/s/[A-Za-z0-9_-]+/exec\\?p=$v([\"'])|$v.html\\1|g" *.html
+          done
+          cp home.html index.html
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
