@@ -25,12 +25,12 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      EXEC: https://script.google.com/macros/s/AKfycbyWnEPtYygRHFXCit_siswpLjD-SjF-H47P72xEW2Ybah-mok2UcSZdJMKFUpApVPL1/exec
+      UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36
     steps:
       - uses: actions/checkout@v4
       - name: Fetch pages from GAS
-        env:
-          EXEC: https://script.google.com/macros/s/AKfycbyWnEPtYygRHFXCit_siswpLjD-SjF-H47P72xEW2Ybah-mok2UcSZdJMKFUpApVPL1/exec
-          UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36
         run: |
           set -e
           mkdir -p raw out
@@ -55,6 +55,29 @@ jobs:
             python3 scripts/extract_userhtml.py "raw/$v.html" "out/$v.html"
             head -c 100 "out/$v.html" | grep -qi '<!doctype html' || { echo "extract failed for $v"; exit 1; }
           done
+      - name: Fetch member album pages (?p=me&m=)
+        run: |
+          set -e
+          # 成員清單直接取自剛抓的 songs 頁內嵌 MEMBERS JSON（現役成員、英文 display 名）
+          python3 -c "import re, json; s = open('out/songs.html', encoding='utf-8').read(); print('\n'.join(json.loads(re.search(r',MEMBERS=(\[[^\]]*\])', s).group(1))))" > members.txt
+          [ -s members.txt ] || { echo 'no members found'; exit 1; }
+          cat members.txt
+          while read -r name; do
+            [ -n "$name" ] || continue
+            # 檔名用 encodeURIComponent 同款編碼，跟 GAS 端 staticMeUrl_ 對齊
+            enc=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1], safe=\"!'()*-._~\"))" "$name")
+            ok=0
+            for try in 1 2 3; do
+              if curl -sL --max-time 120 -A "$UA" -o "raw/me-$enc.html" "$EXEC?p=me&m=$enc"; then
+                size=$(wc -c < "raw/me-$enc.html")
+                if [ "$size" -gt 20000 ] && grep -q 'userHtml' "raw/me-$enc.html"; then ok=1; break; fi
+              fi
+              echo "retry $try for me/$name"; sleep 20
+            done
+            [ "$ok" = 1 ] || { echo "FAILED to fetch me/$name"; exit 1; }
+            python3 scripts/extract_userhtml.py "raw/me-$enc.html" "out/me-$enc.html"
+            echo "me/$name ok ($(wc -c < out/me-$enc.html) bytes)"
+          done < members.txt
       - name: Rewrite internal links to static pages
         run: |
           set -e
