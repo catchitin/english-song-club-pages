@@ -26,26 +26,34 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - uses: actions/checkout@v4
       - name: Fetch pages from GAS
         env:
           EXEC: https://script.google.com/macros/s/AKfycbyWnEPtYygRHFXCit_siswpLjD-SjF-H47P72xEW2Ybah-mok2UcSZdJMKFUpApVPL1/exec
           UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36
         run: |
           set -e
-          mkdir -p out
+          mkdir -p raw out
           views="home songs board appreciate top themes hall rules more leave"
           for v in $views; do
             ok=0
             for try in 1 2 3; do
-              if curl -sL --max-time 120 -A "$UA" -o "out/$v.html" "$EXEC?p=$v"; then
-                # GAS 節流/錯誤頁很小；正常頁至少數十 KB，且必須是 HTML
-                size=$(wc -c < "out/$v.html")
-                if [ "$size" -gt 20000 ] && head -c 300 "out/$v.html" | grep -qi '<!doctype html\|<html'; then ok=1; break; fi
+              if curl -sL --max-time 120 -A "$UA" -o "raw/$v.html" "$EXEC?p=$v"; then
+                # /exec 回的是 Google sandbox 外殼（真內容 escape 在 userHtml）；節流/錯誤頁很小
+                size=$(wc -c < "raw/$v.html")
+                if [ "$size" -gt 20000 ] && grep -q 'userHtml' "raw/$v.html"; then ok=1; break; fi
               fi
               echo "retry $try for $v"; sleep 20
             done
             [ "$ok" = 1 ] || { echo "FAILED to fetch $v"; exit 1; }
-            echo "fetched $v ($(wc -c < out/$v.html) bytes)"
+            echo "fetched $v ($(wc -c < raw/$v.html) bytes)"
+          done
+      - name: Extract userHtml (strip Google wrapper)
+        run: |
+          set -e
+          for v in home songs board appreciate top themes hall rules more leave; do
+            python3 scripts/extract_userhtml.py "raw/$v.html" "out/$v.html"
+            head -c 100 "out/$v.html" | grep -qi '<!doctype html' || { echo "extract failed for $v"; exit 1; }
           done
       - name: Rewrite internal links to static pages
         run: |
