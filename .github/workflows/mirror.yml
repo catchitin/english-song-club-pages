@@ -87,6 +87,10 @@ jobs:
             sed -i -E "s|https://script\\.google\\.com/macros/s/[A-Za-z0-9_-]+/exec\\?p=$v([\"'])|$v.html\\1|g" *.html
           done
           cp home.html index.html
+      - name: Include versioned static pages
+        run: |
+          set -e
+          cp -R static/. out/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

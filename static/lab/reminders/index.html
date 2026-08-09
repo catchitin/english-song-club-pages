@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<!-- Public design snapshot of the @845 personal-reminder release, published 2026-08-10. -->
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="英唱小幫手個人提醒情境與互動設計預覽。">
+  <title>英唱小幫手｜個人提醒設計預覽</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&amp;family=Orbitron:wght@600;700&amp;family=Share+Tech+Mono&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg-1: #070c18;
+      --bg-2: #0d1730;
+      --surface-1: #111d3a;
+      --surface-2: #0c1630;
+      --surface-3: #172847;
+      --border-1: #2a4f8a;
+      --fg-1: #eef6ff;
+      --fg-2: #a9c8eb;
+      --fg-3: #7897c4;
+      --accent-cyan: #26d4f0;
+      --accent-pink: #ff2d8e;
+      --accent-gold: #ffd633;
+      --status-pass: #3dff9e;
+      --status-fail: #ff7189;
+      --line-bg: #91b9a7;
+      --line-header: #ffffff;
+      --line-text: #24272d;
+      --line-muted: #687078;
+      --line-bubble: #ffffff;
+      --line-chip: #ffffff;
+      --font-body: "Noto Sans TC", sans-serif;
+      --font-display: "Orbitron", "Noto Sans TC", sans-serif;
+      --font-mono: "Share Tech Mono", "Noto Sans TC", monospace;
+      --shadow: 0 24px 68px rgba(0, 0, 0, .36);
+      --radius-control: 8px;
+      --radius-card: 12px;
+      --radius-window: 14px;
+      --touch-min: 44px;
+    }
+
+    body.light {
+      color-scheme: light;
+      --bg-1: #ffd84a;
+      --bg-2: #fff9ed;
+      --surface-1: #ffffff;
+      --surface-2: #fff6e8;
+      --surface-3: #ffedcf;
+      --border-1: #25272d;
+      --fg-1: #33373d;
+      --fg-2: #626970;
+      --fg-3: #858b92;
+      --accent-cyan: #108dbf;
+      --accent-pink: #d72d70;
+      --accent-gold: #a86f00;
+      --status-pass: #167b44;
+      --status-fail: #c23e57;
+      --shadow: 0 24px 68px rgba(75, 47, 0, .19);
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body { min-width: 0; margin: 0; }
+
+    body {
+      min-height: 100vh;
+      color: var(--fg-1);
+      background: var(--bg-1);
+      font-family: var(--font-body);
+    }
+
+    body::before {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-image:
+        linear-gradient(rgba(38, 212, 240, .035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(38, 212, 240, .035) 1px, transparent 1px);
+      background-size: 32px 32px;
+      content: "";
+      pointer-events: none;
+    }
+
+    button { font: inherit; cursor: pointer; }
+
+    h1,
+    h2,
+    h3,
+    p,
+    pre { margin: 0; }
+
+    .app {
+      width: min(1280px, 100%);
+      margin: 0 auto;
+      padding: 24px 16px 44px;
+    }
+
+    .publication-notice {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: baseline;
+      gap: 8px 14px;
+      margin: 0 0 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--border-1);
+      border-radius: var(--radius-card);
+      color: var(--fg-2);
+      background: color-mix(in srgb, var(--surface-1) 88%, var(--accent-cyan) 12%);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .publication-notice strong {
+      color: var(--accent-cyan);
+      font: 700 12px/1.4 var(--font-display);
+      letter-spacing: .04em;
+      white-space: nowrap;
+    }
+
+    .window {
+      overflow: hidden;
+      border: 1px solid var(--border-1);
+      border-radius: var(--radius-window);
+      background: var(--surface-2);
+      box-shadow: var(--shadow);
+    }
+
+    .titlebar {
+      display: flex;
+      min-height: 50px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border-1);
+      background: var(--surface-1);
+    }
+
+    .app-mark {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      gap: 10px;
+      color: var(--accent-cyan);
+      font: 700 13px/1 var(--font-display);
+      letter-spacing: .055em;
+    }
+
+    .lamp {
+      width: 10px;
+      height: 10px;
+      flex: 0 0 auto;
+      border: 1px solid var(--accent-cyan);
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--accent-cyan) 38%, transparent);
+      box-shadow: 0 0 14px color-mix(in srgb, var(--accent-cyan) 76%, transparent);
+    }
+
+    .title-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mode-note {
+      color: var(--fg-3);
+      font: 12px/1 var(--font-mono);
+      white-space: nowrap;
+    }
+
+    .utility {
+      min-height: 36px;
+      padding: 0 11px;
+      border: 1px solid var(--border-1);
+      border-radius: 7px;
+      color: var(--fg-1);
+      background: var(--surface-2);
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 22px;
+      align-items: center;
+      padding: 24px 22px 20px;
+      border-bottom: 1px solid var(--border-1);
+      background: var(--surface-1);
+    }
+
+    .intro h1 {
+      max-width: 780px;
+      font-size: clamp(24px, 4vw, 38px);
+      line-height: 1.25;
+      letter-spacing: .01em;
+    }
+
+    .intro p {
+      max-width: 800px;
+      margin-top: 9px;
+      color: var(--fg-2);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .design-stamp {
+      min-width: 178px;
+      padding: 11px 14px;
+      border: 1px solid color-mix(in srgb, var(--accent-gold) 65%, var(--border-1));
+      border-radius: 8px;
+      color: var(--accent-gold);
+      background: color-mix(in srgb, var(--accent-gold) 8%, var(--surface-2));
+      font: 12px/1.5 var(--font-mono);
+      text-align: center;
+    }
+
+    .screen-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-1);
+      background: var(--surface-2);
+      scrollbar-width: thin;
+    }
+
+    .screen-tab {
+      min-height: var(--touch-min);
+      flex: 0 0 auto;
+      padding: 0 14px;
+      border: 1px solid var(--border-1);
+      border-radius: var(--radius-control);
+      color: var(--fg-2);
+      background: transparent;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .screen-tab[aria-selected="true"] {
+      border-color: var(--accent-pink);
+      color: var(--fg-1);
+      background: color-mix(in srgb, var(--accent-pink) 15%, var(--surface-1));
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-pink) 32%, transparent);
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(220px, .8fr) minmax(340px, 1.18fr) minmax(230px, .82fr);
+      gap: 18px;
+      align-items: start;
+      padding: 20px;
+      background: var(--bg-2);
+    }
+
+    .panel {
+      padding: 16px;
+      border: 1px solid var(--border-1);
+      border-radius: var(--radius-card);
+      background: var(--surface-1);
+    }
+
+    .panel + .panel { margin-top: 12px; }
+
+    .panel h2 {
+      color: var(--accent-cyan);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .panel p {
+      margin-top: 8px;
+      color: var(--fg-2);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .principles,
+    .change-list,
+    .implementation-list {
+      display: grid;
+      gap: 10px;
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .principles li,
+    .change-list li,
+    .implementation-list li {
+      position: relative;
+      padding-left: 18px;
+      color: var(--fg-2);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .principles li::before,
+    .change-list li::before,
+    .implementation-list li::before {
+      position: absolute;
+      left: 0;
+      color: var(--accent-cyan);
+      content: "✓";
+      font-weight: 900;
+    }
+
+    .implementation-list li::before {
+      color: var(--accent-gold);
+      content: "※";
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .metric {
+      padding: 10px;
+      border: 1px solid var(--border-1);
+      border-radius: 8px;
+      background: var(--surface-2);
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--accent-gold);
+      font: 700 21px/1 var(--font-display);
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 6px;
+      color: var(--fg-2);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .preview-column { min-width: 0; }
+
+    .scenario-bar {
+      margin-bottom: 12px;
+      padding: 12px;
+      border: 1px solid var(--border-1);
+      border-radius: var(--radius-card);
+      background: var(--surface-1);
+    }
+
+    .scenario-label {
+      display: block;
+      color: var(--fg-3);
+      font: 11px/1.3 var(--font-mono);
+      letter-spacing: .05em;
+    }
+
+    .variant-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 9px;
+    }
+
+    .variant-button {
+      min-height: 40px;
+      padding: 0 11px;
+      border: 1px solid var(--border-1);
+      border-radius: 7px;
+      color: var(--fg-2);
+      background: var(--surface-2);
+      font-size: 12px;
+    }
+
+    .variant-button[aria-pressed="true"] {
+      border-color: var(--accent-cyan);
+      color: var(--fg-1);
+      background: color-mix(in srgb, var(--accent-cyan) 13%, var(--surface-2));
+    }
+
+    .phone-shell {
+      padding: 10px;
+      border: 1px solid color-mix(in srgb, var(--accent-cyan) 68%, var(--border-1));
+      border-radius: 28px;
+      background: #050914;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, .27);
+    }
+
+    .phone-status {
+      display: flex;
+      min-height: 29px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 11px;
+      color: #c9d9ef;
+      font: 11px/1 var(--font-mono);
+    }
+
+    .phone {
+      overflow: hidden;
+      border: 1px solid #26426d;
+      border-radius: 19px;
+      background: var(--line-bg);
+    }
+
+    .line-header {
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr) 30px;
+      min-height: 56px;
+      align-items: center;
+      padding: 8px 12px;
+      border-bottom: 1px solid #d9dde0;
+      color: #22252a;
+      background: var(--line-header);
+    }
+
+    .line-header span {
+      color: #596069;
+      font-size: 18px;
+    }
+
+    .line-header div { min-width: 0; text-align: center; }
+
+    .line-header strong {
+      display: block;
+      overflow: hidden;
+      font-size: 14px;
+      line-height: 1.25;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .line-header small {
+      display: block;
+      margin-top: 2px;
+      color: #7c838a;
+      font-size: 10px;
+    }
+
+    .chat {
+      min-height: 610px;
+      padding: 18px 11px 14px;
+      background-color: var(--line-bg);
+      background-image:
+        linear-gradient(rgba(255, 255, 255, .055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .055) 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+
+    .date-chip {
+      width: fit-content;
+      margin: 0 auto 15px;
+      padding: 4px 9px;
+      border-radius: 12px;
+      color: #ffffff;
+      background: rgba(50, 69, 63, .43);
+      font-size: 10px;
+      line-height: 1.2;
+    }
+
+    .message-row {
+      display: grid;
+      grid-template-columns: 36px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+    }
+
+    .bot-avatar {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border: 1px solid #20a9c5;
+      border-radius: 9px;
+      color: #0f7790;
+      background: #f3fdff;
+      font: 700 15px/1 var(--font-display);
+    }
+
+    .message-stack { min-width: 0; }
+
+    .sender {
+      margin-bottom: 4px;
+      color: #ffffff;
+      font-size: 10px;
+      line-height: 1.2;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, .35);
+    }
+
+    .bubble {
+      position: relative;
+      width: min(100%, 340px);
+      padding: 13px 14px;
+      border-radius: 4px 13px 13px 13px;
+      color: var(--line-text);
+      background: var(--line-bubble);
+      box-shadow: 0 2px 7px rgba(32, 51, 45, .18);
+    }
+
+    .bubble::before {
+      position: absolute;
+      top: 0;
+      left: -7px;
+      width: 0;
+      height: 0;
+      border-top: 8px solid var(--line-bubble);
+      border-left: 8px solid transparent;
+      content: "";
+    }
+
+    .message-copy {
+      overflow-wrap: anywhere;
+      color: var(--line-text);
+      font: 400 13px/1.62 var(--font-body);
+      white-space: pre-wrap;
+    }
+
+    .message-time {
+      margin-top: 4px;
+      color: rgba(255, 255, 255, .87);
+      font: 10px/1 var(--font-mono);
+    }
+
+    .quick-replies {
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      margin: 14px 0 0 44px;
+      padding: 2px 1px 8px;
+      scrollbar-width: thin;
+    }
+
+    .quick-reply {
+      min-height: var(--touch-min);
+      flex: 0 0 auto;
+      padding: 0 15px;
+      border: 1px solid #22a1b7;
+      border-radius: 22px;
+      color: #08758b;
+      background: var(--line-chip);
+      box-shadow: 0 2px 6px rgba(32, 51, 45, .16);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .quick-reply:first-child {
+      color: #ffffff;
+      background: #159eb8;
+    }
+
+    .tap-result {
+      min-height: 19px;
+      margin: 6px 0 0 45px;
+      color: #ffffff;
+      font-size: 10px;
+      line-height: 1.4;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, .35);
+    }
+
+    .preview-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .preview-actions .utility { flex: 1 1 auto; }
+
+    .screen-callout {
+      padding: 11px 12px;
+      border: 1px solid color-mix(in srgb, var(--accent-gold) 58%, var(--border-1));
+      border-radius: 8px;
+      color: var(--fg-2);
+      background: color-mix(in srgb, var(--accent-gold) 6%, var(--surface-2));
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    .screen-callout strong { color: var(--accent-gold); }
+
+    .source-note {
+      margin: 0 20px 20px;
+      padding: 14px 16px;
+      border: 1px solid var(--border-1);
+      border-radius: 10px;
+      background: var(--surface-1);
+    }
+
+    .source-note summary {
+      color: var(--fg-1);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .source-note p {
+      max-width: 980px;
+      margin-top: 10px;
+      color: var(--fg-2);
+      font-size: 12px;
+      line-height: 1.72;
+    }
+
+    .source-note code {
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+    }
+
+    @media (max-width: 980px) {
+      .workspace { grid-template-columns: minmax(220px, .8fr) minmax(340px, 1.2fr); }
+      .right-rail { grid-column: 1 / -1; }
+      .right-rail .panel {
+        display: inline-block;
+        width: calc(50% - 8px);
+        vertical-align: top;
+      }
+      .right-rail .panel + .panel { margin: 0 0 0 12px; }
+    }
+
+    @media (max-width: 720px) {
+      .app { padding: 0 0 24px; }
+      .publication-notice {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 4px;
+        margin: 12px 14px;
+      }
+      .window { border-right: 0; border-left: 0; border-radius: 0; }
+      .intro { grid-template-columns: 1fr; padding: 19px 16px; }
+      .design-stamp { justify-self: start; }
+      .workspace { grid-template-columns: minmax(0, 1fr); padding: 14px; }
+      .preview-column { order: -1; }
+      .chat { min-height: 560px; }
+      .right-rail .panel { display: block; width: auto; }
+      .right-rail .panel + .panel { margin: 12px 0 0; }
+      .source-note { margin: 0 14px 14px; }
+      .mode-note { display: none; }
+    }
+
+    @media (max-width: 390px) {
+      .screen-tabs { padding-right: 12px; padding-left: 12px; }
+      .workspace { padding-right: 10px; padding-left: 10px; }
+      .phone-shell { padding: 7px; border-radius: 22px; }
+      .phone { border-radius: 15px; }
+      .chat { padding-right: 8px; padding-left: 8px; }
+      .message-row { grid-template-columns: 32px minmax(0, 1fr); gap: 6px; }
+      .bot-avatar { width: 32px; height: 32px; }
+      .quick-replies { margin-left: 38px; }
+      .tap-result { margin-left: 39px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <aside class="publication-notice" role="note" aria-label="發布版本說明">
+      <strong>DESIGN PREVIEW · 2026-08-10</strong>
+      <span>對應正式版 @845。下方是提醒情境與互動示意；實際私訊會依週次、歌曲、期限與個人狀態動態產生，本頁不讀取或寫入任何社員資料。</span>
+    </aside>
+
+    <section class="window" aria-labelledby="page-title">
+      <header class="titlebar">
+        <div class="app-mark"><span class="lamp" aria-hidden="true"></span>REMINDER.EXE / HUMAN TONE</div>
+        <div class="title-actions">
+          <span class="mode-note">public snapshot / no data access</span>
+          <button class="utility" type="button" data-action="theme">亮／暗</button>
+        </div>
+      </header>
+
+      <section class="intro">
+        <div>
+          <h1 id="page-title">提醒不是警告，是讓人知道：我現在在哪裡，下一步可以做什麼。</h1>
+          <p>每一種社員／評審個人 push 都先回到「這週的歌／任務／活動」，只列真正待辦，再給可按的下一步。來不及時，請假被描述成正常休息，不把人寫成犯錯。</p>
+        </div>
+        <div class="design-stamp">溫暖，不灌雞湯<br>清楚，不像判決書</div>
+      </section>
+
+      <nav class="screen-tabs" aria-label="提醒訊息種類">
+        <button class="screen-tab" type="button" data-screen="pick" aria-selected="true">選曲開放</button>
+        <button class="screen-tab" type="button" data-screen="submit" aria-selected="false">交歌／心得</button>
+        <button class="screen-tab" type="button" data-screen="leave" aria-selected="false">請假結果</button>
+        <button class="screen-tab" type="button" data-screen="judgeStart" aria-selected="false">評審開始</button>
+        <button class="screen-tab" type="button" data-screen="judge" aria-selected="false">評審今晚收尾</button>
+        <button class="screen-tab" type="button" data-screen="judgeResult" aria-selected="false">評審結果</button>
+        <button class="screen-tab" type="button" data-screen="announcementPreview" aria-selected="false">公告預覽</button>
+        <button class="screen-tab" type="button" data-screen="activityVote" aria-selected="false">活動意願</button>
+        <button class="screen-tab" type="button" data-screen="duet" aria-selected="false">合唱應變</button>
+        <button class="screen-tab" type="button" data-screen="activityWish" aria-selected="false">交換出題</button>
+        <button class="screen-tab" type="button" data-screen="assignment" aria-selected="false">收到任務</button>
+        <button class="screen-tab" type="button" data-screen="activityJudge" aria-selected="false">活動評選</button>
+      </nav>
+
+      <section class="workspace">
+        <aside class="left-rail">
+          <section class="panel">
+            <h2>這一版固定的語氣</h2>
+            <ul class="principles">
+              <li>先顯示本人那一首歌或那一週評審。</li>
+              <li>只列尚未完成的事，不把已完成項目再催一次。</li>
+              <li>待辦期限只放一個；公告時間另列，不寫死「隔日」。</li>
+              <li>請假＝休息一週的紀錄，不是處罰或道德評價。</li>
+              <li>警告放最後；可做的動作集中在前一區。</li>
+            </ul>
+          </section>
+
+          <section class="panel">
+            <h2>訊息預算</h2>
+            <div class="metric-grid">
+              <div class="metric"><strong>1</strong><span>一個主要脈絡</span></div>
+              <div class="metric"><strong>2</strong><span>最多兩個一般動作</span></div>
+              <div class="metric"><strong>3</strong><span>動作上限三顆</span></div>
+              <div class="metric"><strong>0</strong><span>內部系統術語</span></div>
+            </div>
+          </section>
+        </aside>
+
+        <section class="preview-column" aria-label="LINE 訊息預覽">
+          <div class="scenario-bar">
+            <span class="scenario-label">切換真實狀態</span>
+            <div class="variant-buttons" id="variant-buttons"></div>
+          </div>
+
+          <div class="phone-shell">
+            <div class="phone-status"><span>9:41</span><span>5G ▰ 87%</span></div>
+            <section class="phone">
+              <header class="line-header">
+                <span aria-hidden="true">‹</span>
+                <div><strong>英唱小幫手</strong><small>官方帳號</small></div>
+                <span aria-hidden="true">☰</span>
+              </header>
+              <div class="chat">
+                <div class="date-chip">今天</div>
+                <div class="message-row">
+                  <div class="bot-avatar" aria-hidden="true">♪</div>
+                  <div class="message-stack">
+                    <div class="sender">英唱小幫手</div>
+                    <div class="bubble"><pre class="message-copy" id="message-copy"></pre></div>
+                    <div class="message-time">18:00</div>
+                  </div>
+                </div>
+                <div class="quick-replies" id="quick-replies" aria-label="下一步快捷按鈕"></div>
+                <div class="tap-result" id="tap-result" aria-live="polite"></div>
+              </div>
+            </section>
+          </div>
+
+          <div class="preview-actions">
+            <button class="utility" type="button" data-action="copy">複製目前文案</button>
+            <button class="utility" type="button" data-action="reset">回到第一種狀態</button>
+          </div>
+        </section>
+
+        <aside class="right-rail">
+          <section class="panel">
+            <h2 id="screen-title">週日交歌提醒</h2>
+            <p id="screen-note"></p>
+            <ul class="change-list" id="change-list"></ul>
+          </section>
+
+          <section class="panel">
+            <h2>正式版已完成</h2>
+            <ul class="implementation-list">
+              <li>提醒會帶出真實週次、歌曲、未完成項目、評審進度或活動內容。</li>
+              <li>LINE 私訊正文與 Quick Reply 使用同一份動作規格，按鈕會依當下可做步驟變動。</li>
+              <li>期限過後不再顯示失效按鈕；請假結果用「這週先休息」說明。</li>
+              <li>評審完成後可查看綁定該週的公告預覽與評選結果，不會漂到別週。</li>
+              <li>群組公告時間依實際排程與狀態顯示，不寫死固定日期。</li>
+            </ul>
+          </section>
+
+          <div class="screen-callout">
+            <strong>★ 最值得改的不是 emoji。</strong><br>
+            是把「系統要處理你」改成「這是你的歌、這裡還差什麼、你可以怎麼選」。
+          </div>
+        </aside>
+      </section>
+
+      <details class="source-note">
+        <summary>這頁與正式版的關係</summary>
+        <p>這是 2026-08-10 上線版本的設計快照，用固定範例一次展示所有提醒情境。正式 LINE 訊息會以當下資料產生，可能因週次、歌曲、期限、任務進度與可用動作不同而省略或替換內容；本頁只做文案與互動預覽。</p>
+      </details>
+    </section>
+  </main>
+
+  <script>
+    const exampleSong = "Die With A Smile - Lady Gaga & Bruno Mars";
+    const announcementBody = "★ W5 MVP 公告 🤖\n\n🌈 抒情歌\n\n🎧 評審：Ophelia\n\n🎖️ MVP 1：Mina｜Blue Moon - Aira\n⭐ 情緒層次很完整，讓人想重聽。\n\n🎖️ MVP 2：Ivy｜Nocturne - Mella\n⭐ 副歌很有感染力。\n\n感謝大家這週的作品～獎章已入帳，\n還沒聽的可以去作品區補聽喔~\n\n恭喜 Mina、Ivy 獲選本週 MVP 🎉\n也謝謝 Ophelia 的用心評選與講評 ♪ ✨";
+    const reviewPacketSummary = "符合評選條件的 6 件作品：\n1　Mina｜Blue Moon - Aira\n2　Ivy｜Nocturne - Mella\n3　Cara｜Gravity - Sara Bareilles\n4　Lena｜Easy On Me - Adele\n5　Vania｜All I Ask - Adele\n6　Eloise｜The Scientist - Coldplay";
+
+    function messageAction(label, payload, route) {
+      return { type: "message", label: label, payload: payload, route: route || "" };
+    }
+
+    function uriAction(label, uri) {
+      return { type: "uri", label: label, uri: uri };
+    }
+
+    function escapeHtml(value) {
+      return String(value == null ? "" : value).replace(/[&<>"']/g, function (character) {
+        return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character];
+      });
+    }
+
+    const screens = {
+      submit: {
+        title: "週日交歌提醒",
+        note: "提醒本人今晚還欠什麼。歌名先建立脈絡，狀態列只催缺件；休息選項放最後，不搶走主要動作。",
+        changes: [
+          "把本人選的歌補回來。",
+          "兩項都缺才同時顯示兩顆膠囊。",
+          "未完成用 ○、完成用 ✓，不用紅叉施壓。",
+          "把『少一個就視為請假』改成中性結果。"
+        ],
+        variants: {
+          both: {
+            label: "兩項都缺",
+            message: "♪ W6｜今晚完成這首\n\n🔰 " + exampleSong + "\n📆 今天 8/9（日）23:59 前\n\n○ 交歌　尚未完成\n○ 心得　尚未完成\n\n➤【交歌】貼作品連結\n➤【心得】寫有感歌詞\n\n※ 今晚來不及也沒關係～\n時間到會記為請假，這首不送評審；\n下週想唱再回來就好。",
+            actions: [messageAction("交歌", "交歌"), messageAction("心得", "心得")]
+          },
+          link: {
+            label: "只缺交歌",
+            message: "♪ W6｜今晚還差交歌\n\n🔰 " + exampleSong + "\n📆 今天 8/9（日）23:59 前\n\n○ 交歌　尚未完成\n✓ 心得　已完成\n\n➤【交歌】貼作品連結\n\n※ 今晚來不及也沒關係～\n時間到會記為請假，這首不送評審；\n下週想唱再回來就好。",
+            actions: [messageAction("交歌", "交歌")]
+          },
+          reflection: {
+            label: "只缺心得",
+            message: "♪ W6｜今晚還差心得\n\n🔰 " + exampleSong + "\n📆 今天 8/9（日）23:59 前\n\n✓ 交歌　已完成\n○ 心得　尚未完成\n\n➤【心得】寫有感歌詞\n\n※ 今晚來不及也沒關係～\n時間到會記為請假，這首不送評審；\n下週想唱再回來就好。",
+            actions: [messageAction("心得", "心得")]
+          }
+        }
+      },
+      leave: {
+        title: "請假結果通知",
+        note: "期限已過後，不再出現 ✕ 或補交暗示。通知說明哪一首、缺什麼、系統怎麼記錄，然後自然帶往下一週。",
+        changes: [
+          "標題從失敗改為 🏖️ 休息狀態。",
+          "逐項列出本次未完成內容。",
+          "明講不用補交，也不用有壓力。",
+          "下一步不再導向已鎖定的交歌流程。"
+        ],
+        variants: {
+          both: {
+            label: "兩項都沒完成",
+            message: "🏖️ W6｜這週先休息\n📆 8/3（一）–8/9（日）\n\n🔰 " + exampleSong + "\n\n這次沒完成的是：\n🔗 作品連結\n💚 心得（有感歌詞）\n\n這週已幫你記成請假，\n這首不會送進 W6 評審。\n\n這只是休息一週的紀錄，\n不用補交，也不用有壓力。\n下週想唱再回來就好～\n\n➤【選曲】看看下一週\n➤【查請假】看本季紀錄",
+            actions: [messageAction("選曲", "選曲"), messageAction("查請假", "請假紀錄")]
+          },
+          link: {
+            label: "缺作品連結",
+            message: "🏖️ W6｜這週先休息\n📆 8/3（一）–8/9（日）\n\n🔰 " + exampleSong + "\n\n這次沒完成的是：\n🔗 作品連結\n\n這週已幫你記成請假，\n這首不會送進 W6 評審。\n\n這只是休息一週的紀錄，\n不用補交，也不用有壓力。\n下週想唱再回來就好～\n\n➤【選曲】看看下一週\n➤【查請假】看本季紀錄",
+            actions: [messageAction("選曲", "選曲"), messageAction("查請假", "請假紀錄")]
+          },
+          reflection: {
+            label: "缺心得",
+            message: "🏖️ W6｜這週先休息\n📆 8/3（一）–8/9（日）\n\n🔰 " + exampleSong + "\n\n這次沒完成的是：\n💚 心得（有感歌詞）\n\n這週已幫你記成請假，\n這首不會送進 W6 評審。\n\n這只是休息一週的紀錄，\n不用補交，也不用有壓力。\n下週想唱再回來就好～\n\n➤【選曲】看看下一週\n➤【查請假】看本季紀錄",
+            actions: [messageAction("選曲", "選曲"), messageAction("查請假", "請假紀錄")]
+          }
+        }
+      },
+      judge: {
+        title: "評審今晚收尾",
+        note: "不再寫『沒有結果會排入管理員草稿』這種內部話。除了作品數與真實進度，也先說清楚完成後何時自動公告；公告時程由系統計算，不寫死隔日。",
+        changes: [
+          "以 W5 與題目固定評審脈絡。",
+          "補上候選件數或草稿進度。",
+          "主膠囊隨 task 階段切換。",
+          "從缺與請假只說人需要知道的結果。",
+          "公告時間是下游安排，不混成第二個待辦期限。"
+        ],
+        variants: {
+          new: {
+            label: "還沒開始",
+            message: "🎧 W5｜今晚完成評選\n\n🌈 抒情歌\n📆 今天 8/9（日）23:59 前\n\n這次有 6 件作品。\n目前：還沒開始評選\n\n➤【我輪值】開始評選\n➤【評審入口】重看作品\n\n📣 完成後的群組公告\n送出評選後不會立刻發群組。\n若在期限前完成，\n預計 8/10（一）08:00 自動公告；\n完成後可以先看公告預覽。\n\n※ 今晚來不及也沒關係～\n時間到會記一週請假，W5 MVP 從缺；\n不用另外補件或說明。",
+            actions: [messageAction("我輪值", "我輪值"), messageAction("評審入口", "評審入口")]
+          },
+          active: {
+            label: "評選做到一半",
+            message: "🎧 W5｜今晚完成評選\n\n🌈 抒情歌\n📆 今天 8/9（日）23:59 前\n\n目前進度：\n合格 4・不合格 1・MVP 1/2\n\n➤【我輪值】繼續評選\n➤【評審入口】重看作品\n\n📣 完成後的群組公告\n送出評選後不會立刻發群組。\n若在期限前完成，\n預計 8/10（一）08:00 自動公告；\n完成後可以先看公告預覽。\n\n※ 今晚來不及也沒關係～\n時間到會記一週請假，W5 MVP 從缺；\n不用另外補件或說明。",
+            actions: [messageAction("我輪值", "我輪值"), messageAction("評審入口", "評審入口")]
+          },
+          ready: {
+            label: "只差送出",
+            message: "🎧 W5｜今晚完成評選\n\n🌈 抒情歌\n📆 今天 8/9（日）23:59 前\n\n✓ 判定已完成\n✓ MVP 已選 2/2\n目前只差確認送出。\n\n➤【確認送出】完成 W5 評選\n➤【我輪值】先看完整摘要\n\n📣 完成後的群組公告\n送出評選後不會立刻發群組。\n若在期限前完成，\n預計 8/10（一）08:00 自動公告；\n完成後可以先看公告預覽。\n\n※ 今晚來不及也沒關係～\n時間到會記一週請假，W5 MVP 從缺；\n不用另外補件或說明。",
+            actions: [messageAction("確認送出", "確認送出"), messageAction("我輪值", "我輪值")]
+          }
+        }
+      }
+    };
+
+    screens.leave.variants.noPick = {
+      label: "沒有選曲",
+      message: "🏖️ W7｜這週先休息\n📆 8/10（一）–8/16（日）\n\n這週沒有選曲。\n已幫你記成請假，\n這週的交歌流程也先關起來。\n\n這只是休息一週的紀錄，\n不用補交，也不用有壓力。\n下週想唱再回來就好～\n\n➤【選曲】看看下一週\n➤【查請假】看本季紀錄",
+      actions: [messageAction("選曲", "選曲"), messageAction("查請假", "請假紀錄")]
+    };
+
+    Object.assign(screens, {
+      pick: {
+        title: "選曲開放",
+        note: "沒有歌名可回顯時，就用真實題目建立脈絡。這是邀請，不用一開頭就把請假後果壓在臉上。",
+        changes: [
+          "標題說明選曲已開放，不只寫『提醒』。",
+          "顯示 W7 與真實題目。",
+          "主動作只有一顆【選曲】。",
+          "休息選項以一句中性結果收尾。"
+        ],
+        variants: {
+          normal: {
+            label: "一般題目",
+            message: "♪ W7｜選曲開放了\n\n🌈 夏日公路歌\n📆 8/10（一）23:59 前\n\n這週還沒選歌。\n想到想唱的就可以開始～\n\n➤【選曲】挑一首歌\n\n※ 這週想休息也沒關係。\n時間到沒選，會幫你記成請假。",
+            actions: [messageAction("選曲", "選曲")]
+          },
+          free: {
+            label: "自由題目",
+            message: "♪ W7｜選曲開放了\n\n🌈 自由題目\n📆 8/10（一）23:59 前\n\n這週想唱什麼都可以。\n想到歌就直接開始～\n\n➤【選曲】挑一首歌\n\n※ 這週想休息也沒關係。\n時間到沒選，會幫你記成請假。",
+            actions: [messageAction("選曲", "選曲")]
+          }
+        }
+      },
+      judgeStart: {
+        title: "評審開始",
+        note: "評審資料包保留作品內容，並遵守現行固定導引順序：先【我輪值】、再【評審入口】。預覽直接列真實候選摘要，不留下製作註記。",
+        changes: [
+          "先說 W5、題目與 6 件作品。",
+          "不把工作台或 task 名稱丟給評審。",
+          "【我輪值】先評選與送出，【評審入口】再重看作品統整。",
+          "一週前的開始通知不需要先講請假。",
+          "先預告完成後可看公告，以及系統算出的發布時間。"
+        ],
+        variants: {
+          packet: {
+            label: "6 件作品",
+            message: "🎧 W5｜評審開始\n\n🌈 抒情歌\n📆 8/9（日）23:59 前\n\n➤【我輪值】評選與送出\n➤【評審入口】重看作品統整\n\n" + reviewPacketSummary + "\n\n可以先聽作品，再慢慢完成判定與 MVP。\n\n📣 完成後的群組公告\n送出評選後不會立刻發群組。\n若在期限前完成，\n預計 8/10（一）08:00 自動公告；\n完成後可以先看公告預覽。",
+            actions: [messageAction("我輪值", "我輪值"), messageAction("評審入口", "評審入口")]
+          }
+        }
+      },
+      judgeResult: {
+        title: "評審結果",
+        note: "系統已改變正式狀態時，一定要對稱告知本人。完成結果同時交代確切公告窗口、唯讀預覽與鎖定後的修改方式；逾期則不留下假入口。",
+        changes: [
+          "自動轉正不再說『寫入資料庫』。",
+          "明講有沒有記請假。",
+          "逾期結果補上目前缺少的本人通知。",
+          "結果通知不再顯示過期編輯動作。",
+          "錯字／補充直接發群組；更換 MVP 才找群主或工程師。"
+        ],
+        variants: {
+          auto: {
+            label: "草稿自動完成",
+            message: "✓ W5｜評選已完成\n\n你先前存下的評選內容，\n已在期限到時轉為正式結果。\n\n🎖️ MVP：Mina、Ivy\n🏖️ 這次沒有記請假\n\n不用再補送或重做。\n下次記得按「確認送出」就好～\n\n📣 群組公告\n這裡不會立刻發群組。\n預計 8/11（二）08:00 自動公告。\n可以先看群組會收到的內容。\n\n※ 評選送出後已鎖定\n錯字或想補充講評：直接在群組補充。\n要更換 MVP 人選：請聯絡群主或工程師協助。\n\n➤【公告預覽】先看公告\n➤【評選結果】查看結果",
+            actions: [messageAction("公告預覽", "公告預覽 2026Q3 W5", "announcementPreview"), messageAction("評選結果", "評選結果 2026Q3 W5", "judgeResult")]
+          },
+          missed: {
+            label: "評審未完成",
+            message: "🏖️ W5｜這次評審先休息\n\n🌈 抒情歌\n\n評審時間已經結束，\n這次沒有收到完成結果。\n\n已記一週請假，W5 MVP 從缺。\n不用補評，也不用另外說明。\n下一次輪值再回來就好～\n\n➤【查請假】看本季紀錄",
+            actions: [messageAction("查請假", "請假紀錄")]
+          }
+        }
+      },
+      announcementPreview: {
+        title: "群組公告預覽",
+        note: "評審點結果通知的【公告預覽】後，只讀取原本那一週的正式公告正文。它不會發群、不會解鎖評選，也不會因日後完成新一週而漂移。",
+        changes: [
+          "時間與結果通知共用同一個排程 resolver。",
+          "正文與真正群推共用 mvpAnnouncementText。",
+          "預覽 payload 綁定 2026Q3 W5，不找最新週。",
+          "只說『現在不會發』，不否認已排定的自動公告。"
+        ],
+        variants: {
+          scheduled: {
+            label: "預計自動公告",
+            message: "♪ W5｜群組公告預覽\n\n📣 預計 8/11（二）08:00 自動發布\n這是群組到時會收到的內容：\n\n────────────\n" + announcementBody + "\n────────────\n\n※ 這只是預覽，現在不會發群組。\n\n➤【評選結果】回看正式結果",
+            actions: [messageAction("評選結果", "評選結果 2026Q3 W5", "judgeResult")]
+          },
+          announced: {
+            label: "已經公告",
+            message: "♪ W5｜群組公告預覽\n\n✓ 已於 8/11（二）08:00 發布\n以下是群組收到的內容：\n\n────────────\n" + announcementBody + "\n────────────\n\n➤【評選結果】回看正式結果",
+            actions: [messageAction("評選結果", "評選結果 2026Q3 W5", "judgeResult")]
+          },
+          manual_handoff: {
+            label: "管理端接手",
+            message: "♪ W5｜群組公告預覽\n\n○ 這次改由群主／工程師接手\n自動群發沒有送出；同一份公告已交給管理端。\n目前沒有新的自動發布時間，你不用另外處理。\n\n────────────\n" + announcementBody + "\n────────────\n\n※ 這只是預覽，評選結果仍然有效。\n\n➤【評選結果】回看正式結果",
+            actions: [messageAction("評選結果", "評選結果 2026Q3 W5", "judgeResult")]
+          },
+          disabled: {
+            label: "自動公告關閉",
+            message: "♪ W5｜群組公告預覽\n\n○ 自動群組公告目前未開啟\n這週會由群主或工程師決定後續發布，\n你不用重做評選。\n\n────────────\n" + announcementBody + "\n────────────\n\n※ 這只是預覽，現在不會發群組。\n\n➤【評選結果】回看正式結果",
+            actions: [messageAction("評選結果", "評選結果 2026Q3 W5", "judgeResult")]
+          },
+          unknown: {
+            label: "時間未排定",
+            message: "♪ W5｜群組公告預覽\n\n○ 公告時間尚未排定\n目前讀不到可靠的發布窗口。\n系統不會猜日期，已交由工程師確認。\n\n────────────\n" + announcementBody + "\n────────────\n\n※ 這只是預覽，評選結果仍然有效。\n\n➤【評選結果】回看正式結果",
+            actions: [messageAction("評選結果", "評選結果 2026Q3 W5", "judgeResult")]
+          }
+        }
+      },
+      activityVote: {
+        title: "活動意願",
+        note: "選項本身就是按鈕，不再叫人先按【投票】、再記 1／2／3。『不參加』是同等有效的選擇。",
+        changes: [
+          "三個 label 直接說出選擇。",
+          "按鈕 label 與 payload 分離。",
+          "說清楚不參加配對的真實影響。",
+          "完全沒回覆時，明講會視為不參加配對。",
+          "最後一天只換期限感，不加警告符號。"
+        ],
+        variants: {
+          open: {
+            label: "意願開放",
+            message: "♬ W9/W10｜想玩哪一種？\n\n📆 8/17（一）08:00 前\n\n這季的驚喜活動要選玩法：\n1　交換歌曲\n2　合唱\n3　這次不參加配對\n\n➤【交換歌曲】選這個玩法\n➤【合唱】選這個玩法\n➤【這次不參加】先不配對\n\n※ 選「不參加配對」也可以；\n這個選擇本身不計請假。\n完全沒回覆時，會視為這次不參加配對；\nW9／W10 仍照非配對成員的方式交作品。",
+            actions: [messageAction("交換歌曲", "投票 1"), messageAction("合唱", "投票 2"), messageAction("這次不參加", "投票 3")]
+          },
+          last: {
+            label: "今天收尾",
+            message: "♬ W9/W10｜活動意願今天收尾\n\n📆 今天 8/17（一）08:00 前\n\n還沒收到你的選擇：\n1　交換歌曲\n2　合唱\n3　這次不參加配對\n\n➤【交換歌曲】選這個玩法\n➤【合唱】選這個玩法\n➤【這次不參加】先不配對\n\n※ 三個選項都可以；\n這個選擇本身不計請假。\n完全沒回覆時，會視為這次不參加配對；\nW9／W10 仍照非配對成員的方式交作品。",
+            actions: [messageAction("交換歌曲", "投票 1"), messageAction("合唱", "投票 2"), messageAction("這次不參加", "投票 3")]
+          }
+        }
+      },
+      duet: {
+        title: "合唱單數應變",
+        note: "先把抽象的『選 1 或 2』翻成兩個人話選項；未回覆的預設結果仍要清楚寫在最後。",
+        changes: [
+          "選項名稱直接說偏好。",
+          "括號中的應變方式只解釋一次。",
+          "明講未回覆會採哪個預設。",
+          "不把自願活動寫成義務。"
+        ],
+        variants: {
+          open: {
+            label: "詢問偏好",
+            message: "♬ 合唱活動｜單數時怎麼安排？\n\n📆 8/18（二）08:00 前\n\n如果最後報名人數是單數，\n你比較希望：\n\n1　我可以自行應變\n（雙聲部／找夥伴／唱一個 part）\n\n2　我一定要有合唱夥伴\n\n➤【我可應變】選 1\n➤【一定要夥伴】選 2\n\n※ 沒有回覆時，\n會照「一定要夥伴」處理。",
+            actions: [messageAction("我可應變", "報名 1"), messageAction("一定要夥伴", "報名 2")]
+          },
+          last: {
+            label: "最後一天",
+            message: "♬ 合唱活動｜今天確認偏好\n\n📆 今天 8/18（二）08:00 前\n\n如果最後報名人數是單數，\n你想自行應變，還是一定要有夥伴？\n\n➤【我可應變】雙聲部也可以\n➤【一定要夥伴】希望有人合唱\n\n※ 沒有回覆時，\n會照「一定要夥伴」處理。",
+            actions: [messageAction("我可應變", "報名 1"), messageAction("一定要夥伴", "報名 2")]
+          }
+        }
+      },
+      activityWish: {
+        title: "交換歌曲出題",
+        note: "把『活動 wish phase』翻成一件具體工作：還差兩首願望，每首要歌名與一句原因。",
+        changes: [
+          "直接說還缺幾首。",
+          "只保留一顆主按鈕。",
+          "逾時結果是不參加配對，不用威嚇。",
+          "W9/W10 的一般活動規則不在提醒重講。"
+        ],
+        variants: {
+          pending: {
+            label: "還差 2 首",
+            message: "♬ 交換歌曲｜還差 2 首願望\n\n📆 8/23（日）23:59 前\n\n請準備 2 首你願意交給別人唱的歌，\n每首附一句想推薦的原因。\n\n➤【活動出題】開始填願望\n\n※ 來不及時會改列這次不參加配對；\n不會因為這件事記請假。",
+            actions: [messageAction("活動出題", "活動出題")]
+          }
+        }
+      },
+      assignment: {
+        title: "收到交換任務",
+        note: "這是好消息與任務交接。通知直接列本人抽到的兩首候選歌與精確截止；【拿題】再展開推薦原因。",
+        changes: [
+          "標題先說配對完成。",
+          "直接列出兩首候選歌，不讓人按進去才知道任務。",
+          "【拿題】是唯一主動作。",
+          "完整長度與精確期限只提醒一次。"
+        ],
+        variants: {
+          ready: {
+            label: "配對完成",
+            message: "✓ 交換歌曲｜你的任務來了\n\n你收到兩首候選歌：\n1　Birds of a Feather - Billie Eilish\n2　Too Sweet - Hozier\n\n📆 9/6（日）23:59 前\n從候選中完成 1 首完整作品。\n\n➤【拿題】看推薦原因與選歌\n\n※ 兩首選一首就好；想唱兩首也可以。",
+            actions: [messageAction("拿題", "拿題")]
+          }
+        }
+      },
+      activityJudge: {
+        title: "驚喜活動評選",
+        note: "這一項不計請假，語氣應該是邀請。個人專屬網頁是主入口，LINE【欣賞】是備援。",
+        changes: [
+          "先說 W9/W10 作品已到齊。",
+          "URI 膠囊直接打開個人評選頁。",
+          "規則只留選 2 位與 3 讚門檻。",
+          "明講沒投不會記請假。"
+        ],
+        variants: {
+          d1: {
+            label: "剩 1 天",
+            message: "♬ 驚喜活動｜一起選 MVP\n\nW9/W10 的作品都到齊了，\n還沒收到你的評選。\n\n📆 明天 9/13（日）23:59 前\n每人最多選 2 位；滿 3 讚就是 MVP。\n\n🌐 你的個人評選頁已準備好。\n\n➤【開始評選】直接投票\n➤【欣賞】在 LINE 內看\n\n※ 這次沒投也不會記請假；\n有空再一起選就好♪",
+            actions: [uriAction("開始評選", "https://example.com/activity-review?token=fixture"), messageAction("欣賞", "欣賞")]
+          }
+        }
+      }
+    });
+
+    const state = {
+      screen: "pick",
+      variants: {
+        pick: "normal",
+        submit: "both",
+        leave: "both",
+        judgeStart: "packet",
+        judge: "new",
+        judgeResult: "auto",
+        announcementPreview: "scheduled",
+        activityVote: "open",
+        duet: "open",
+        activityWish: "pending",
+        assignment: "ready",
+        activityJudge: "d1"
+      }
+    };
+
+    function currentScreen() {
+      return screens[state.screen];
+    }
+
+    function currentVariant() {
+      const screen = currentScreen();
+      return screen.variants[state.variants[state.screen]];
+    }
+
+    function renderVariants() {
+      const screen = currentScreen();
+      const selected = state.variants[state.screen];
+      document.getElementById("variant-buttons").innerHTML = Object.keys(screen.variants).map(function (key) {
+        const variant = screen.variants[key];
+        return '<button class="variant-button" type="button" data-variant="' + key + '" aria-pressed="' +
+          (selected === key ? "true" : "false") + '">' + variant.label + "</button>";
+      }).join("");
+    }
+
+    function renderChanges() {
+      const screen = currentScreen();
+      document.getElementById("screen-title").textContent = screen.title;
+      document.getElementById("screen-note").textContent = screen.note;
+      document.getElementById("change-list").innerHTML = screen.changes.map(function (item) {
+        return "<li>" + item + "</li>";
+      }).join("");
+    }
+
+    function renderMessage() {
+      const variant = currentVariant();
+      const actions = variant.actions || [];
+      document.getElementById("message-copy").textContent = variant.message;
+      document.getElementById("quick-replies").innerHTML = actions.map(function (action, index) {
+        return '<button class="quick-reply" type="button" data-action-index="' + index +
+          '" data-action-kind="' + escapeHtml(action.type) + '">' + escapeHtml(action.label) + "</button>";
+      }).join("");
+      document.getElementById("tap-result").textContent = "";
+    }
+
+    function render() {
+      document.querySelectorAll("[data-screen]").forEach(function (button) {
+        button.setAttribute("aria-selected", button.dataset.screen === state.screen ? "true" : "false");
+      });
+      renderVariants();
+      renderChanges();
+      renderMessage();
+    }
+
+    function copyCurrentMessage() {
+      const message = currentVariant().message;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(message).then(function () {
+          document.getElementById("tap-result").textContent = "✓ 文案已複製";
+        });
+        return;
+      }
+      document.getElementById("tap-result").textContent = "※ 瀏覽器未開放剪貼簿權限";
+    }
+
+    document.addEventListener("click", function (event) {
+      const screenButton = event.target.closest("[data-screen]");
+      if (screenButton) {
+        state.screen = screenButton.dataset.screen;
+        render();
+        return;
+      }
+
+      const variantButton = event.target.closest("[data-variant]");
+      if (variantButton) {
+        state.variants[state.screen] = variantButton.dataset.variant;
+        render();
+        return;
+      }
+
+      const quickButton = event.target.closest("[data-action-index]");
+      if (quickButton) {
+        const quickAction = (currentVariant().actions || [])[Number(quickButton.dataset.actionIndex)];
+        if (!quickAction) return;
+        if (quickAction.route) {
+          state.screen = quickAction.route;
+          render();
+          document.getElementById("tap-result").textContent = "✓ 模擬送出「" + quickAction.payload + "」並開啟「" + quickAction.label + "」";
+          return;
+        }
+        document.getElementById("tap-result").textContent = quickAction.type === "uri"
+          ? "模擬開啟 URI：" + quickAction.uri
+          : "模擬送出 payload：「" + quickAction.payload + "」";
+        return;
+      }
+
+      const action = event.target.closest("[data-action]");
+      if (!action) return;
+      if (action.dataset.action === "theme") document.body.classList.toggle("light");
+      if (action.dataset.action === "copy") copyCurrentMessage();
+      if (action.dataset.action === "reset") {
+        const first = Object.keys(currentScreen().variants)[0];
+        state.variants[state.screen] = first;
+        render();
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>
