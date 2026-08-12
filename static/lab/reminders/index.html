@@ -627,18 +627,18 @@
       flex: 0 0 238px;
       flex-direction: column;
       overflow: hidden;
-      border: 1px solid #2a4f8a;
+      border: 1px solid #303640;
       border-radius: 10px;
-      color: #eef6ff;
-      background: #070c18;
-      box-shadow: 0 2px 7px rgba(22, 37, 64, .28);
+      color: #f7f8fa;
+      background: #111318;
+      box-shadow: 0 8px 20px rgba(4, 6, 10, .22);
       scroll-snap-align: start;
     }
 
     .flex-card__header {
       padding: 15px 15px 13px;
-      border-bottom: 1px solid #2a4f8a;
-      background: #0c1630;
+      border-bottom: 1px solid #303640;
+      background: #191c23;
     }
 
     .flex-card__eyebrow {
@@ -651,20 +651,16 @@
       line-height: 1.35;
     }
 
-    .flex-card__eyebrow strong { color: #4aa8ff; }
-    .flex-card[data-accent="pink"] .flex-card__eyebrow strong { color: #ff2d8e; }
-    .flex-card[data-accent="cyan"] .flex-card__eyebrow strong { color: #26d4f0; }
-    .flex-card[data-accent="gold"] .flex-card__eyebrow strong { color: #ffd633; }
-    .flex-card[data-accent="orange"] .flex-card__eyebrow strong { color: #ff8a3d; }
+    .flex-card__eyebrow strong { color: #8b80f9; }
 
     .flex-card__context {
-      color: #9fc0e8;
+      color: #b4bbc6;
       text-align: right;
     }
 
     .flex-card__title {
       margin-top: 9px;
-      color: #eef6ff;
+      color: #f7f8fa;
       font-size: 19px;
       line-height: 1.25;
     }
@@ -679,7 +675,7 @@
 
     .flex-card__label {
       display: block;
-      color: #5f7bb0;
+      color: #7e8796;
       font-size: 10px;
       font-weight: 700;
       line-height: 1.35;
@@ -688,7 +684,7 @@
     .flex-card__value {
       display: block;
       margin-top: 5px;
-      color: #eef6ff;
+      color: #f7f8fa;
       font-size: 12px;
       line-height: 1.5;
       overflow-wrap: anywhere;
@@ -697,25 +693,25 @@
     .flex-card__status {
       padding: 11px;
       border-radius: 8px;
-      background: #0c1630;
+      background: #191c23;
     }
 
     .flex-card__status-value {
       display: block;
       margin-top: 6px;
-      color: #9fc0e8;
+      color: #b4bbc6;
       font-size: 14px;
       font-weight: 700;
       line-height: 1.45;
     }
 
-    .flex-card__status-value[data-tone="pending"] { color: #ffd633; }
-    .flex-card__status-value[data-tone="done"] { color: #3dff9e; }
+    .flex-card__status-value[data-tone="pending"] { color: #f0c66b; }
+    .flex-card__status-value[data-tone="done"] { color: #52d5a1; }
 
     .flex-card__status-detail {
       display: block;
       margin-top: 4px;
-      color: #9fc0e8;
+      color: #b4bbc6;
       font-size: 10px;
       line-height: 1.4;
     }
@@ -730,14 +726,14 @@
     .flex-step {
       padding: 8px 4px;
       border-radius: 6px;
-      color: #eef6ff;
-      background: #070c18;
+      color: #f7f8fa;
+      background: #111318;
       text-align: center;
     }
 
     .flex-step strong {
       display: block;
-      color: #9fc0e8;
+      color: #b4bbc6;
       font-size: 15px;
       line-height: 1;
     }
@@ -752,8 +748,8 @@
 
     .flex-card__footer {
       padding: 10px;
-      border-top: 1px solid #2a4f8a;
-      background: #111d3a;
+      border-top: 1px solid #303640;
+      background: #15181d;
     }
 
     .flex-card__button {
@@ -763,7 +759,7 @@
       border: 0;
       border-radius: 7px;
       color: #ffffff;
-      background: #2a4f8a;
+      background: #6f63e8;
       font-size: 13px;
       font-weight: 700;
     }
@@ -1428,7 +1424,7 @@
     function taskCarouselVariant_(includeActivityVote) {
       const cards = [
         {
-          accent: "pink",
+          accent: "brand",
           context: "W7｜2026 Q3",
           title: "本週選歌",
           descriptionLabel: "本週主題",
@@ -1441,7 +1437,7 @@
           action: messageAction("進入選曲", "選曲")
         },
         {
-          accent: "cyan",
+          accent: "brand",
           context: "W7｜2026 Q3",
           title: "交歌",
           descriptionLabel: "目前作品",
@@ -1454,7 +1450,7 @@
           action: messageAction("進入交歌", "交歌")
         },
         {
-          accent: "gold",
+          accent: "brand",
           context: "W7｜2026 Q3",
           title: "心得",
           descriptionLabel: "填寫說明",
@@ -1467,7 +1463,7 @@
           action: messageAction("進入心得", "心得")
         },
         {
-          accent: "blue",
+          accent: "brand",
           context: "W7｜2026 Q3",
           title: "本週進度",
           descriptionLabel: "本週流程",
@@ -1483,7 +1479,7 @@
           action: messageAction("查看詳細進度", "任務詳情")
         },
         {
-          accent: "pink",
+          accent: "brand",
           context: "W8｜2026 Q3",
           title: "下週選曲",
           descriptionLabel: "下週主題",
@@ -1499,7 +1495,7 @@
 
       if (includeActivityVote) {
         cards.push({
-          accent: "orange",
+          accent: "brand",
           context: "W9–W10｜2026 Q3",
           title: "驚喜活動投票",
           descriptionLabel: "玩法選擇",
@@ -1562,7 +1558,7 @@
 
       if (role === "previous") {
         cards = taskCarouselParticipantCards_().concat([{
-          accent: "gold",
+          accent: "brand",
           context: "W6｜2026 Q3",
           title: "選 MVP",
           descriptionLabel: "評審主題",
@@ -1579,7 +1575,7 @@
         trigger = "社員按【任務】；本人是上週評審且尚未完成評選";
       } else if (role === "future") {
         cards = taskCarouselParticipantCards_().concat([{
-          accent: "cyan",
+          accent: "brand",
           context: "W8｜2026 Q3",
           title: "補充題目說明",
           descriptionLabel: "你將評審的主題",
