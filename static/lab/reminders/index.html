@@ -896,6 +896,13 @@
       .quick-replies { margin-left: 38px; }
       .tap-result { margin-left: 39px; }
     }
+
+    @media (max-width: 330px) {
+      .message-row { grid-template-columns: minmax(0, 1fr); }
+      .bot-avatar { display: none; }
+      .quick-replies,
+      .tap-result { margin-left: 0; }
+    }
   </style>
 </head>
 <body>
