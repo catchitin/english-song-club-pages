@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<!-- Public design snapshot of the personal-reminder experience, published 2026-08-10. -->
+<!-- Public design snapshot of reminder, command-reply, and admin-draft surfaces, published 2026-08-12. -->
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark light">
   <meta name="robots" content="noindex, nofollow">
-  <meta name="description" content="英唱小幫手個人提醒情境與互動設計預覽。">
-  <title>英唱小幫手｜個人提醒設計預覽</title>
+  <meta name="description" content="英唱小幫手自動私訊、成員指令回覆與管理員群組草稿的完整情境預覽。">
+  <title>英唱小幫手｜訊息情境完整預覽</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2310172b'/%3E%3Cpath d='M40 10v31.5a11 11 0 1 1-6-9.8V18l18-4v22.5a11 11 0 1 1-6-9.8V10z' fill='%2300f5d4'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&amp;family=Orbitron:wght@600;700&amp;family=Share+Tech+Mono&amp;display=swap" rel="stylesheet">
@@ -175,7 +176,7 @@
     }
 
     .utility {
-      min-height: 36px;
+      min-height: var(--touch-min);
       padding: 0 11px;
       border: 1px solid var(--border-1);
       border-radius: 7px;
@@ -221,6 +222,7 @@
 
     .screen-tabs {
       display: flex;
+      align-items: center;
       gap: 8px;
       overflow-x: auto;
       padding: 12px 16px;
@@ -228,6 +230,56 @@
       background: var(--surface-2);
       scrollbar-width: thin;
     }
+
+    .tab-group {
+      flex: 0 0 auto;
+      padding: 0 5px;
+      color: var(--accent-gold);
+      font: 700 10px/1.35 var(--font-mono);
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .tab-group:not(:first-child) {
+      margin-left: 10px;
+      padding-left: 14px;
+      border-left: 1px dashed var(--border-1);
+    }
+
+    .audience-map {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-1);
+      background: color-mix(in srgb, var(--surface-2) 82%, var(--accent-cyan) 18%);
+    }
+
+    .audience-card {
+      min-width: 0;
+      padding: 10px 12px;
+      border: 1px solid var(--border-1);
+      border-radius: 8px;
+      background: var(--surface-1);
+    }
+
+    .audience-card strong {
+      display: block;
+      color: var(--accent-cyan);
+      font: 700 11px/1.4 var(--font-mono);
+    }
+
+    .audience-card span {
+      display: block;
+      margin-top: 4px;
+      color: var(--fg-2);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .audience-card[data-audience="group_draft"] strong { color: var(--accent-gold); }
+    .audience-card[data-audience="personal_reply"] strong { color: var(--accent-pink); }
 
     .screen-tab {
       min-height: var(--touch-min);
@@ -359,6 +411,41 @@
       letter-spacing: .05em;
     }
 
+    .delivery-meta {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 9px;
+      padding-bottom: 9px;
+      border-bottom: 1px dashed var(--border-1);
+    }
+
+    .audience-badge {
+      flex: 0 0 auto;
+      padding: 4px 7px;
+      border: 1px solid var(--accent-cyan);
+      border-radius: 999px;
+      color: var(--accent-cyan);
+      font: 700 10px/1.2 var(--font-mono);
+    }
+
+    .audience-badge[data-audience="personal_reply"] {
+      border-color: var(--accent-pink);
+      color: var(--accent-pink);
+    }
+
+    .audience-badge[data-audience="group_draft"] {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
+
+    .trigger-meta {
+      min-width: 0;
+      color: var(--fg-2);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
     .variant-buttons {
       display: flex;
       flex-wrap: wrap;
@@ -367,7 +454,7 @@
     }
 
     .variant-button {
-      min-height: 40px;
+      min-height: var(--touch-min);
       padding: 0 11px;
       border: 1px solid var(--border-1);
       border-radius: 7px;
@@ -627,6 +714,7 @@
         gap: 4px;
         margin: 12px 14px;
       }
+      .audience-map { grid-template-columns: 1fr; }
       .window { border-right: 0; border-left: 0; border-radius: 0; }
       .intro { grid-template-columns: 1fr; padding: 19px 16px; }
       .design-stamp { justify-self: start; }
@@ -655,8 +743,8 @@
 <body>
   <main class="app">
     <aside class="publication-notice" role="note" aria-label="發布版本說明">
-      <strong>DESIGN PREVIEW · 2026-08-10</strong>
-      <span>下方是提醒情境與互動示意；實際私訊會依週次、歌曲、期限與個人狀態動態產生，本頁不讀取或寫入任何社員資料。</span>
+      <strong>MESSAGE LAB · 2026-08-12</strong>
+      <span>下方完整分開自動私訊、成員指令回覆與管理員群組草稿；這是固定假資料測試台，不會連到 LINE、不讀社員資料，也不會真的發訊息。</span>
     </aside>
 
     <section class="window" aria-labelledby="page-title">
@@ -670,13 +758,29 @@
 
       <section class="intro">
         <div>
-          <h1 id="page-title">提醒不是警告，是讓人知道：我現在在哪裡，下一步可以做什麼。</h1>
-          <p>每一種社員／評審個人 push 都先回到「這週的歌／任務／活動」，只列真正待辦，再給可按的下一步。來不及時，請假被描述成正常休息，不把人寫成犯錯。</p>
+          <h1 id="page-title">不用真的跑小幫手，也能一次檢查所有訊息狀態。</h1>
+          <p>每個畫面都標出真正收件人與觸發方式。尤其驚喜活動：投票提醒是逐位社員私訊；主揪群組稿只是選配，不會取代個人通知。</p>
         </div>
         <div class="design-stamp">溫暖，不灌雞湯<br>清楚，不像判決書</div>
       </section>
 
-      <nav class="screen-tabs" aria-label="提醒訊息種類">
+      <section class="audience-map" aria-label="三種訊息表面說明">
+        <div class="audience-card" data-audience="personal">
+          <strong>A / 個人自動私訊</strong>
+          <span>排程逐位 push 給符合條件的社員；驚喜活動投票在這一類。</span>
+        </div>
+        <div class="audience-card" data-audience="personal_reply">
+          <strong>B / 成員指令回覆</strong>
+          <span>社員按圖文選單或輸入指令後，立即回覆目前對話狀態。</span>
+        </div>
+        <div class="audience-card" data-audience="group_draft">
+          <strong>C / 管理員群組草稿</strong>
+          <span>管理員先私訊預覽，再到公告群手動觸發當則 reply；沒有排程群發，也沒有 Quick Reply。</span>
+        </div>
+      </section>
+
+      <nav class="screen-tabs" aria-label="訊息情境種類">
+        <span class="tab-group">A 個人自動私訊</span>
         <button class="screen-tab" type="button" data-screen="pick" aria-selected="true">選曲開放</button>
         <button class="screen-tab" type="button" data-screen="submit" aria-selected="false">交歌／心得</button>
         <button class="screen-tab" type="button" data-screen="leave" aria-selected="false">請假結果</button>
@@ -690,6 +794,13 @@
         <button class="screen-tab" type="button" data-screen="activityWish" aria-selected="false">交換出題</button>
         <button class="screen-tab" type="button" data-screen="assignment" aria-selected="false">收到任務</button>
         <button class="screen-tab" type="button" data-screen="activityJudge" aria-selected="false">活動評選</button>
+        <span class="tab-group">B 成員指令回覆</span>
+        <button class="screen-tab" type="button" data-screen="dailyPick" aria-selected="false">選曲對話</button>
+        <button class="screen-tab" type="button" data-screen="dailySubmit" aria-selected="false">交歌對話</button>
+        <button class="screen-tab" type="button" data-screen="dailyReflection" aria-selected="false">心得對話</button>
+        <span class="tab-group">C 管理員群組草稿</span>
+        <button class="screen-tab" type="button" data-screen="groupDrafts" aria-selected="false">例行群組稿</button>
+        <button class="screen-tab" type="button" data-screen="groupActivity" aria-selected="false">活動階段稿</button>
       </nav>
 
       <section class="workspace">
@@ -718,6 +829,10 @@
 
         <section class="preview-column" aria-label="LINE 訊息預覽">
           <div class="scenario-bar">
+            <div class="delivery-meta">
+              <span class="audience-badge" id="audience-badge" data-audience="personal">個人自動私訊</span>
+              <span class="trigger-meta" id="trigger-meta">排程逐位檢查後 push；不經主揪群組稿</span>
+            </div>
             <span class="scenario-label">切換真實狀態</span>
             <div class="variant-buttons" id="variant-buttons"></div>
           </div>
@@ -727,7 +842,7 @@
             <section class="phone">
               <header class="line-header">
                 <span aria-hidden="true">‹</span>
-                <div><strong>英唱小幫手</strong><small>官方帳號</small></div>
+                <div><strong id="surface-title">英唱小幫手</strong><small id="surface-subtitle">個人自動私訊</small></div>
                 <span aria-hidden="true">☰</span>
               </header>
               <div class="chat">
@@ -737,7 +852,7 @@
                   <div class="message-stack">
                     <div class="sender">英唱小幫手</div>
                     <div class="bubble"><pre class="message-copy" id="message-copy"></pre></div>
-                    <div class="message-time">18:00</div>
+                    <div class="message-time">固定情境預覽</div>
                   </div>
                 </div>
                 <div class="quick-replies" id="quick-replies" aria-label="下一步快捷按鈕"></div>
@@ -843,18 +958,18 @@
         variants: {
           both: {
             label: "兩項都沒完成",
-            message: "🏖️ W6｜這週先休息\n📆 8/3（一）–8/9（日）\n\n🔰 " + exampleSong + "\n\n這次沒完成的是：\n🔗 作品連結\n💚 心得（有感歌詞）\n\n這週已幫你記成請假，\n這首不會送進 W6 評審。\n\n這只是休息一週的紀錄，\n不用補交，也不用有壓力。\n下週想唱再回來就好～\n\n➤【選曲】看看下一週\n➤【查請假】看本季紀錄",
-            actions: [messageAction("選曲", "選曲"), messageAction("查請假", "請假紀錄")]
+            message: "🏖️ W6｜這週先休息\n📆 8/3（一）–8/9（日）\n\n🔰 " + exampleSong + "\n\n這次沒完成的是：\n🔗 作品連結\n💚 心得（有感歌詞）\n\n這週已幫你記成請假，\n這首不會送進 W6 評審。\n\n這只是休息一週的紀錄，\n不用補交，也不用有壓力。\n下週想唱再回來就好～\n\n➤【看看下週】想唱再選\n➤【查請假】看本季紀錄",
+            actions: [messageAction("看看下週", "選曲"), messageAction("查請假", "查請假")]
           },
           link: {
             label: "缺作品連結",
-            message: "🏖️ W6｜這週先休息\n📆 8/3（一）–8/9（日）\n\n🔰 " + exampleSong + "\n\n這次沒完成的是：\n🔗 作品連結\n\n這週已幫你記成請假，\n這首不會送進 W6 評審。\n\n這只是休息一週的紀錄，\n不用補交，也不用有壓力。\n下週想唱再回來就好～\n\n➤【選曲】看看下一週\n➤【查請假】看本季紀錄",
-            actions: [messageAction("選曲", "選曲"), messageAction("查請假", "請假紀錄")]
+            message: "🏖️ W6｜這週先休息\n📆 8/3（一）–8/9（日）\n\n🔰 " + exampleSong + "\n\n這次沒完成的是：\n🔗 作品連結\n\n這週已幫你記成請假，\n這首不會送進 W6 評審。\n\n這只是休息一週的紀錄，\n不用補交，也不用有壓力。\n下週想唱再回來就好～\n\n➤【看看下週】想唱再選\n➤【查請假】看本季紀錄",
+            actions: [messageAction("看看下週", "選曲"), messageAction("查請假", "查請假")]
           },
           reflection: {
             label: "缺心得",
-            message: "🏖️ W6｜這週先休息\n📆 8/3（一）–8/9（日）\n\n🔰 " + exampleSong + "\n\n這次沒完成的是：\n💚 心得（有感歌詞）\n\n這週已幫你記成請假，\n這首不會送進 W6 評審。\n\n這只是休息一週的紀錄，\n不用補交，也不用有壓力。\n下週想唱再回來就好～\n\n➤【選曲】看看下一週\n➤【查請假】看本季紀錄",
-            actions: [messageAction("選曲", "選曲"), messageAction("查請假", "請假紀錄")]
+            message: "🏖️ W6｜這週先休息\n📆 8/3（一）–8/9（日）\n\n🔰 " + exampleSong + "\n\n這次沒完成的是：\n💚 心得（有感歌詞）\n\n這週已幫你記成請假，\n這首不會送進 W6 評審。\n\n這只是休息一週的紀錄，\n不用補交，也不用有壓力。\n下週想唱再回來就好～\n\n➤【看看下週】想唱再選\n➤【查請假】看本季紀錄",
+            actions: [messageAction("看看下週", "選曲"), messageAction("查請假", "查請假")]
           }
         }
       },
@@ -871,18 +986,18 @@
         variants: {
           new: {
             label: "還沒開始",
-            message: "🎧 W5｜今晚完成評選\n\n🌈 抒情歌\n📆 今天 8/9（日）23:59 前\n\n這次有 6 件作品。\n目前：還沒開始評選\n\n➤【我輪值】開始評選\n➤【評審入口】重看作品\n\n📣 完成後的群組公告\n送出評選後不會立刻發群組。\n若在期限前完成，\n預計 8/10（一）08:00 自動公告；\n完成後可以先看公告預覽。\n\n※ 目前沒有評選草稿\n期限到會記一週請假，W5 MVP 從缺",
-            actions: [messageAction("我輪值", "我輪值"), messageAction("評審入口", "評審入口")]
+            message: "🎧 W5｜今晚完成評選\n\n🌈 抒情歌\n📆 今天 8/9（日）23:59 前\n\n這次有 6 件作品。\n目前：還沒開始評選\n\n➤【開始評選】接著完成\n➤【評審入口】重看作品\n\n📣 完成後的群組公告\n送出評選後不會立刻發群組。\n若在期限前完成，\n預計 8/10（一）08:00 自動公告；\n完成後可以先看公告預覽。\n\n※ 目前沒有評選草稿\n期限到會記一週請假，W5 MVP 從缺",
+            actions: [messageAction("開始評選", "我輪值"), messageAction("評審入口", "評審入口")]
           },
           active: {
             label: "評選做到一半",
-            message: "🎧 W5｜今晚完成評選\n\n🌈 抒情歌\n📆 今天 8/9（日）23:59 前\n\n目前進度：\n合格 4・不合格 1・MVP 1/2\n\n➤【我輪值】繼續評選\n➤【評審入口】重看作品\n\n📣 完成後的群組公告\n送出評選後不會立刻發群組。\n若在期限前完成，\n預計 8/10（一）08:00 自動公告；\n完成後可以先看公告預覽。\n\n※ 尚未正式送出\n期限到會依目前內容自動送出，算評選完成",
-            actions: [messageAction("我輪值", "我輪值"), messageAction("評審入口", "評審入口")]
+            message: "🎧 W5｜今晚完成評選\n\n🌈 抒情歌\n📆 今天 8/9（日）23:59 前\n\n目前進度：\n合格 4・不合格 1・MVP 1/2\n\n➤【繼續評選】接著完成\n➤【評審入口】重看作品\n\n📣 完成後的群組公告\n送出評選後不會立刻發群組。\n若在期限前完成，\n預計 8/10（一）08:00 自動公告；\n完成後可以先看公告預覽。\n\n※ 尚未正式送出\n期限到會依目前內容自動送出，算評選完成",
+            actions: [messageAction("繼續評選", "我輪值"), messageAction("評審入口", "評審入口")]
           },
           ready: {
             label: "只差送出",
-            message: "🎧 W5｜今晚完成評選\n\n🌈 抒情歌\n📆 今天 8/9（日）23:59 前\n\n✓ 判定已完成\n✓ MVP 已選 2/2\n目前只差確認送出。\n\n➤【確認送出】完成 W5 評選\n➤【我輪值】先看完整摘要\n\n📣 完成後的群組公告\n送出評選後不會立刻發群組。\n若在期限前完成，\n預計 8/10（一）08:00 自動公告；\n完成後可以先看公告預覽。\n\n※ 尚未正式送出\n期限到會依目前內容自動送出，算評選完成",
-            actions: [messageAction("確認送出", "確認送出"), messageAction("我輪值", "我輪值")]
+            message: "🎧 W5｜今晚完成評選\n\n🌈 抒情歌\n📆 今天 8/9（日）23:59 前\n\n✓ 判定已完成\n✓ MVP 已選 2/2\n目前只差確認送出。\n\n➤【確認送出】完成 W5 評選\n➤【評審入口】重看作品\n\n📣 完成後的群組公告\n送出評選後不會立刻發群組。\n若在期限前完成，\n預計 8/10（一）08:00 自動公告；\n完成後可以先看公告預覽。\n\n※ 尚未正式送出\n期限到會依目前內容自動送出，算評選完成",
+            actions: [messageAction("確認送出", "確認送出"), messageAction("評審入口", "評審入口")]
           }
         }
       }
@@ -890,8 +1005,8 @@
 
     screens.leave.variants.noPick = {
       label: "沒有選曲",
-      message: "🏖️ W7｜這週先休息\n📆 8/10（一）–8/16（日）\n\n這週沒有選曲。\n已幫你記成請假，\n這週的交歌流程也先關起來。\n\n這只是休息一週的紀錄，\n不用補交，也不用有壓力。\n下週想唱再回來就好～\n\n➤【選曲】看看下一週\n➤【查請假】看本季紀錄",
-      actions: [messageAction("選曲", "選曲"), messageAction("查請假", "請假紀錄")]
+      message: "🏖️ W7｜這週先休息\n📆 8/10（一）–8/16（日）\n\n這週沒有選曲。\n已幫你記成請假，\n這週的交歌流程也先關起來。\n\n這只是休息一週的紀錄，\n不用補交，也不用有壓力。\n下週想唱再回來就好～\n\n➤【看看下週】想唱再選\n➤【查請假】看本季紀錄",
+      actions: [messageAction("看看下週", "預先選曲"), messageAction("查請假", "查請假")]
     };
 
     Object.assign(screens, {
@@ -954,7 +1069,7 @@
           missed: {
             label: "評審未完成",
             message: "🏖️ W5｜這次評審先休息\n\n🌈 抒情歌\n\n評審時間已經結束，\n這次沒有收到完成結果。\n\n已記一週請假，W5 MVP 從缺。\n不用補評，也不用另外說明。\n下一次輪值再回來就好～\n\n➤【查請假】看本季紀錄",
-            actions: [messageAction("查請假", "請假紀錄")]
+            actions: [messageAction("查請假", "查請假")]
           }
         }
       },
@@ -1014,7 +1129,7 @@
           },
           last: {
             label: "今天收尾",
-            message: "♬ W9/W10｜活動意願今天收尾\n\n📆 今天 8/17（一）08:00 前\n\n還沒收到你的選擇：\n1　交換歌曲\n2　合唱\n3　這次不參加配對\n\n➤【交換歌曲】選這個玩法\n➤【合唱】選這個玩法\n➤【這次不參加】先不配對\n\n※ 三個選項都可以；\n這個選擇本身不計請假。\n完全沒回覆時，會視為這次不參加配對；\nW9／W10 仍照非配對成員的方式交作品。",
+            message: "♬ W9/W10｜想玩哪一種？\n\n📆 8/17（一）08:00 前\n\n這季的驚喜活動要選玩法：\n1　交換歌曲\n2　合唱\n3　這次不參加配對\n\n➤【交換歌曲】選這個玩法\n➤【合唱】選這個玩法\n➤【這次不參加】先不配對\n\n※ 選「不參加配對」也可以；\n這個選擇本身不計請假。\n完全沒回覆時，會視為這次不參加配對；\nW9／W10 仍照非配對成員的方式交作品。",
             actions: [messageAction("交換歌曲", "投票 1"), messageAction("合唱", "投票 2"), messageAction("這次不參加", "投票 3")]
           }
         }
@@ -1127,6 +1242,232 @@
       }
     });
 
+    screens.judgeResult.variants.manual = {
+      label: "手動確認送出",
+      message: "✓ W5｜評選已完成\n\n🎖️ MVP：Mina、Ivy\n\n📣 群組公告\n這裡不會立刻發群組。\n預計 8/11（二）08:00 自動公告。\n可以先看群組會收到的內容。\n\n※ 評選送出後已鎖定\n錯字或想補充講評：直接在群組補充。\n要更換 MVP 人選：請聯絡群主或工程師協助。\n\n➤【公告預覽】先看公告\n➤【評選結果】查看結果",
+      actions: [messageAction("公告預覽", "公告預覽 2026Q3 W5", "announcementPreview"), messageAction("評選結果", "評選結果 2026Q3 W5", "judgeResult")]
+    };
+
+    function fixedReplyVariant_(contractId, label, trigger, message, actions) {
+      return {
+        contractId: contractId,
+        audience: "personal_reply",
+        audienceLabel: "成員指令回覆",
+        trigger: trigger,
+        deliveryNote: "社員操作後立即 reply；不是排程 push，也不會送到群組。",
+        label: label,
+        message: message,
+        actions: actions || []
+      };
+    }
+
+    Object.assign(screens, {
+      dailyPick: {
+        title: "日常選曲對話",
+        note: "從開啟選曲、補歌手到完成後的下一步。這一區都是社員操作後的即時回覆，不是自動提醒。",
+        changes: [
+          "三個關鍵狀態都使用正式文字可解析出的膠囊。",
+          "需要自由輸入時只顯示說明；膠囊只承擔可按動作。",
+          "完成後可直接看同週、換歌、交歌或寫心得。"
+        ],
+        variants: {
+          open: fixedReplyVariant_(
+            "daily:pick:open", "選曲入口", "社員按【選曲】；系統建立 W6 選曲對話",
+            "♪ W6 選曲已開放\n\n🌈 夏日公路歌\n────────────\n▫️ 你的狀態\n▫️ 尚未選曲:  (📆 8/3（一）23:59 前都能改)\n────────────\n目前還沒有人選曲\n────────────\n接下來可以：\n➤ ✏️ 直接輸入歌名\n➤【預先選曲】選其他週\n➤【收起】結束對話",
+            [messageAction("預先選曲", "預先選曲"), messageAction("收起", "收起")]
+          ),
+          awaitArtist: fixedReplyVariant_(
+            "daily:pick:await_artist", "等待歌手", "社員已輸入歌名 Yellow；系統等待歌手",
+            "♪ W6 選曲｜還差歌手\n\n歌名:\n\n🔰 Yellow\n\n────────────\n🤖 歌名重複排查:\n沒同名紀錄，可放心選\n\n──────────\n下一步，系統在等你\n\n➤ ✏️ 請輸入歌手 ，以完成選曲。\n\n──────────\n➤ 回【上一步】重填歌名\n➤【取消】放棄這次選曲\n\n──────────\n※ 填入歌手後才會儲存，才算完成選曲動作。",
+            [messageAction("上一步", "上一步"), messageAction("取消", "取消")]
+          ),
+          done: fixedReplyVariant_(
+            "daily:pick:done", "選曲完成後", "社員完成歌名＋歌手；系統顯示可接續動作",
+            "\n\n────────────\n接下來可以：\n\n➤【同週選曲】看 W6 大家選什麼\n➤【換歌】重新選 W6\n➤【交歌】貼作品連結🔗\n➤【心得】先寫心得\n────────────\n➤【收起】",
+            [messageAction("同週選曲", "同週選曲"), messageAction("換歌", "換歌"), messageAction("交歌", "交歌"), messageAction("心得", "心得"), messageAction("收起", "收起")]
+          )
+        }
+      },
+      dailySubmit: {
+        title: "日常交歌對話",
+        note: "涵蓋多週選擇、等待連結、完成狀態與換連結。所有膠囊都對齊正式文字解析規則。",
+        changes: [
+          "有多週可交時，週次本身就是可按膠囊。",
+          "直接貼連結是文字輸入，不偽裝成按鈕。",
+          "已完成後保留換連結、刪連結、心得與預先交歌。"
+        ],
+        variants: {
+          chooseWeek: fixedReplyVariant_(
+            "daily:submit:choose_week", "先選週次", "社員按【交歌】，同時有 W6／W8 可交",
+            "── 你的交歌狀況 ──\n\n✅ 收到連結！\n\n你有 2 週可以交，請按下面的週次數字選：\n──────────\n【 6 】W6\n🔰 Yellow - Coldplay\n▫️ 還沒交\n──────────\n【 8 】W8\n🔰 Gravity - Sara Bareilles\n▫️ 還沒交\n──────────\n\n➤【預先交歌】預交未來週的歌\n\n────────────\n➤【收起】結束對話（已存的不變）",
+            [messageAction("6", "6"), messageAction("8", "8"), messageAction("預先交歌", "預先交歌"), messageAction("收起", "收起")]
+          ),
+          awaitLink: fixedReplyVariant_(
+            "daily:submit:await_link", "等待作品連結", "社員選 W6；系統等待貼上作品 URL",
+            "♪ 交歌 W6\n\n✅ 選曲　Yellow - Coldplay\n❌ 交歌　尚未完成\n❌ 心得　尚未完成\n\n━━━━━━━━━━━━━━\n下一步\n━━━━━━━━━━━━━━\n\n✏️ 直接貼上作品連結🔗（心得可後補）\n➤【心得】補寫心得\n\n────────────\n➤【收起】結束對話（已存的不變）",
+            [messageAction("心得", "心得"), messageAction("收起", "收起")]
+          ),
+          done: fixedReplyVariant_(
+            "daily:submit:done", "交歌與心得完成", "社員重開【交歌】查看已儲存狀態",
+            "♪ 交歌 W6\n\n✅ 選曲　Yellow - Coldplay\n✅ 交歌\n🔗 https://youtu.be/example\n✅ 心得\n💚 心得內容\n\n🌐 評審看到的作品頁\n\n━━━━━━━━━━━━━━\n其他動作\n━━━━━━━━━━━━━━\n\n➤【換連結】貼上新的覆蓋\n➤【刪連結】只刪連結，選曲留著\n➤【心得】查看／修改\n➤【預先交歌】預交未來週\n\n────────────\n➤【收起】結束對話（已存的不變）",
+            [messageAction("換連結", "換連結"), messageAction("刪連結", "刪連結"), messageAction("心得", "心得"), messageAction("預先交歌", "預先交歌"), messageAction("收起", "收起")]
+          ),
+          changeLink: fixedReplyVariant_(
+            "daily:submit:change_link", "更換連結", "社員按【換連結】；舊連結保留到新連結送出",
+            "♪ W6 換連結\n\n────────────\n目前連結🔗：\n────────────\n\nhttps://youtu.be/example\n\n➤ ✏️ 貼上新的作品連結🔗\n貼上後覆蓋原連結\n\n────────────\n➤【取消】原本的不會變",
+            [messageAction("取消", "取消")]
+          )
+        }
+      },
+      dailyReflection: {
+        title: "日常心得編輯對話",
+        note: "完整展示『開啟編輯 → 貼新版 → 確認覆蓋／再改 → 儲存完成』，避免貼上的文字在未確認時被誤認為已存。",
+        changes: [
+          "現有心得在確認前一直保留。",
+          "確認畫面補上【我要改一下】，可回頭修稿再送出。",
+          "只有按【確認】才真正覆蓋；完成後可再次改心得。"
+        ],
+        variants: {
+          edit: fixedReplyVariant_(
+            "daily:reflection:edit", "開啟編輯", "社員按【心得】查看／修改已有心得",
+            "♪ W6 改心得\n\n────────────\n🟨目前心得：\n────────────\n\n心得內容\n\n※ 目前只是開啟編輯，還沒有修改，也沒有清空。\n💚 原本心得會保留到你送出新版為止。\n\n➤ ✏️ 直接輸入新的「心得內容」\n送出後會整篇覆蓋舊心得\n\n────────────\n➤【收起】不修改，保留原本心得",
+            [messageAction("收起", "收起")]
+          ),
+          confirmOverwrite: fixedReplyVariant_(
+            "daily:reflection:confirm_overwrite", "確認覆蓋", "社員貼上新版心得；內容仍只在暫存對話",
+            "※ 偵測到你貼了一段文字，這段「還沒有存進去」。\n\n要用這段覆蓋 W6 的心得嗎？\n\n你剛貼的內容：\n新版心得\n\n➤ 下一步（系統在等你）\n\n➤【確認】就用這段新的\n➤【我要改一下】繼續修改再送出\n➤【取消】保留原本心得並離開",
+            [messageAction("確認", "確認"), messageAction("我要改一下", "我要改一下"), messageAction("取消", "取消")]
+          ),
+          revise: fixedReplyVariant_(
+            "daily:reflection:revise", "繼續修改", "社員按【我要改一下】；等待貼完整修訂稿",
+            "♪ W6 修改新心得草稿\n\n────────────\n目前待確認的新心得：\n────────────\n\n新版心得\n\n※ 原本心得仍保留，現在還沒有覆蓋。\n\n➤ ✏️ 貼上修改後的完整心得\n貼上後會回到確認畫面，不會立刻存入。",
+            []
+          ),
+          done: fixedReplyVariant_(
+            "daily:reflection:done", "心得已更新", "社員按【確認】後，系統寫入並 read-back 成功",
+            "✓ 心得已更新 ｜ W6\n\n✅ 選曲　Yellow - Coldplay\n✅ 交歌\n🔗 https://youtu.be/example\n✅ 心得\n💚 心得內容\n\n🌐 評審看到的作品頁\n\n━━━━━━━━━━━━━━\n其他動作\n━━━━━━━━━━━━━━\n\n➤【改心得】整篇重寫\n\n────────────\n➤【收起】結束對話（已存的不變）",
+            [messageAction("改心得", "改心得"), messageAction("收起", "收起")]
+          )
+        }
+      }
+    });
+
+    function groupDraftVariant_(contractId, label, command, message) {
+      return {
+        contractId: contractId,
+        audience: "group_draft",
+        audienceLabel: "管理員群組草稿",
+        trigger: "管理員私訊【" + command + "】預覽；確認後依頁尾指令到公告群手動觸發當則 reply",
+        deliveryNote: "選配草稿，不會由排程群發、不取代社員個人私訊；群組稿沒有 LINE Quick Reply。",
+        label: label,
+        message: message,
+        actions: []
+      };
+    }
+
+    Object.assign(screens, {
+      groupDrafts: {
+        title: "管理員例行群組草稿",
+        note: "這 16 個 key 對應正式群組稿 registry。畫面只展示可複製正文；真正發布要由管理員在群組觸發當則 reply。",
+        changes: [
+          "所有 variant 明示管理員選配，不冒充自動通知。",
+          "群組內【文字】不是 Quick Reply，因此預覽不畫假膠囊。",
+          "提醒對象與日期由正式快照計算；此頁只放固定測試資料。"
+        ],
+        variants: {
+          reminder: groupDraftVariant_("group:reminder", "提醒｜三天內", "提醒", "♪ 群組提醒草稿\n\n未來三天有 2 件待辦：\nW7 選曲｜8/10（一）23:59 前\nW6 評選｜8/16（日）23:59 前\n\n※ 主揪選配草稿；社員該收到的個人提醒仍由排程逐位私訊。"),
+          reminder1: groupDraftVariant_("group:reminder_1", "提醒1｜24 小時", "提醒1", "♪ 24 小時內待辦草稿\n\nW7 還有 3 人尚未選曲。\n📆 8/10（一）23:59 前\n\n麻煩有空把歌選一選喔，沒選會記請假。"),
+          reminderFri: groupDraftVariant_("group:reminder_f", "提醒Fri｜下週預告", "提醒Fri", "♪ 星期五下週預告\n\n下週是 W7｜夏日公路歌\n選曲會在週一晚間截止。\n評審輪值請先確認題目與說明。"),
+          reminderSun: groupDraftVariant_("group:reminder_s", "提醒Sun｜交歌收尾", "提醒Sun", "♪ 星期日交歌收尾\n\nW6 今天 23:59 截止。\n還沒完成的社員，麻煩把作品連結與心得補上喔。"),
+          reminderMon: groupDraftVariant_("group:reminder_m", "提醒Mon｜選曲截止", "提醒Mon", "♪ 星期一選曲截止\n\nW7 今天 23:59 截止。\n還沒選的麻煩把歌選一選喔，沒選會記請假。"),
+          judgeBrief: groupDraftVariant_("group:judge_brief", "評審出題", "評審出題", "🎧 評審出題提醒草稿\n\nW8 題目已填，說明尚未完成。\n麻煩輪值評審到圖文選單 評審 › 我輪值補上說明。"),
+          judgeReview: groupDraftVariant_("group:judge_review", "評審評選", "評審評選", "🎧 評審評選提醒草稿\n\nW6 作品評選進行中。\n麻煩輪值評審在期限前完成判定與 MVP。"),
+          mvp: groupDraftVariant_("group:mvp", "MVP 標記", "MVP標記", "★ W5 MVP 公告\n\n🎖️ MVP 1：Mina｜Yellow - Coldplay\n🎖️ MVP 2：Ivy｜Gravity - Sara Bareilles\n\n感謝大家的參與 ♪"),
+          nextTheme: groupDraftVariant_("group:next_theme", "下週主題", "下週主題草稿", "♪ 下週主題草稿\n\nW7｜夏日公路歌\n題目說明：適合在路上聽、帶有移動感的英文歌。"),
+          theme: groupDraftVariant_("group:theme", "本週主題", "主題草稿", "♪ W6 本週主題\n\n🌈 自由題目\n這週想唱什麼都可以，選一首你真的想唱的歌。"),
+          submit: groupDraftVariant_("group:submit", "交件名單", "交件名單", "♪ W6 交件名單\n\n✓ 已完成：Mina、Ivy、Cara\n○ 尚未完成：2 人\n\n※ 進入最後倒數才會列名。"),
+          leave: groupDraftVariant_("group:leave", "本週請假", "請假草稿", "🏖️ W6 本週請假\n\n這週休息：Lena、Vania\n\n請假只是休息一週的紀錄，下週想唱再回來就好。"),
+          weeklyDigest: groupDraftVariant_("group:weekly_digest", "本週週報", "本週週報", "♪ W6 本週週報\n\n主題：自由題目\n交件：5／7\n評審：Ophelia\n\n本週流程已結束，謝謝大家。"),
+          nextDigest: groupDraftVariant_("group:next_digest", "下週週報", "下週週報", "♪ W7 下週預告\n\n主題：夏日公路歌\n選曲截止：8/10（一）23:59\n交歌截止：8/16（日）23:59"),
+          seasonPrep: groupDraftVariant_("group:season_prep", "開季準備", "開季準備", "♪ 2026 Q4 開季準備\n\n輪值評審請先完成預備題目與說明。\n開季時未準備的週次會改成自由題目。"),
+          activity: groupDraftVariant_("group:activity", "活動草稿｜目前階段", "活動草稿", "♬ 驚喜活動群組草稿\n\n目前階段：玩法投票\n社員會各自收到投票私訊；這份只是主揪想在群組補充時可用的選配稿。\n\n※ 不會自動群發，也不取代個人私訊。")
+        }
+      },
+      groupActivity: {
+        title: "驚喜活動七階段群組草稿",
+        note: "同一個【活動草稿】指令會依正式活動 state 產生不同正文。每一階段都只是主揪選配，不是社員任務的主要入口。",
+        changes: [
+          "投票、合唱應變、配對與活動評選仍由系統逐位私訊。",
+          "群組稿只補共同脈絡，不承擔個人選擇或寫入。",
+          "七個正式 phase 都能在這裡離線檢查。"
+        ],
+        variants: {
+          vote: groupDraftVariant_("group:activity:vote", "1｜玩法投票", "活動草稿", "♬ 驚喜活動｜玩法投票中\n\n社員會各自收到交換歌曲／合唱／不參加配對的私訊選項。\n📆 8/17（一）08:00 前\n\n※ 這是主揪選配群組稿；沒有貼也不影響個人投票私訊。"),
+          exchangeWish: groupDraftVariant_("group:activity:exchange_wish", "2｜交換出題", "活動草稿", "♬ 驚喜活動｜交換歌曲出題中\n\n參加者各推薦 2 首：歌曲＋推薦原因必填，YouTube 連結選填。\n📆 8/22（六）23:59 前\n\n個人填寫入口已逐位私訊。"),
+          exchangeActive: groupDraftVariant_("group:activity:exchange_active", "3｜交換進行中", "活動草稿", "♬ 驚喜活動｜交換任務已配對\n\n參加者已各自收到兩首候選歌與推薦原因，從中完成 1 首完整長度翻唱。\nW9／W10 是同一份活動任務。"),
+          freeActive: groupDraftVariant_("group:activity:free_active", "4｜非配對自由唱", "活動草稿", "♬ 驚喜活動｜自由參加方式\n\n這次沒有進入配對的社員，W9／W10 仍可依非配對方式完成一份作品；不會因活動投票本身被記請假。"),
+          duetConsent: groupDraftVariant_("group:activity:duet_consent", "5｜合唱單數偏好", "活動草稿", "♬ 驚喜活動｜合唱玩法確定\n\n若參加人數為單數，系統會逐位私訊詢問是否願意自行應變。\n📆 8/18（二）08:00 前\n\n※ 個人偏好只在私訊選擇，群組稿不代填。"),
+          duetActive: groupDraftVariant_("group:activity:duet_active", "6｜合唱進行中", "活動草稿", "♬ 驚喜活動｜合唱安排已完成\n\n參加者已逐位收到夥伴或單數安排，請私下討論曲目與分工，完成 1 首完整長度作品。"),
+          judged: groupDraftVariant_("group:activity:judged", "7｜活動評選", "活動草稿", "♬ 驚喜活動｜一起欣賞與選 MVP\n\n每人最多選 2 位；作品滿 3 讚就是 MVP，不限人數。\n社員的個人評選頁會逐位私訊；沒投不記請假。")
+        }
+      }
+    });
+
+    function addPersonalMeta_(screenKey, variantKey, contractId, trigger) {
+      const variant = screens[screenKey].variants[variantKey];
+      variant.contractId = contractId;
+      variant.audience = "personal";
+      variant.audienceLabel = "個人自動私訊";
+      variant.trigger = trigger;
+      variant.deliveryNote = "排程逐位檢查後 push 給本人；不是主揪群組提醒。";
+    }
+
+    [
+      ["pick", "normal", "personal:pick:normal", "選曲開放排程｜一般題目、本人尚未選曲"],
+      ["pick", "free", "personal:pick:free", "選曲開放排程｜自由題目、本人尚未選曲"],
+      ["submit", "both", "personal:submit:both", "交歌截止提醒｜本人缺作品連結＋心得"],
+      ["submit", "link", "personal:submit:link", "交歌截止提醒｜本人只缺作品連結"],
+      ["submit", "reflection", "personal:reflection:only", "交歌截止提醒｜本人只缺心得"],
+      ["leave", "noPick", "personal:locked_leave:no_pick", "選曲截止結算｜本人未選曲，記一週請假"],
+      ["leave", "both", "personal:final_leave:both", "交歌截止結算｜本人缺作品連結＋心得"],
+      ["leave", "link", "personal:final_leave:link", "交歌截止結算｜本人只缺作品連結"],
+      ["leave", "reflection", "personal:final_leave:reflection", "交歌截止結算｜本人只缺心得"],
+      ["judgeStart", "packet", "personal:review_packet:packet", "評審期開始｜逐位私訊當週輪值評審"],
+      ["judge", "new", "personal:review_last_day:new", "評審截止日｜尚未開始且沒有草稿"],
+      ["judge", "active", "personal:review_last_day:active", "評審截止日｜已存部分草稿"],
+      ["judge", "ready", "personal:review_last_day:ready", "評審截止日｜判定完成、只差確認"],
+      ["judgeResult", "auto", "personal:judge_draft_finalized:auto", "評審期限到｜已存草稿自動轉為正式結果"],
+      ["judgeResult", "manual", "personal:judge_draft_finalized:manual", "評審按確認送出｜正式結果鎖定"],
+      ["judgeResult", "missed", "personal:deadline_judge_review:missed", "評審期限到｜沒有可轉正草稿"],
+      ["announcementPreview", "scheduled", "reply:announcement_preview:scheduled", "評審本人按【公告預覽】｜已排定"],
+      ["announcementPreview", "announced", "reply:announcement_preview:announced", "評審本人按【公告預覽】｜已發布"],
+      ["announcementPreview", "manual_handoff", "reply:announcement_preview:manual_handoff", "評審本人按【公告預覽】｜管理端接手"],
+      ["announcementPreview", "disabled", "reply:announcement_preview:disabled", "評審本人按【公告預覽】｜自動公告關閉"],
+      ["announcementPreview", "unknown", "reply:announcement_preview:unknown", "評審本人按【公告預覽】｜時間無法判定"],
+      ["activityVote", "open", "personal:activity_vote_open:open", "W7 週一 08:00｜逐位 push 給尚未投票的現役社員"],
+      ["activityVote", "last", "personal:activity_vote_open:last", "W7 週日 08:00（截止前一日）｜只 push 尚未回覆者"],
+      ["duet", "open", "personal:duet_consent:open", "合唱勝出且人數可能為單數｜逐位詢問偏好"],
+      ["duet", "last", "personal:duet_consent:last", "合唱偏好截止日｜只 push 尚未回覆者"],
+      ["duetAssignment", "partner", "personal:activity_duet_assignment:partner", "合唱配對完成｜逐位私訊本人夥伴"],
+      ["duetAssignment", "solo", "personal:activity_duet_assignment:solo", "合唱配對完成｜逐位私訊單數應變者"],
+      ["activityWish", "open", "personal:activity_wish_open:open", "交換歌曲勝出｜逐位私訊未完成出題者"],
+      ["activityWish", "completed", "personal:activity_wish_open:completed", "交換歌曲勝出｜已提前交滿兩題者收到沿用確認"],
+      ["activityWish", "pending", "personal:activity_wish:pending", "交換出題截止提醒｜只 push 尚缺題目者"],
+      ["assignment", "ready", "personal:activity_exchange_assignment:ready", "交換配對完成｜逐位私訊本人兩首候選任務"],
+      ["activityJudge", "d1", "personal:activity_judge:d1", "活動作品完成｜逐位私訊尚未評選者的專屬入口"]
+    ].forEach(function (item) {
+      if (item[0] === "announcementPreview") {
+        const variant = screens[item[0]].variants[item[1]];
+        variant.contractId = item[2];
+        variant.audience = "personal_reply";
+        variant.audienceLabel = "成員指令回覆";
+        variant.trigger = item[3];
+        variant.deliveryNote = "社員主動按【公告預覽】後，由小幫手回覆本人；不是排程 push。";
+      } else {
+        addPersonalMeta_(item[0], item[1], item[2], item[3]);
+      }
+    });
+
     const state = {
       screen: "pick",
       variants: {
@@ -1142,9 +1483,31 @@
         duetAssignment: "partner",
         activityWish: "pending",
         assignment: "ready",
-        activityJudge: "d1"
+        activityJudge: "d1",
+        dailyPick: "open",
+        dailySubmit: "chooseWeek",
+        dailyReflection: "edit",
+        groupDrafts: "reminder",
+        groupActivity: "vote"
       }
     };
+
+    try {
+      const savedState = JSON.parse(localStorage.getItem("reminder-lab-state") || "null");
+      if (savedState && screens[savedState.screen]) state.screen = savedState.screen;
+      Object.keys(state.variants).forEach(function (screenKey) {
+        const savedVariant = savedState && savedState.variants && savedState.variants[screenKey];
+        if (savedVariant && screens[screenKey] && screens[screenKey].variants[savedVariant]) {
+          state.variants[screenKey] = savedVariant;
+        }
+      });
+    } catch (error) {
+      localStorage.removeItem("reminder-lab-state");
+    }
+
+    function persistState() {
+      localStorage.setItem("reminder-lab-state", JSON.stringify(state));
+    }
 
     function currentScreen() {
       return screens[state.screen];
@@ -1177,12 +1540,22 @@
     function renderMessage() {
       const variant = currentVariant();
       const actions = variant.actions || [];
+      const audience = variant.audience || "personal";
+      const audienceLabel = variant.audienceLabel || "個人自動私訊";
+      const badge = document.getElementById("audience-badge");
+      badge.dataset.audience = audience;
+      badge.textContent = audienceLabel;
+      document.getElementById("trigger-meta").textContent = "觸發：" + (variant.trigger || "未標示") + "｜" + (variant.deliveryNote || "");
+      document.getElementById("surface-title").textContent = audience === "group_draft" ? "管理員草稿預覽" : "英唱小幫手";
+      document.getElementById("surface-subtitle").textContent = audienceLabel;
       document.getElementById("message-copy").textContent = variant.message;
       document.getElementById("quick-replies").innerHTML = actions.map(function (action, index) {
         return '<button class="quick-reply" type="button" data-action-index="' + index +
           '" data-action-kind="' + escapeHtml(action.type) + '">' + escapeHtml(action.label) + "</button>";
       }).join("");
-      document.getElementById("tap-result").textContent = "";
+      document.getElementById("tap-result").textContent = audience === "group_draft"
+        ? "※ 群組稿沒有 Quick Reply；實際請依觸發欄，到公告群手動觸發當則 reply。"
+        : "";
     }
 
     function render() {
@@ -1192,6 +1565,7 @@
       renderVariants();
       renderChanges();
       renderMessage();
+      persistState();
     }
 
     function copyCurrentMessage() {
