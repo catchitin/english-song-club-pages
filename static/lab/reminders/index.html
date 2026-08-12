@@ -764,32 +764,6 @@
       font-weight: 700;
     }
 
-    .flex-card[data-mode="status"] {
-      border-color: #3a4451;
-      background: #171b22;
-      box-shadow: 0 6px 16px rgba(4, 6, 10, .16);
-    }
-
-    .flex-card[data-mode="status"] .flex-card__header,
-    .flex-card[data-mode="status"] .flex-card__status {
-      border-color: #3a4451;
-      background: #202630;
-    }
-
-    .flex-card[data-mode="status"] .flex-card__eyebrow strong { color: #aab4c2; }
-    .flex-card[data-mode="status"] .flex-card__label { color: #8a94a3; }
-    .flex-card[data-mode="status"] .flex-step { background: #171b22; }
-
-    .flex-card[data-mode="status"] .flex-card__footer {
-      border-color: #3a4451;
-      background: #1b2028;
-    }
-
-    .flex-card[data-mode="status"] .flex-card__button {
-      color: #aab4c2;
-      background: transparent;
-    }
-
     .message-time {
       margin-top: 4px;
       color: rgba(255, 255, 255, .87);
@@ -1543,7 +1517,7 @@
       }
 
       cards.forEach(function (card, index) {
-        card.eyebrow = (card.actionable === true ? "待辦" : "狀態") + " · 卡片 " + (index + 1) + "/" + cards.length;
+        card.eyebrow = "卡片 " + (index + 1) + "/" + cards.length;
       });
 
       return {
@@ -1652,7 +1626,7 @@
       }
 
       cards.forEach(function (card, index) {
-        card.eyebrow = (card.actionable === true ? "待辦" : "狀態") + " · 卡片 " + (index + 1) + "/" + cards.length;
+        card.eyebrow = "卡片 " + (index + 1) + "/" + cards.length;
       });
       return {
         contractId: contractId,
@@ -1758,7 +1732,7 @@
         trigger = "工程師輸入【輪值卡測試】；本人是未來評審且缺說明";
       }
       cards.forEach(function (card, index) {
-        card.eyebrow = (card.actionable === true ? "待辦" : "狀態") + " · 卡片 " + (index + 1) + "/" + cards.length;
+        card.eyebrow = "卡片 " + (index + 1) + "/" + cards.length;
       });
       return {
         contractId: "reply:judge_duty_carousel:" + role,
@@ -1795,8 +1769,8 @@
         }
       },
       judgeDutyCarousel: {
-        title: "輪值 Carousel｜待辦與狀態分層",
-        note: "輪值卡先走 operations-only 測試入口。狀態卡使用安靜灰藍底；真正需要處理的卡才使用紫色主按鈕。",
+        title: "輪值 Carousel｜任務與進度",
+        note: "輪值卡先走 operations-only 測試入口。所有卡片恢復深石墨底與紫色主按鈕，狀態改由內容區文字與色彩判讀。",
         changes: [
           "上週評選中：看作品、選 MVP、確認送出是待辦；不合格判定是選配操作。",
           "本週評審：不製造假 MVP 待辦，只顯示輪值狀態並提醒可先唱其他週。",
@@ -2107,8 +2081,7 @@
           ? '<span class="flex-card__status-detail">' + escapeHtml(card.statusDetail) + '</span>'
           : "");
       const action = card.action || {};
-      return '<article class="flex-card" data-mode="' + (card.actionable === true ? "action" : "status") +
-        '" data-accent="' + escapeHtml(card.accent || "blue") + '">' +
+      return '<article class="flex-card" data-accent="' + escapeHtml(card.accent || "blue") + '">' +
         '<header class="flex-card__header">' +
           '<div class="flex-card__eyebrow"><strong>' + escapeHtml(card.eyebrow) + '</strong>' +
             '<span class="flex-card__context">' + escapeHtml(card.context) + '</span></div>' +
