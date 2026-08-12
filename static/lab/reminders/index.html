@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Public design snapshot of reminder, command-reply, and admin-draft surfaces, published 2026-08-12. -->
+<!-- Public design snapshot of reminder, command-reply, and admin-draft surfaces, published 2026-08-13. -->
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8">
@@ -606,6 +606,168 @@
       white-space: pre-wrap;
     }
 
+    .bubble[hidden],
+    .flex-carousel[hidden] { display: none; }
+
+    .flex-carousel {
+      display: flex;
+      width: 100%;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 0 2px 9px 0;
+      scroll-padding-left: 1px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
+    }
+
+    .flex-card {
+      display: flex;
+      width: 238px;
+      min-height: 420px;
+      flex: 0 0 238px;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid #2a4f8a;
+      border-radius: 10px;
+      color: #eef6ff;
+      background: #070c18;
+      box-shadow: 0 2px 7px rgba(22, 37, 64, .28);
+      scroll-snap-align: start;
+    }
+
+    .flex-card__header {
+      padding: 15px 15px 13px;
+      border-bottom: 1px solid #2a4f8a;
+      background: #0c1630;
+    }
+
+    .flex-card__eyebrow {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .flex-card__eyebrow strong { color: #4aa8ff; }
+    .flex-card[data-accent="pink"] .flex-card__eyebrow strong { color: #ff2d8e; }
+    .flex-card[data-accent="cyan"] .flex-card__eyebrow strong { color: #26d4f0; }
+    .flex-card[data-accent="gold"] .flex-card__eyebrow strong { color: #ffd633; }
+    .flex-card[data-accent="orange"] .flex-card__eyebrow strong { color: #ff8a3d; }
+
+    .flex-card__context {
+      color: #9fc0e8;
+      text-align: right;
+    }
+
+    .flex-card__title {
+      margin-top: 9px;
+      color: #eef6ff;
+      font-size: 19px;
+      line-height: 1.25;
+    }
+
+    .flex-card__body {
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+      gap: 15px;
+      padding: 15px;
+    }
+
+    .flex-card__label {
+      display: block;
+      color: #5f7bb0;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .flex-card__value {
+      display: block;
+      margin-top: 5px;
+      color: #eef6ff;
+      font-size: 12px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .flex-card__status {
+      padding: 11px;
+      border-radius: 8px;
+      background: #0c1630;
+    }
+
+    .flex-card__status-value {
+      display: block;
+      margin-top: 6px;
+      color: #9fc0e8;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .flex-card__status-value[data-tone="pending"] { color: #ffd633; }
+    .flex-card__status-value[data-tone="done"] { color: #3dff9e; }
+
+    .flex-card__status-detail {
+      display: block;
+      margin-top: 4px;
+      color: #9fc0e8;
+      font-size: 10px;
+      line-height: 1.4;
+    }
+
+    .flex-steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 7px;
+    }
+
+    .flex-step {
+      padding: 8px 4px;
+      border-radius: 6px;
+      color: #eef6ff;
+      background: #070c18;
+      text-align: center;
+    }
+
+    .flex-step strong {
+      display: block;
+      color: #9fc0e8;
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .flex-step span {
+      display: block;
+      margin-top: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .flex-card__footer {
+      padding: 10px;
+      border-top: 1px solid #2a4f8a;
+      background: #111d3a;
+    }
+
+    .flex-card__button {
+      width: 100%;
+      min-height: 44px;
+      padding: 8px 10px;
+      border: 0;
+      border-radius: 7px;
+      color: #ffffff;
+      background: #2a4f8a;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
     .message-time {
       margin-top: 4px;
       color: rgba(255, 255, 255, .87);
@@ -743,7 +905,7 @@
 <body>
   <main class="app">
     <aside class="publication-notice" role="note" aria-label="發布版本說明">
-      <strong>MESSAGE LAB · 2026-08-12</strong>
+      <strong>MESSAGE LAB · 2026-08-13</strong>
       <span>下方完整分開自動私訊、成員指令回覆與管理員群組草稿；這是固定假資料測試台，不會連到 LINE、不讀社員資料，也不會真的發訊息。</span>
     </aside>
 
@@ -795,6 +957,7 @@
         <button class="screen-tab" type="button" data-screen="assignment" aria-selected="false">收到任務</button>
         <button class="screen-tab" type="button" data-screen="activityJudge" aria-selected="false">活動評選</button>
         <span class="tab-group">B 成員指令回覆</span>
+        <button class="screen-tab" type="button" data-screen="taskCarousel" aria-selected="false">任務卡片</button>
         <button class="screen-tab" type="button" data-screen="dailyPick" aria-selected="false">選曲對話</button>
         <button class="screen-tab" type="button" data-screen="dailySubmit" aria-selected="false">交歌對話</button>
         <button class="screen-tab" type="button" data-screen="dailyReflection" aria-selected="false">心得對話</button>
@@ -851,7 +1014,8 @@
                   <div class="bot-avatar" aria-hidden="true">♪</div>
                   <div class="message-stack">
                     <div class="sender">英唱小幫手</div>
-                    <div class="bubble"><pre class="message-copy" id="message-copy"></pre></div>
+                    <div class="bubble" id="text-bubble"><pre class="message-copy" id="message-copy"></pre></div>
+                    <div class="flex-carousel" id="flex-carousel" aria-label="可左右滑動的任務卡片" hidden></div>
                     <div class="message-time">固定情境預覽</div>
                   </div>
                 </div>
@@ -894,7 +1058,7 @@
 
       <details class="source-note">
         <summary>這頁與正式版的關係</summary>
-        <p>這是 2026-08-12 版本的設計預覽，用固定範例一次展示所有提醒情境；正式提醒文案變更時會同步受影響的範例。正式 LINE 訊息仍以當下資料產生，可能因週次、歌曲、期限、任務進度與可用動作不同而省略或替換內容；本頁不是第二份資料來源。</p>
+        <p>這是 2026-08-13 版本的設計預覽，用固定範例一次展示所有提醒情境；正式提醒文案變更時會同步受影響的範例。正式 LINE 訊息仍以當下資料產生，可能因週次、歌曲、期限、任務進度與可用動作不同而省略或替換內容；本頁不是第二份資料來源。</p>
       </details>
     </section>
   </main>
@@ -1261,7 +1425,231 @@
       };
     }
 
+    function taskCarouselVariant_(includeActivityVote) {
+      const cards = [
+        {
+          accent: "pink",
+          context: "W7｜2026 Q3",
+          title: "本週選歌",
+          descriptionLabel: "本週主題",
+          description: "Songs that mix 中文 and English",
+          statusLabel: "目前狀態",
+          status: "— 本週已請假",
+          statusTone: "muted",
+          metaLabel: "選曲期限",
+          meta: "8/10（一）23:59",
+          action: messageAction("進入選曲", "選曲")
+        },
+        {
+          accent: "cyan",
+          context: "W7｜2026 Q3",
+          title: "交歌",
+          descriptionLabel: "目前作品",
+          description: "尚未選曲",
+          statusLabel: "目前狀態",
+          status: "— 本週已請假",
+          statusTone: "muted",
+          metaLabel: "交歌期限",
+          meta: "8/16（日）23:59",
+          action: messageAction("進入交歌", "交歌")
+        },
+        {
+          accent: "gold",
+          context: "W7｜2026 Q3",
+          title: "心得",
+          descriptionLabel: "填寫說明",
+          description: "選曲後即可填寫，不必等交歌。",
+          statusLabel: "目前狀態",
+          status: "— 本週已請假",
+          statusTone: "muted",
+          metaLabel: "心得期限",
+          meta: "8/16（日）23:59",
+          action: messageAction("進入心得", "心得")
+        },
+        {
+          accent: "blue",
+          context: "W7｜2026 Q3",
+          title: "本週進度",
+          descriptionLabel: "本週流程",
+          description: "選曲 → 交歌 → 心得",
+          statusLabel: "完成狀態",
+          steps: [
+            { marker: "—", label: "選曲" },
+            { marker: "—", label: "交歌" },
+            { marker: "—", label: "心得" }
+          ],
+          metaLabel: "本週安排",
+          meta: "本週已請假",
+          action: messageAction("查看詳細進度", "任務詳情")
+        },
+        {
+          accent: "pink",
+          context: "W8｜2026 Q3",
+          title: "下週選曲",
+          descriptionLabel: "下週主題",
+          description: "A song that feels like home",
+          statusLabel: "目前狀態",
+          status: "○ 尚未選曲",
+          statusTone: "pending",
+          metaLabel: "選曲期限",
+          meta: "8/17（一）23:59",
+          action: messageAction("進入下週選曲", "預先選曲 W8")
+        }
+      ];
+
+      if (includeActivityVote) {
+        cards.push({
+          accent: "orange",
+          context: "W9–W10｜2026 Q3",
+          title: "驚喜活動投票",
+          descriptionLabel: "玩法選擇",
+          description: "交換歌曲、合唱，或這次不參加配對。",
+          statusLabel: "目前狀態",
+          status: "○ 尚未投票",
+          statusTone: "pending",
+          metaLabel: "投票期限",
+          meta: "8/17（一）08:00",
+          action: messageAction("立即投票", "投票")
+        });
+      }
+
+      cards.forEach(function (card, index) {
+        card.eyebrow = "卡片 " + (index + 1) + "/" + cards.length;
+      });
+
+      return {
+        contractId: includeActivityVote ? "reply:task_carousel:leave_unvoted" : "reply:task_carousel:leave_voted",
+        audience: "personal_reply",
+        audienceLabel: "成員指令回覆",
+        trigger: "社員按【任務】；本週個人列為請假",
+        deliveryNote: "社員操作後立即 reply；請假只豁免本週，未來週與活動待辦照常顯示。",
+        label: includeActivityVote ? "本週請假・未投票｜6 張" : "本週請假・已投票｜5 張",
+        kind: "flex_carousel",
+        altText: "♪ 功能選單｜本週任務與近期行動",
+        message: "♪ 功能選單｜本週任務與近期行動",
+        cards: cards,
+        actions: []
+      };
+    }
+
+    function taskCarouselParticipantCards_() {
+      const cards = taskCarouselVariant_(false).cards.slice(0, 4);
+      cards[0].status = "✓ 已完成";
+      cards[0].statusTone = "done";
+      cards[0].statusDetail = "Because of You - Kelly Clarkson";
+      cards[1].description = "Because of You - Kelly Clarkson";
+      cards[1].status = "○ 待完成";
+      cards[1].statusTone = "pending";
+      cards[2].status = "○ 待完成";
+      cards[2].statusTone = "pending";
+      cards[3].steps = [
+        { marker: "✓", label: "選曲" },
+        { marker: "○", label: "交歌" },
+        { marker: "○", label: "心得" }
+      ];
+      cards[3].metaLabel = "下一步";
+      cards[3].meta = "查看未完成項目與詳細期限";
+      return cards;
+    }
+
+    function taskJudgeCarouselVariant_(role) {
+      const nextPick = taskCarouselVariant_(false).cards[4];
+      const activityVote = taskCarouselVariant_(true).cards[5];
+      let cards = [];
+      let contractId = "";
+      let label = "";
+      let trigger = "";
+
+      if (role === "previous") {
+        cards = taskCarouselParticipantCards_().concat([{
+          accent: "gold",
+          context: "W6｜2026 Q3",
+          title: "選 MVP",
+          descriptionLabel: "評審主題",
+          description: "A song that tells a story",
+          statusLabel: "目前狀態",
+          status: "○ 評選尚未完成",
+          statusTone: "pending",
+          metaLabel: "評審期限",
+          meta: "8/16（日）23:59",
+          action: messageAction("開始選 MVP", "選MVP")
+        }, nextPick, activityVote]);
+        contractId = "reply:task_carousel:judge_previous";
+        label = "上週評審・未投活動｜7 張";
+        trigger = "社員按【任務】；本人是上週評審且尚未完成評選";
+      } else if (role === "future") {
+        cards = taskCarouselParticipantCards_().concat([{
+          accent: "cyan",
+          context: "W8｜2026 Q3",
+          title: "補充題目說明",
+          descriptionLabel: "你將評審的主題",
+          description: "A song that feels like home",
+          statusLabel: "目前狀態",
+          status: "○ 題目說明尚未填寫",
+          statusTone: "pending",
+          metaLabel: "可修改至",
+          meta: "8/17（一）23:59",
+          action: messageAction("補充題目說明", "出題說明")
+        }, activityVote]);
+        contractId = "reply:task_carousel:judge_future";
+        label = "未來評審・缺說明｜6 張";
+        trigger = "社員按【任務】；本人是下週評審，題目說明尚未填寫";
+      } else {
+        cards = taskCarouselVariant_(false).cards.slice(0, 4);
+        cards.slice(0, 3).forEach(function (card) {
+          card.status = "— 本週為評審週，三步驟免做";
+          card.statusTone = "muted";
+        });
+        cards[3].steps = [
+          { marker: "—", label: "選曲" },
+          { marker: "—", label: "交歌" },
+          { marker: "—", label: "心得" }
+        ];
+        cards[3].metaLabel = "本週安排";
+        cards[3].meta = "本週為評審週，三步驟免做";
+        cards.push(nextPick);
+        contractId = "reply:task_carousel:judge_current";
+        label = "本週評審｜5 張";
+        trigger = "社員按【任務】；本人是本週評審";
+      }
+
+      cards.forEach(function (card, index) {
+        card.eyebrow = "卡片 " + (index + 1) + "/" + cards.length;
+      });
+      return {
+        contractId: contractId,
+        audience: "personal_reply",
+        audienceLabel: "成員指令回覆",
+        trigger: trigger,
+        deliveryNote: "社員操作後立即 reply；評審角色與完成狀態會由正式任務判定即時計算。",
+        label: label,
+        kind: "flex_carousel",
+        altText: "♪ 功能選單｜本週任務與近期行動",
+        message: "♪ 功能選單｜本週任務與近期行動",
+        cards: cards,
+        actions: []
+      };
+    }
+
     Object.assign(screens, {
+      taskCarousel: {
+        title: "任務 Carousel｜請假與評審身分",
+        note: "本週四張固定保留，後面依本人真正能做的近期行動追加。切換情境後左右滑動，可比較請假與三種評審角色。",
+        changes: [
+          "前三張狀態固定顯示「— 本週已請假」，不冒充待完成。",
+          "進度卡三格都用「—」；摘要顯示「本週安排／本週已請假」。",
+          "下週選曲仍可做；尚未投活動票時，投票卡固定排最後。",
+          "上週評審未完成才顯示選 MVP；未來評審缺說明才顯示補充卡。",
+          "本週評審不增加評審待辦，只保留免做狀態與可先處理的其他週選曲。"
+        ],
+        variants: {
+          leaveVoted: taskCarouselVariant_(false),
+          leaveUnvoted: taskCarouselVariant_(true),
+          judgePrevious: taskJudgeCarouselVariant_("previous"),
+          judgeFuture: taskJudgeCarouselVariant_("future"),
+          judgeCurrent: taskJudgeCarouselVariant_("current")
+        }
+      },
       dailyPick: {
         title: "日常選曲對話",
         note: "從開啟選曲、補歌手到完成後的下一步。這一區都是社員操作後的即時回覆，不是自動提醒。",
@@ -1484,6 +1872,7 @@
         activityWish: "pending",
         assignment: "ready",
         activityJudge: "d1",
+        taskCarousel: "leaveVoted",
         dailyPick: "open",
         dailySubmit: "chooseWeek",
         dailyReflection: "edit",
@@ -1503,6 +1892,16 @@
       });
     } catch (error) {
       localStorage.removeItem("reminder-lab-state");
+    }
+
+    const previewParams = new URLSearchParams(window.location.search);
+    const requestedScreen = previewParams.get("screen");
+    const requestedVariant = previewParams.get("variant");
+    if (requestedScreen && screens[requestedScreen]) {
+      state.screen = requestedScreen;
+      if (requestedVariant && screens[requestedScreen].variants[requestedVariant]) {
+        state.variants[requestedScreen] = requestedVariant;
+      }
     }
 
     function persistState() {
@@ -1537,9 +1936,40 @@
       }).join("");
     }
 
+    function renderFlexCard_(card, index) {
+      const steps = Array.isArray(card.steps) && card.steps.length
+        ? '<div class="flex-steps">' + card.steps.map(function (step) {
+          return '<div class="flex-step"><strong>' + escapeHtml(step.marker) + '</strong><span>' +
+            escapeHtml(step.label) + '</span></div>';
+        }).join("") + '</div>'
+        : '<strong class="flex-card__status-value" data-tone="' + escapeHtml(card.statusTone || "") + '">' +
+          escapeHtml(card.status) + '</strong>' + (card.statusDetail
+          ? '<span class="flex-card__status-detail">' + escapeHtml(card.statusDetail) + '</span>'
+          : "");
+      const action = card.action || {};
+      return '<article class="flex-card" data-accent="' + escapeHtml(card.accent || "blue") + '">' +
+        '<header class="flex-card__header">' +
+          '<div class="flex-card__eyebrow"><strong>' + escapeHtml(card.eyebrow) + '</strong>' +
+            '<span class="flex-card__context">' + escapeHtml(card.context) + '</span></div>' +
+          '<h3 class="flex-card__title">' + escapeHtml(card.title) + '</h3>' +
+        '</header>' +
+        '<div class="flex-card__body">' +
+          '<div><span class="flex-card__label">' + escapeHtml(card.descriptionLabel) + '</span>' +
+            '<span class="flex-card__value">' + escapeHtml(card.description) + '</span></div>' +
+          '<div class="flex-card__status"><span class="flex-card__label">' +
+            escapeHtml(card.statusLabel || "目前狀態") + '</span>' + steps + '</div>' +
+          '<div><span class="flex-card__label">' + escapeHtml(card.metaLabel) + '</span>' +
+            '<span class="flex-card__value">' + escapeHtml(card.meta) + '</span></div>' +
+        '</div>' +
+        '<footer class="flex-card__footer"><button class="flex-card__button" type="button" ' +
+          'data-flex-action-index="' + index + '">' + escapeHtml(action.label || "查看") + '</button></footer>' +
+        '</article>';
+    }
+
     function renderMessage() {
       const variant = currentVariant();
       const actions = variant.actions || [];
+      const isFlexCarousel = variant.kind === "flex_carousel";
       const audience = variant.audience || "personal";
       const audienceLabel = variant.audienceLabel || "個人自動私訊";
       const badge = document.getElementById("audience-badge");
@@ -1548,7 +1978,12 @@
       document.getElementById("trigger-meta").textContent = "觸發：" + (variant.trigger || "未標示") + "｜" + (variant.deliveryNote || "");
       document.getElementById("surface-title").textContent = audience === "group_draft" ? "管理員草稿預覽" : "英唱小幫手";
       document.getElementById("surface-subtitle").textContent = audienceLabel;
-      document.getElementById("message-copy").textContent = variant.message;
+      document.getElementById("text-bubble").hidden = isFlexCarousel;
+      document.getElementById("flex-carousel").hidden = !isFlexCarousel;
+      document.getElementById("message-copy").textContent = variant.message || variant.altText || "";
+      document.getElementById("flex-carousel").innerHTML = isFlexCarousel
+        ? (variant.cards || []).map(renderFlexCard_).join("")
+        : "";
       document.getElementById("quick-replies").innerHTML = actions.map(function (action, index) {
         return '<button class="quick-reply" type="button" data-action-index="' + index +
           '" data-action-kind="' + escapeHtml(action.type) + '">' + escapeHtml(action.label) + "</button>";
@@ -1569,7 +2004,8 @@
     }
 
     function copyCurrentMessage() {
-      const message = currentVariant().message;
+      const variant = currentVariant();
+      const message = variant.message || variant.altText || "";
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(message).then(function () {
           document.getElementById("tap-result").textContent = "✓ 文案已複製";
@@ -1591,6 +2027,17 @@
       if (variantButton) {
         state.variants[state.screen] = variantButton.dataset.variant;
         render();
+        return;
+      }
+
+      const flexButton = event.target.closest("[data-flex-action-index]");
+      if (flexButton) {
+        const card = (currentVariant().cards || [])[Number(flexButton.dataset.flexActionIndex)];
+        const flexAction = card && card.action;
+        if (!flexAction) return;
+        document.getElementById("tap-result").textContent = flexAction.type === "uri"
+          ? "模擬開啟 URI：" + flexAction.uri
+          : "模擬送出 payload：「" + flexAction.payload + "」";
         return;
       }
 
