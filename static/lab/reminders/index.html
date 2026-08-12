@@ -627,18 +627,18 @@
       flex: 0 0 238px;
       flex-direction: column;
       overflow: hidden;
-      border: 1px solid #2a4f8a;
+      border: 1px solid #303640;
       border-radius: 10px;
-      color: #eef6ff;
-      background: #070c18;
-      box-shadow: 0 2px 7px rgba(22, 37, 64, .28);
+      color: #f7f8fa;
+      background: #111318;
+      box-shadow: 0 8px 20px rgba(4, 6, 10, .22);
       scroll-snap-align: start;
     }
 
     .flex-card__header {
       padding: 15px 15px 13px;
-      border-bottom: 1px solid #2a4f8a;
-      background: #0c1630;
+      border-bottom: 1px solid #303640;
+      background: #191c23;
     }
 
     .flex-card__eyebrow {
@@ -651,21 +651,16 @@
       line-height: 1.35;
     }
 
-    .flex-card__eyebrow strong { color: #4aa8ff; }
-    .flex-card[data-accent="pink"] .flex-card__eyebrow strong { color: #ff2d8e; }
-    .flex-card[data-accent="cyan"] .flex-card__eyebrow strong { color: #26d4f0; }
-    .flex-card[data-accent="gold"] .flex-card__eyebrow strong { color: #ffd633; }
-    .flex-card[data-accent="orange"] .flex-card__eyebrow strong { color: #ff8a3d; }
-    .flex-card[data-accent="red"] .flex-card__eyebrow strong { color: #ff5d7a; }
+    .flex-card__eyebrow strong { color: #8b80f9; }
 
     .flex-card__context {
-      color: #9fc0e8;
+      color: #b4bbc6;
       text-align: right;
     }
 
     .flex-card__title {
       margin-top: 9px;
-      color: #eef6ff;
+      color: #f7f8fa;
       font-size: 19px;
       line-height: 1.25;
     }
@@ -680,7 +675,7 @@
 
     .flex-card__label {
       display: block;
-      color: #5f7bb0;
+      color: #7e8796;
       font-size: 10px;
       font-weight: 700;
       line-height: 1.35;
@@ -689,7 +684,7 @@
     .flex-card__value {
       display: block;
       margin-top: 5px;
-      color: #eef6ff;
+      color: #f7f8fa;
       font-size: 12px;
       line-height: 1.5;
       overflow-wrap: anywhere;
@@ -698,25 +693,25 @@
     .flex-card__status {
       padding: 11px;
       border-radius: 8px;
-      background: #0c1630;
+      background: #191c23;
     }
 
     .flex-card__status-value {
       display: block;
       margin-top: 6px;
-      color: #9fc0e8;
+      color: #b4bbc6;
       font-size: 14px;
       font-weight: 700;
       line-height: 1.45;
     }
 
-    .flex-card__status-value[data-tone="pending"] { color: #ffd633; }
-    .flex-card__status-value[data-tone="done"] { color: #3dff9e; }
+    .flex-card__status-value[data-tone="pending"] { color: #f0c66b; }
+    .flex-card__status-value[data-tone="done"] { color: #52d5a1; }
 
     .flex-card__status-detail {
       display: block;
       margin-top: 4px;
-      color: #9fc0e8;
+      color: #b4bbc6;
       font-size: 10px;
       line-height: 1.4;
     }
@@ -731,14 +726,14 @@
     .flex-step {
       padding: 8px 4px;
       border-radius: 6px;
-      color: #eef6ff;
-      background: #070c18;
+      color: #f7f8fa;
+      background: #111318;
       text-align: center;
     }
 
     .flex-step strong {
       display: block;
-      color: #9fc0e8;
+      color: #b4bbc6;
       font-size: 15px;
       line-height: 1;
     }
@@ -753,8 +748,8 @@
 
     .flex-card__footer {
       padding: 10px;
-      border-top: 1px solid #2a4f8a;
-      background: #111d3a;
+      border-top: 1px solid #303640;
+      background: #15181d;
     }
 
     .flex-card__button {
@@ -764,10 +759,33 @@
       border: 0;
       border-radius: 7px;
       color: #ffffff;
-      background: #2a4f8a;
+      background: #6f63e8;
       font-size: 13px;
       font-weight: 700;
     }
+
+    /* 只有本週進度使用同色系的深靛紫狀態層；其他已完成／只讀卡不跟著灰化。 */
+    .flex-card[data-role="progress"] {
+      border-color: #4a426d;
+      background: #171526;
+    }
+
+    .flex-card[data-role="progress"] .flex-card__header {
+      border-color: #4a426d;
+      background: #211d35;
+    }
+
+    .flex-card[data-role="progress"] .flex-card__eyebrow strong { color: #b5acff; }
+    .flex-card[data-role="progress"] .flex-card__body { background: #171526; }
+    .flex-card[data-role="progress"] .flex-card__status { background: #25203d; }
+    .flex-card[data-role="progress"] .flex-step { background: #13111f; }
+
+    .flex-card[data-role="progress"] .flex-card__footer {
+      border-color: #4a426d;
+      background: #1b192c;
+    }
+
+    .flex-card[data-role="progress"] .flex-card__button { background: #554c92; }
 
     .message-time {
       margin-top: 4px;
@@ -1437,7 +1455,7 @@
     function taskCarouselVariant_(includeActivityVote) {
       const cards = [
         {
-          accent: "pink",
+          accent: "brand",
           context: "W7｜2026 Q3",
           title: "本週選歌",
           descriptionLabel: "本週主題",
@@ -1451,7 +1469,7 @@
           action: messageAction("查看本週安排", "任務詳情")
         },
         {
-          accent: "cyan",
+          accent: "brand",
           context: "W7｜2026 Q3",
           title: "交歌",
           descriptionLabel: "目前作品",
@@ -1465,7 +1483,7 @@
           action: messageAction("查看本週安排", "任務詳情")
         },
         {
-          accent: "gold",
+          accent: "brand",
           context: "W7｜2026 Q3",
           title: "心得",
           descriptionLabel: "填寫說明",
@@ -1479,7 +1497,8 @@
           action: messageAction("查看本週安排", "任務詳情")
         },
         {
-          accent: "blue",
+          accent: "brand",
+          visualRole: "progress",
           context: "W7｜2026 Q3",
           title: "本週進度",
           descriptionLabel: "本週流程",
@@ -1496,7 +1515,7 @@
           action: messageAction("查看詳細進度", "任務詳情")
         },
         {
-          accent: "pink",
+          accent: "brand",
           context: "W8｜2026 Q3",
           title: "下週選曲",
           descriptionLabel: "下週主題",
@@ -1513,7 +1532,7 @@
 
       if (includeActivityVote) {
         cards.push({
-          accent: "orange",
+          accent: "brand",
           context: "W9–W10｜2026 Q3",
           title: "驚喜活動投票",
           descriptionLabel: "玩法選擇",
@@ -1584,7 +1603,7 @@
 
       if (role === "previous") {
         cards = taskCarouselParticipantCards_().concat([{
-          accent: "gold",
+          accent: "brand",
           context: "W6｜2026 Q3",
           title: "選 MVP",
           descriptionLabel: "評審主題",
@@ -1602,7 +1621,7 @@
         trigger = "社員按【任務】；本人是上週評審且尚未完成評選";
       } else if (role === "future") {
         cards = taskCarouselParticipantCards_().concat([{
-          accent: "cyan",
+          accent: "brand",
           context: "W8｜2026 Q3",
           title: "補充題目說明",
           descriptionLabel: "你將評審的主題",
@@ -1657,7 +1676,7 @@
 
     function judgeDutyCarouselVariant_(role) {
       const overview = {
-        accent: "blue",
+        accent: "brand",
         context: (role === "previous" ? "W6" : role === "current" ? "W7" : "W8") + "｜2026 Q3",
         title: "輪值狀態",
         descriptionLabel: "本季評審安排",
@@ -1678,25 +1697,25 @@
       if (role === "previous") {
         overview.description = "W6";
         cards = [overview, {
-          accent: "cyan", context: "W6｜2026 Q3", title: "評審週作品",
+          accent: "brand", context: "W6｜2026 Q3", title: "評審週作品",
           descriptionLabel: "作品狀態", description: "候選作品已開放，可逐一欣賞與判定。",
           statusLabel: "目前狀態", status: "○ 請先看完本週作品", statusTone: "pending",
           metaLabel: "評審期限", meta: "8/16（日）23:59", actionable: true,
           action: messageAction("查看評審作品", "評審週作品")
         }, {
-          accent: "gold", context: "W6｜2026 Q3", title: "選 MVP",
+          accent: "brand", context: "W6｜2026 Q3", title: "選 MVP",
           descriptionLabel: "目前進度", description: "已選 0/2 位",
           statusLabel: "目前狀態", status: "○ 還沒選滿 2 位", statusTone: "pending",
           metaLabel: "評審期限", meta: "8/16（日）23:59", actionable: true,
           action: messageAction("開始選 MVP", "選MVP")
         }, {
-          accent: "red", context: "W6｜2026 Q3", title: "不合格判定",
+          accent: "brand", context: "W6｜2026 Q3", title: "不合格判定",
           descriptionLabel: "使用時機", description: "只有作品不符合規則時才需要回報。",
           statusLabel: "目前狀態", status: "— 選配操作", statusTone: "muted",
           metaLabel: "預設判定", meta: "沒有回報者視為合格", actionable: false,
           action: messageAction("需要時回報", "有人不合格")
         }, {
-          accent: "blue", context: "W6｜2026 Q3", title: "完成評選",
+          accent: "brand", context: "W6｜2026 Q3", title: "完成評選",
           descriptionLabel: "最後一步", description: "檢查 MVP 與不合格判定後送出。",
           statusLabel: "目前狀態", status: "○ 尚未確認送出", statusTone: "pending",
           metaLabel: "評審期限", meta: "8/16（日）23:59", actionable: true,
@@ -1706,19 +1725,19 @@
         trigger = "工程師輸入【輪值卡測試】；本人有已開放的評選";
       } else if (role === "current") {
         cards = [overview, {
-          accent: "cyan", context: "W7｜2026 Q3", title: "題目說明",
+          accent: "brand", context: "W7｜2026 Q3", title: "題目說明",
           descriptionLabel: "你將評審的主題", description: "Songs that mix 中文 and English",
           statusLabel: "目前狀態", status: "✓ 題目說明已填寫", statusTone: "done",
           statusDetail: "中英文自然切換", metaLabel: "目前狀態", meta: "選曲已開始後鎖定",
           actionable: false, action: messageAction("查看輪值詳情", "我輪值")
         }, {
-          accent: "pink", context: "W7｜2026 Q3", title: "成員選曲",
+          accent: "brand", context: "W7｜2026 Q3", title: "成員選曲",
           descriptionLabel: "目前進度", description: "已選曲 9 人",
           statusLabel: "目前狀態", status: "○ 等待大家完成交件", statusTone: "muted",
           metaLabel: "評選開始", meta: "8/17（一）00:01", actionable: false,
           action: messageAction("查看成員選曲", "看成員選曲")
         }, {
-          accent: "pink", context: "W8｜2026 Q3", title: "先唱其他週",
+          accent: "brand", context: "W8｜2026 Q3", title: "先唱其他週",
           descriptionLabel: "可先安排的週次", description: "A song that feels like home",
           statusLabel: "目前狀態", status: "○ 尚未選曲", statusTone: "pending",
           metaLabel: "選曲期限", meta: "8/17（一）23:59", actionable: true,
@@ -1728,13 +1747,13 @@
         trigger = "工程師輸入【輪值卡測試】；本人是本週評審";
       } else {
         cards = [overview, {
-          accent: "cyan", context: "W8｜2026 Q3", title: "題目說明",
+          accent: "brand", context: "W8｜2026 Q3", title: "題目說明",
           descriptionLabel: "你將評審的主題", description: "A song that feels like home",
           statusLabel: "目前狀態", status: "○ 題目說明尚未填寫", statusTone: "pending",
           metaLabel: "可修改至", meta: "8/17（一）23:59", actionable: true,
           action: messageAction("補充題目說明", "出題說明")
         }, {
-          accent: "pink", context: "W8｜2026 Q3", title: "成員選曲",
+          accent: "brand", context: "W8｜2026 Q3", title: "成員選曲",
           descriptionLabel: "目前進度", description: "已選曲 0 人",
           statusLabel: "目前狀態", status: "○ 輪值週尚未開始", statusTone: "muted",
           metaLabel: "評選開始", meta: "8/24（一）00:01", actionable: false,
@@ -1764,10 +1783,10 @@
     Object.assign(screens, {
       taskCarousel: {
         title: "任務 Carousel｜請假與評審身分",
-        note: "本週四張固定保留，後面依本人真正能做的近期行動追加。切換情境後左右滑動，可比較請假與三種評審角色。",
+        note: "本週四張固定保留，後面依本人真正能做的近期行動追加。一般卡恢復炭黑＋品牌紫；只有本週進度使用深靛紫狀態卡面。",
         changes: [
           "前三張狀態固定顯示「— 本週已請假」，不冒充待完成。",
-          "進度卡三格都用「—」；摘要顯示「本週安排／本週已請假」。",
+          "本週進度以同色系深靛紫 card／panel 與較沉的紫色實心按鈕標示狀態總覽。",
           "下週選曲仍可做；尚未投活動票時，投票卡固定排最後。",
           "上週評審未完成才顯示選 MVP；未來評審缺說明才顯示補充卡。",
           "本週評審不增加評審待辦，只保留免做狀態與可先處理的其他週選曲。"
@@ -1782,7 +1801,7 @@
       },
       judgeDutyCarousel: {
         title: "輪值 Carousel｜任務與進度",
-        note: "輪值卡先走 operations-only 測試入口。卡片沿用深海軍藍、近黑藍內容區與深藍主按鈕，左上序號以粉／青／黃／藍標示功能。",
+        note: "輪值卡先走 operations-only 測試入口。卡片與任務動作卡共用炭黑底、品牌紫序號與亮紫實心按鈕。",
         changes: [
           "上週評選中：看作品、選 MVP、確認送出是待辦；不合格判定是選配操作。",
           "本週評審：不製造假 MVP 待辦，只顯示輪值狀態並提醒可先唱其他週。",
@@ -2093,7 +2112,8 @@
           ? '<span class="flex-card__status-detail">' + escapeHtml(card.statusDetail) + '</span>'
           : "");
       const action = card.action || {};
-      return '<article class="flex-card" data-accent="' + escapeHtml(card.accent || "blue") + '">' +
+      return '<article class="flex-card" data-role="' + escapeHtml(card.visualRole || "task") +
+        '" data-accent="' + escapeHtml(card.accent || "brand") + '">' +
         '<header class="flex-card__header">' +
           '<div class="flex-card__eyebrow"><strong>' + escapeHtml(card.eyebrow) + '</strong>' +
             '<span class="flex-card__context">' + escapeHtml(card.context) + '</span></div>' +
