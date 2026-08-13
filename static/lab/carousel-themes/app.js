@@ -3,9 +3,9 @@ const STORAGE_KEY = "opendesign." + ARTIFACT_ID;
 
 const themes = {
   baseline: {
-    index: "01 / CURRENT",
-    name: "目前炭黑紫",
-    summary: "霧面炭黑把資訊壓得很穩，紫色動作不常見、辨識度高；本週進度改用深靛紫，仍屬同一家族但一眼看得出是狀態總覽。",
+    index: "01 / PREVIOUS",
+    name: "舊版炭黑紫",
+    summary: "上一版正式配色。霧面炭黑與紫色動作辨識度高，保留在此作為深色對照，不再是正式預設。",
     colors: ["#111318", "#6f63e8", "#52d5a1", "#171526"],
     differences: [
       ["表面", "霧面深色、低彩度邊線"],
@@ -25,9 +25,9 @@ const themes = {
     ]
   },
   minimal: {
-    index: "03 / QUIET",
-    name: "極簡燕麥米白",
-    summary: "把原本偏亮的米白壓成燕麥暖灰，暗處開啟時不會突然刺眼；文字仍維持深色高對比，按鈕改用公主風的膠囊圓角。",
+    index: "03 / SELECTED",
+    name: "已選定｜極簡燕麥米白",
+    summary: "正式選定方向。把偏亮米白壓成燕麥暖灰，暗處開啟時不會突然刺眼；文字維持深色高對比，按鈕採公主風膠囊圓角。",
     colors: ["#71695f", "#d8cfc2", "#51425b", "#b7ab9d"],
     differences: [
       ["表面", "深燕麥背景、暖灰褐卡面，降低亮度跳差"],
