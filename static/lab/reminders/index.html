@@ -1690,7 +1690,7 @@
         meta: role === "previous" ? "8/16（日）23:59" :
           role === "current" ? "8/17（一）00:01" : "8/24（一）00:01",
         actionable: false,
-        action: messageAction("查看輪值總覽", "我輪值")
+        action: messageAction("查看輪值總覽", "輪值詳情")
       };
       let cards;
       let label;
@@ -1723,14 +1723,14 @@
           action: messageAction("確認送出", "確認送出")
         }];
         label = "上週評選中｜5 張";
-        trigger = "工程師輸入【輪值卡測試】；本人有已開放的評選";
+        trigger = "社員按【我輪值】；本人有已開放的評選";
       } else if (role === "current") {
         cards = [overview, {
           accent: "brand", context: "W7｜2026 Q3", title: "題目說明",
           descriptionLabel: "你將評審的主題", description: "Songs that mix 中文 and English",
           statusLabel: "目前狀態", status: "✓ 題目說明已填寫", statusTone: "done",
           statusDetail: "中英文自然切換", metaLabel: "目前狀態", meta: "選曲已開始後鎖定",
-          actionable: false, action: messageAction("查看輪值詳情", "我輪值")
+          actionable: false, action: messageAction("查看輪值詳情", "輪值詳情")
         }, {
           accent: "brand", context: "W7｜2026 Q3", title: "成員選曲",
           descriptionLabel: "目前進度", description: "已選曲 9 人",
@@ -1745,7 +1745,7 @@
           action: messageAction("進入下週選曲", "預先選曲 W8")
         }];
         label = "本週輪值・無評選待辦｜4 張";
-        trigger = "工程師輸入【輪值卡測試】；本人是本週評審";
+        trigger = "社員按【我輪值】；本人是本週評審";
       } else {
         cards = [overview, {
           accent: "brand", context: "W8｜2026 Q3", title: "題目說明",
@@ -1761,7 +1761,7 @@
           action: messageAction("查看成員選曲", "看成員選曲")
         }];
         label = "未來輪值・缺題目說明｜3 張";
-        trigger = "工程師輸入【輪值卡測試】；本人是未來評審且缺說明";
+        trigger = "社員按【我輪值】；本人是未來評審且缺說明";
       }
       cards.forEach(function (card, index) {
         card.eyebrow = "卡片 " + (index + 1) + "/" + cards.length;
@@ -1769,9 +1769,9 @@
       return {
         contractId: "reply:judge_duty_carousel:" + role,
         audience: "personal_reply",
-        audienceLabel: "開發測試回覆",
+        audienceLabel: "社員個人回覆",
         trigger: trigger,
-        deliveryNote: "第一階段只開放 operations 測試；正式【我輪值】仍是文字版。",
+        deliveryNote: "正式【我輪值】回覆；operations 仍可用【輪值卡測試】預覽同一份 payload。",
         label: label,
         kind: "flex_carousel",
         altText: "♪ 評審輪值｜狀態與下一步",
@@ -1802,12 +1802,12 @@
       },
       judgeDutyCarousel: {
         title: "輪值 Carousel｜任務與進度",
-        note: "輪值卡先走 operations-only 測試入口。卡片與任務動作卡共用炭黑底、品牌紫序號與亮紫實心按鈕。",
+        note: "正式【我輪值】使用這組卡片；【輪值詳情】保留原文字總覽。卡片與任務動作卡共用炭黑底、品牌紫序號與亮紫實心按鈕。",
         changes: [
           "上週評選中：看作品、選 MVP、確認送出是待辦；不合格判定是選配操作。",
           "本週評審：不製造假 MVP 待辦，只顯示輪值狀態並提醒可先唱其他週。",
           "未來評審：題目說明從缺才升為待辦；成員選曲仍是只讀狀態。",
-          "正式【我輪值】尚未替換，等 LINE 實機確認後再決定。"
+          "第一張與鎖定後的題目卡送【輪值詳情】，不會用【我輪值】重新開自己。"
         ],
         variants: {
           previous: judgeDutyCarouselVariant_("previous"),
