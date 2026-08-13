@@ -184,6 +184,14 @@
       background: var(--surface-2);
     }
 
+    .lab-link {
+      display: inline-block;
+      margin-left: 8px;
+      color: var(--accent-cyan);
+      font-weight: 700;
+      text-underline-offset: 3px;
+    }
+
     .intro {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
@@ -932,7 +940,7 @@
   <main class="app">
     <aside class="publication-notice" role="note" aria-label="發布版本說明">
       <strong>MESSAGE LAB · 2026-08-13</strong>
-      <span>下方完整分開自動私訊、成員指令回覆與管理員群組草稿；這是固定假資料測試台，不會連到 LINE、不讀社員資料，也不會真的發訊息。</span>
+      <span>下方完整分開自動私訊、成員指令回覆與管理員群組草稿；這是固定假資料測試台，不會連到 LINE、不讀社員資料，也不會真的發訊息。<a class="lab-link" href="../carousel-themes/">開啟四種配色比較</a></span>
     </aside>
 
     <section class="window" aria-labelledby="page-title">
@@ -985,6 +993,8 @@
         <span class="tab-group">B 成員指令回覆</span>
         <button class="screen-tab" type="button" data-screen="taskCarousel" aria-selected="false">任務卡片</button>
         <button class="screen-tab" type="button" data-screen="judgeDutyCarousel" aria-selected="false">輪值卡片</button>
+        <button class="screen-tab" type="button" data-screen="myStatusCarousel" aria-selected="false">我的狀態卡</button>
+        <button class="screen-tab" type="button" data-screen="activityVoteCarousel" aria-selected="false">活動投票卡</button>
         <button class="screen-tab" type="button" data-screen="dailyPick" aria-selected="false">選曲對話</button>
         <button class="screen-tab" type="button" data-screen="dailySubmit" aria-selected="false">交歌對話</button>
         <button class="screen-tab" type="button" data-screen="dailyReflection" aria-selected="false">心得對話</button>
@@ -1676,18 +1686,19 @@
     }
 
     function judgeDutyCarouselVariant_(role) {
+      const weekLabel = role === "done" ? "W5" : role === "previous" ? "W6" : role === "current" ? "W7" : "W8";
       const overview = {
         accent: "brand",
-        context: (role === "previous" ? "W6" : role === "current" ? "W7" : "W8") + "｜2026 Q3",
+        context: weekLabel + "｜2026 Q3",
         title: "輪值狀態",
         descriptionLabel: "本季評審安排",
         description: "W8",
         statusLabel: "目前狀態",
-        status: role === "previous" ? "○ 評選進行中" :
+        status: role === "done" ? "✓ 評選已完成" : role === "previous" ? "○ 評選進行中" :
           role === "current" ? "— 本週是你的評審週" : "○ 輪值尚未開始",
-        statusTone: role === "previous" ? "pending" : "muted",
+        statusTone: role === "done" ? "done" : role === "previous" ? "pending" : "muted",
         metaLabel: role === "previous" ? "評審期限" : "評選開始",
-        meta: role === "previous" ? "8/16（日）23:59" :
+        meta: role === "done" ? "8/3（一）00:01" : role === "previous" ? "8/16（日）23:59" :
           role === "current" ? "8/17（一）00:01" : "8/24（一）00:01",
         actionable: false,
         action: messageAction("查看輪值總覽", "輪值詳情")
@@ -1705,25 +1716,37 @@
           action: messageAction("查看評審作品", "評審週作品")
         }, {
           accent: "brand", context: "W6｜2026 Q3", title: "選 MVP",
-          descriptionLabel: "目前進度", description: "已選 0/2 位",
-          statusLabel: "目前狀態", status: "○ 還沒選滿 2 位", statusTone: "pending",
+          descriptionLabel: "目前進度", description: "目前已選 0 位（最多 2 位）",
+          statusLabel: "目前狀態", status: "○ 可選 0–2 位，也可從缺", statusTone: "pending",
           metaLabel: "評審期限", meta: "8/16（日）23:59", actionable: true,
           action: messageAction("開始選 MVP", "選MVP")
         }, {
-          accent: "brand", context: "W6｜2026 Q3", title: "不合格判定",
+          accent: "brand", context: "W6｜2026 Q3", title: "作品不合格",
           descriptionLabel: "使用時機", description: "只有作品不符合規則時才需要回報。",
           statusLabel: "目前狀態", status: "— 選配操作", statusTone: "muted",
-          metaLabel: "預設判定", meta: "沒有回報者視為合格", actionable: false,
-          action: messageAction("需要時回報", "有人不合格")
+          metaLabel: "預設判定", meta: "未標記的送評作品視為合格", actionable: false,
+          action: messageAction("需要時回報", "作品不合格")
         }, {
           accent: "brand", context: "W6｜2026 Q3", title: "完成評選",
-          descriptionLabel: "最後一步", description: "檢查 MVP 與不合格判定後送出。",
+          descriptionLabel: "最後一步", description: "檢查 MVP 與作品不合格判定後送出。",
           statusLabel: "目前狀態", status: "○ 尚未確認送出", statusTone: "pending",
           metaLabel: "評審期限", meta: "8/16（日）23:59", actionable: true,
           action: messageAction("確認送出", "確認送出")
         }];
         label = "上週評選中｜5 張";
         trigger = "社員按【我輪值】；本人有已開放的評選";
+      } else if (role === "done") {
+        overview.description = "W5";
+        cards = [overview, {
+          accent: "brand", visualRole: "progress", context: "W5｜2026 Q3", title: "評選結果",
+          descriptionLabel: "MVP", description: "Andrew、Olivia",
+          statusLabel: "目前狀態", status: "✓ 送評作品判定已完成", statusTone: "done",
+          statusDetail: "合格 6 件・不合格 0 件",
+          metaLabel: "請假（未送評）", meta: "6 人\n明細：請假（選曲）6 人", actionable: false,
+          action: messageAction("查看完整評選結果", "輪值回顧 2026Q3 W5")
+        }];
+        label = "評選已完成｜2 張";
+        trigger = "社員按【我輪值】；本人最近一週評選已完成";
       } else if (role === "current") {
         cards = [overview, {
           accent: "brand", context: "W7｜2026 Q3", title: "題目說明",
@@ -1781,6 +1804,107 @@
       };
     }
 
+    function myStatusCarouselVariant_() {
+      const cards = [{
+        accent: "brand", visualRole: "progress", context: "W7｜2026 Q3", title: "本週參與",
+        descriptionLabel: "目前身分", description: "一般參與",
+        statusLabel: "本週進度", steps: [
+          { marker: "✓", label: "選曲" },
+          { marker: "○", label: "交歌" },
+          { marker: "○", label: "心得" }
+        ],
+        metaLabel: "本週主題", meta: "Songs that mix 中文 and English", actionable: false,
+        action: messageAction("查看本週任務", "任務")
+      }, {
+        accent: "brand", context: "2026 Q3", title: "請假與點數",
+        descriptionLabel: "本季請假計點", description: "已計入 1 次（上限 3 次）",
+        statusLabel: "目前狀態", status: "未來預請 1 次", statusTone: "muted",
+        statusDetail: "淨請假 1 次", metaLabel: "目前可用資源", meta: "可用點數 2 點・獎章 1 枚", actionable: false,
+        action: messageAction("查看請假明細", "查請假")
+      }, {
+        accent: "brand", context: "2026 Q3", title: "評審輪值",
+        descriptionLabel: "本季評審安排", description: "W5",
+        statusLabel: "目前狀態", status: "— 目前沒有待處理的評審任務", statusTone: "muted",
+        metaLabel: "下一步", meta: "目前不用處理；輪值開始時會再提醒。", actionable: false,
+        action: messageAction("查看我的輪值", "我輪值")
+      }, {
+        accent: "brand", context: "Ophelia", title: "累積成果",
+        descriptionLabel: "歷史作品", description: "已交作品 8 首",
+        statusLabel: "目前狀態", status: "獲選 MVP 2 次", statusTone: "pending",
+        metaLabel: "獎章餘額", meta: "1 枚", actionable: false,
+        action: messageAction("查看我的作品", "我的作品")
+      }];
+      cards.forEach(function (card, index) {
+        card.eyebrow = "卡片 " + (index + 1) + "/" + cards.length;
+      });
+      return {
+        contractId: "reply:my_status_carousel:default",
+        audience: "personal_reply",
+        audienceLabel: "社員個人回覆",
+        trigger: "operations 輸入【我的狀態卡測試】",
+        deliveryNote: "只讀固定預覽；正式【我的狀態】仍維持原文字回覆。",
+        label: "一般成員｜4 張",
+        kind: "flex_carousel",
+        altText: "♪ 我的狀態｜本週、請假、輪值與累積成果",
+        message: "♪ 我的狀態｜本週、請假、輪值與累積成果",
+        cards: cards,
+        actions: []
+      };
+    }
+
+    function activityVoteCarouselVariant_(voteState) {
+      const isOpen = voteState !== "closed";
+      const selected = voteState === "selected" ? 2 : 0;
+      const context = "驚喜活動｜2026 Q3";
+      const deadline = "8/17（一）08:00";
+      const options = [{
+        choice: 1, title: "交換歌曲", description: "彼此推薦歌曲，由系統配對交換挑戰。"
+      }, {
+        choice: 2, title: "合唱合作", description: "依活動配對，和夥伴合作完成合唱作品。"
+      }, {
+        choice: 3, title: "不參加配對", description: "只是不參加配對；W9／W10 仍是驚喜週，仍要依非配對方式完成作品。"
+      }];
+      const cards = [{
+        accent: "brand", visualRole: "progress", context: context, title: "投票狀態",
+        descriptionLabel: "目前玩法選擇", description: selected === 2 ? "合唱合作" : "尚未投票",
+        statusLabel: "目前狀態", status: isOpen ? (selected ? "✓ 已完成投票" : "○ 尚未投票") : "— 玩法投票已截止",
+        statusTone: isOpen ? (selected ? "done" : "pending") : "muted",
+        statusDetail: isOpen ? "截止前可以再次選擇來改票。" : "",
+        metaLabel: "投票期限", meta: deadline, actionable: false,
+        action: messageAction("查看活動狀態", "活動狀態")
+      }].concat(options.map(function (option) {
+        const isSelected = selected === option.choice;
+        return {
+          accent: "brand", context: context, title: option.title,
+          descriptionLabel: "玩法說明", description: option.description,
+          statusLabel: "目前狀態",
+          status: isOpen ? (isSelected ? "✓ 目前選擇" : (selected ? "○ 可改選" : "○ 尚未選擇")) : "— 目前不能投票",
+          statusTone: isOpen ? (isSelected ? "done" : "muted") : "muted",
+          statusDetail: isOpen ? "點選後會直接記錄；再次投票會覆蓋前一票。" : "玩法投票已截止",
+          metaLabel: "投票期限", meta: deadline, actionable: isOpen,
+          action: isOpen
+            ? messageAction(isSelected ? "保留這個選擇" : "選擇" + option.title, "投票 " + option.choice)
+            : messageAction("查看活動狀態", "活動狀態")
+        };
+      }));
+      cards.forEach(function (card, index) {
+        card.eyebrow = "卡片 " + (index + 1) + "/" + cards.length;
+      });
+      return {
+        contractId: "reply:activity_vote_carousel:" + voteState,
+        audience: "personal_reply",
+        audienceLabel: "社員個人回覆",
+        trigger: "operations 輸入【活動投票卡測試】",
+        deliveryNote: "按鈕沿用既有 message routing；點卡片按鈕可在下方核對實際 payload。",
+        label: voteState === "selected" ? "已選合唱・可改票｜4 張" : voteState === "closed" ? "投票已截止｜4 張" : "尚未投票｜4 張",
+        kind: "flex_carousel",
+        altText: "♬ 驚喜活動投票｜選擇玩法",
+        message: "♬ 驚喜活動投票｜選擇玩法",
+        cards: cards,
+        actions: []
+      };
+    }
+
     Object.assign(screens, {
       taskCarousel: {
         title: "任務 Carousel｜請假與評審身分",
@@ -1804,7 +1928,9 @@
         title: "輪值 Carousel｜任務與進度",
         note: "正式【我輪值】使用這組卡片；【輪值詳情】保留原文字總覽。卡片與任務動作卡共用炭黑底、品牌紫序號與亮紫實心按鈕。",
         changes: [
-          "上週評選中：看作品、選 MVP、確認送出是待辦；不合格判定是選配操作。",
+          "上週評選中：看作品、選 MVP、確認送出是待辦；作品不合格是選配操作。",
+          "MVP 明寫最多 2 位且可從缺，不再把 0 位或 1 位寫成未完成。",
+          "評選結果把送評作品以『件』計算，未送評請假以『人』計算。",
           "本週評審：不製造假 MVP 待辦，只顯示輪值狀態並提醒可先唱其他週。",
           "未來評審：題目說明從缺才升為待辦；成員選曲仍是只讀狀態。",
           "第一張與鎖定後的題目卡送【輪值詳情】，不會用【我輪值】重新開自己。"
@@ -1812,7 +1938,36 @@
         variants: {
           previous: judgeDutyCarouselVariant_("previous"),
           current: judgeDutyCarouselVariant_("current"),
-          future: judgeDutyCarouselVariant_("future")
+          future: judgeDutyCarouselVariant_("future"),
+          done: judgeDutyCarouselVariant_("done")
+        }
+      },
+      myStatusCarousel: {
+        title: "我的狀態 Carousel｜四個讀取面向",
+        note: "operations 測試入口把本週、請假、輪值與累積成果放成四張純讀取卡；正式【我的狀態】暫不替換。",
+        changes: [
+          "第一張使用既有深靛角色，明確標成狀態總覽，不冒充待辦。",
+          "請假一律用『次』，作品用『首』，MVP 用『次』，不同統計不混算。",
+          "四顆按鈕沿用既有【任務】、【查請假】、【我輪值】、【我的作品】message routing。",
+          "資料讀不到時正式 builder 會明寫待確認，不用 0 冒充真實結果。"
+        ],
+        variants: {
+          default: myStatusCarouselVariant_()
+        }
+      },
+      activityVoteCarousel: {
+        title: "驚喜活動投票 Carousel｜狀態與三種玩法",
+        note: "operations 測試入口固定四張：投票狀態、交換歌曲、合唱合作、不參加配對。正式按鈕仍走既有【投票 1／2／3】message routing。",
+        changes: [
+          "三種玩法各自一張卡，不把『不參加配對』誤寫成整個驚喜週免做。",
+          "尚未投票、已選且可改票、已截止三種狀態可切換核對。",
+          "點卡片按鈕後，下方會直接顯示 payload：投票 1、投票 2、投票 3。",
+          "投票關閉時三張選項都退回【活動狀態】，不顯示可能誤寫的投票 action。"
+        ],
+        variants: {
+          open: activityVoteCarouselVariant_("open"),
+          selected: activityVoteCarouselVariant_("selected"),
+          closed: activityVoteCarouselVariant_("closed")
         }
       },
       dailyPick: {
@@ -2039,6 +2194,8 @@
         activityJudge: "d1",
         taskCarousel: "leaveVoted",
         judgeDutyCarousel: "previous",
+        myStatusCarousel: "default",
+        activityVoteCarousel: "open",
         dailyPick: "open",
         dailySubmit: "chooseWeek",
         dailyReflection: "edit",
