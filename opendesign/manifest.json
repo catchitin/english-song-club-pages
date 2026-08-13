@@ -1,0 +1,25 @@
+{
+  "generated": "2026-08-13T21:09:07.553Z",
+  "sections": [
+    {
+      "id": "mockups",
+      "label": "Mockups",
+      "groups": [
+        {
+          "slug": "carousel-theme-comparison",
+          "files": [
+            {
+              "label": "index.html",
+              "path": "mockups/carousel-theme-comparison/index.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "design-systems",
+      "label": "Design Systems",
+      "groups": []
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-const ARTIFACT_ID = "carousel-theme-comparison.v1";
+const ARTIFACT_ID = "carousel-theme-comparison.v3";
 const STORAGE_KEY = "opendesign." + ARTIFACT_ID;
 
 const themes = {
@@ -26,13 +26,13 @@ const themes = {
   },
   minimal: {
     index: "03 / QUIET",
-    name: "極簡質感米白",
-    summary: "暖米白像未塗佈紙張，墨黑文字配細棕線，靠留白建立層次。按鈕更克制，適合偏好安靜、長看不累的方向。",
-    colors: ["#f7f2e8", "#b8ad9b", "#2f2d28", "#ded7ca"],
+    name: "極簡燕麥米白",
+    summary: "把原本偏亮的米白壓成燕麥暖灰，暗處開啟時不會突然刺眼；文字仍維持深色高對比，按鈕改用公主風的膠囊圓角。",
+    colors: ["#71695f", "#d8cfc2", "#51425b", "#b7ab9d"],
     differences: [
-      ["表面", "紙張米白、髮絲線與方正圓角"],
-      ["動作", "墨黑實心、短半徑按鈕"],
-      ["狀態卡", "暖灰石色，按鈕改成細框"]
+      ["表面", "深燕麥背景、暖灰褐卡面，降低亮度跳差"],
+      ["動作", "深梅灰實心膠囊按鈕，觸控輪廓更柔和"],
+      ["狀態卡", "再沉一階的灰褐色，與動作卡清楚分流"]
     ]
   },
   candy: {
@@ -136,7 +136,7 @@ const cards = [
   }
 ];
 
-const defaultState = { theme: "baseline", cardWidth: 286, showRoutes: false };
+const defaultState = { theme: "minimal", cardWidth: 286, showRoutes: false };
 let state = loadState();
 
 function loadState() {

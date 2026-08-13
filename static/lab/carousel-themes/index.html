@@ -588,32 +588,32 @@
       --button-border: #74517e;
     }
 
-    /* 03：極簡質感米白。紙感暖白、墨色、細線與較方正的節奏。 */
+    /* 03：極簡燕麥米白。壓低整體明度，以暖灰褐表面降低暗處觀看的亮度跳差。 */
     .preview-shell[data-theme="minimal"] {
-      --stage-bg: #ddd7cb;
-      --stage-line: #bdb5a7;
-      --card-bg: #f7f2e8;
-      --header-bg: #f7f2e8;
-      --body-bg: #f7f2e8;
-      --footer-bg: #f7f2e8;
-      --card-border: #b8ad9b;
-      --card-text: #272622;
-      --card-muted: #716b61;
-      --card-subtle: #8d8578;
-      --card-accent: #5f5548;
-      --panel-bg: #ece5d8;
-      --panel-border: #d2c8b7;
-      --status-done: #2f6e58;
-      --status-pending: #91641e;
-      --step-bg: #f8f4ec;
-      --step-border: #d2c8b7;
-      --button-bg: #2f2d28;
-      --button-text: #fbf7ef;
-      --button-border: #2f2d28;
-      --card-radius: 6px;
-      --panel-radius: 3px;
-      --step-radius: 2px;
-      --button-radius: 3px;
+      --stage-bg: #71695f;
+      --stage-line: #554e46;
+      --card-bg: #d8cfc2;
+      --header-bg: #d0c5b7;
+      --body-bg: #d8cfc2;
+      --footer-bg: #c9bdaf;
+      --card-border: #83786b;
+      --card-text: #28231f;
+      --card-muted: #5f574f;
+      --card-subtle: #534b44;
+      --card-accent: #594b63;
+      --panel-bg: #c9beaf;
+      --panel-border: #aa9e8f;
+      --status-done: #205c48;
+      --status-pending: #7b5214;
+      --step-bg: #ddd5ca;
+      --step-border: #aa9e8f;
+      --button-bg: #51425b;
+      --button-text: #fffaf2;
+      --button-border: #51425b;
+      --card-radius: 15px;
+      --panel-radius: 10px;
+      --step-radius: 9px;
+      --button-radius: 999px;
       --header-padding: 19px 18px 15px;
       --body-padding: 22px 18px;
       --footer-padding: 12px 18px 18px;
@@ -628,22 +628,22 @@
     }
 
     .preview-shell[data-theme="minimal"] .card[data-role="progress"] {
-      --card-bg: #ded7ca;
-      --header-bg: #d6cdbf;
-      --body-bg: #ded7ca;
-      --footer-bg: #ded7ca;
-      --card-border: #897e6f;
-      --card-text: #302d28;
-      --card-muted: #655f56;
-      --card-subtle: #766e63;
-      --card-accent: #453f37;
-      --panel-bg: #d2c9bb;
-      --panel-border: #a99e8e;
-      --step-bg: #e8e1d6;
-      --step-border: #b9ad9c;
-      --button-bg: transparent;
-      --button-text: #302d28;
-      --button-border: #514b43;
+      --card-bg: #b7ab9d;
+      --header-bg: #aa9d8e;
+      --body-bg: #b7ab9d;
+      --footer-bg: #a99c8d;
+      --card-border: #74685d;
+      --card-text: #251f1b;
+      --card-muted: #453d36;
+      --card-subtle: #453d36;
+      --card-accent: #493c52;
+      --panel-bg: #a39789;
+      --panel-border: #827568;
+      --step-bg: #c3b8aa;
+      --step-border: #8f8275;
+      --button-bg: #574a42;
+      --button-text: #fffaf2;
+      --button-border: #574a42;
     }
 
     /* 04：多巴胺糖果風。高彩度分工、厚實圓角、每張卡一種糖果角色。 */
@@ -827,22 +827,22 @@
     </section>
 
     <nav class="theme-switcher" aria-label="卡片風格">
-      <button class="theme-button" type="button" data-theme-button="baseline" aria-pressed="true"><span>01 / CURRENT</span>目前炭黑紫</button>
+      <button class="theme-button" type="button" data-theme-button="baseline" aria-pressed="false"><span>01 / CURRENT</span>目前炭黑紫</button>
       <button class="theme-button" type="button" data-theme-button="princess" aria-pressed="false"><span>02 / SWEET</span>甜美公主風</button>
-      <button class="theme-button" type="button" data-theme-button="minimal" aria-pressed="false"><span>03 / QUIET</span>極簡質感米白</button>
+      <button class="theme-button" type="button" data-theme-button="minimal" aria-pressed="true"><span>03 / QUIET</span>極簡燕麥米白</button>
       <button class="theme-button" type="button" data-theme-button="candy" aria-pressed="false"><span>04 / CANDY</span>多巴胺糖果風</button>
     </nav>
 
     <section class="preview-grid">
       <aside class="theme-brief" aria-live="polite">
-        <p class="theme-index" id="theme-index">01 / CURRENT</p>
-        <h2 id="theme-name">目前炭黑紫</h2>
+        <p class="theme-index" id="theme-index">03 / QUIET</p>
+        <h2 id="theme-name">極簡燕麥米白</h2>
         <p class="theme-summary" id="theme-summary"></p>
         <div class="swatches" id="swatches" aria-label="主要色票"></div>
         <ul class="difference-list" id="difference-list"></ul>
       </aside>
 
-      <div class="preview-shell" data-theme="baseline">
+      <div class="preview-shell" data-theme="minimal">
         <section class="phone" aria-label="390 像素 LINE 手機預覽">
           <header class="line-bar">
             <div>
@@ -874,7 +874,7 @@
       <select id="theme-select">
         <option value="baseline">目前炭黑紫</option>
         <option value="princess">甜美公主風</option>
-        <option value="minimal">極簡質感米白</option>
+        <option value="minimal" selected>極簡燕麥米白</option>
         <option value="candy">多巴胺糖果風</option>
       </select>
     </label>
