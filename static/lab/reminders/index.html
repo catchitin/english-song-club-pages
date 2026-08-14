@@ -977,7 +977,7 @@
 
       <nav class="screen-tabs" aria-label="訊息情境種類">
         <span class="tab-group">A 個人自動私訊</span>
-        <button class="screen-tab" type="button" data-screen="pick" aria-selected="true">選曲開放</button>
+        <button class="screen-tab" type="button" data-screen="pick" aria-selected="true">選曲開放（已停用）</button>
         <button class="screen-tab" type="button" data-screen="submit" aria-selected="false">交歌／心得</button>
         <button class="screen-tab" type="button" data-screen="leave" aria-selected="false">請假結果</button>
         <button class="screen-tab" type="button" data-screen="judgeStart" aria-selected="false">評審開始</button>
@@ -1030,8 +1030,8 @@
         <section class="preview-column" aria-label="LINE 訊息預覽">
           <div class="scenario-bar">
             <div class="delivery-meta">
-              <span class="audience-badge" id="audience-badge" data-audience="personal">個人自動私訊</span>
-              <span class="trigger-meta" id="trigger-meta">排程逐位檢查後 push；不經主揪群組稿</span>
+              <span class="audience-badge" id="audience-badge" data-audience="personal">已停用個人私訊</span>
+              <span class="trigger-meta" id="trigger-meta">2026-08-14 起停用；正式排程不會傳送</span>
             </div>
             <span class="scenario-label">切換真實狀態</span>
             <div class="variant-buttons" id="variant-buttons"></div>
@@ -1042,7 +1042,7 @@
             <section class="phone">
               <header class="line-header">
                 <span aria-hidden="true">‹</span>
-                <div><strong id="surface-title">英唱小幫手</strong><small id="surface-subtitle">個人自動私訊</small></div>
+                <div><strong id="surface-title">英唱小幫手</strong><small id="surface-subtitle">已停用個人私訊</small></div>
                 <span aria-hidden="true">☰</span>
               </header>
               <div class="chat">
@@ -1213,9 +1213,10 @@
 
     Object.assign(screens, {
       pick: {
-        title: "選曲開放",
-        note: "沒有歌名可回顯時，就用真實題目建立脈絡。這是邀請，不用一開頭就把請假後果壓在臉上。",
+        title: "選曲開放（已停用）",
+        note: "2026-08-14 起不再排程逐位私訊。以下 renderer 只供回歸預覽；週五題目改由群組【提醒Fri】reply 公告。",
         changes: [
+          "正式排程不會傳送這兩則選曲個人私訊。",
           "標題說明選曲已開放，不只寫『提醒』。",
           "顯示 W7 與真實題目。",
           "主動作只有一顆【選曲】。",
@@ -2164,7 +2165,14 @@
       ["assignment", "ready", "personal:activity_exchange_assignment:ready", "交換配對完成｜逐位私訊本人兩首候選任務"],
       ["activityJudge", "d1", "personal:activity_judge:d1", "活動作品完成｜逐位私訊尚未評選者的專屬入口"]
     ].forEach(function (item) {
-      if (item[0] === "announcementPreview") {
+      if (item[0] === "pick") {
+        const variant = screens[item[0]].variants[item[1]];
+        variant.contractId = item[2];
+        variant.audience = "personal";
+        variant.audienceLabel = "已停用個人私訊";
+        variant.trigger = "2026-08-14 起停用｜不再排程 push";
+        variant.deliveryNote = "renderer 僅供回歸預覽；正式排程不會傳送。週五題目改由群組【提醒Fri】reply 公告。";
+      } else if (item[0] === "announcementPreview") {
         const variant = screens[item[0]].variants[item[1]];
         variant.contractId = item[2];
         variant.audience = "personal_reply";
