@@ -1006,6 +1006,9 @@
         <button class="screen-tab" type="button" data-screen="myStatusCarousel" aria-selected="false">我的狀態卡</button>
         <button class="screen-tab" type="button" data-screen="activityVoteCarousel" aria-selected="false">活動投票卡</button>
         <button class="screen-tab" type="button" data-screen="seasonScheduleCarousel" aria-selected="false">季程卡片</button>
+        <button class="screen-tab" type="button" data-screen="seasonTopicsCarousel" aria-selected="false">本季題目卡</button>
+        <button class="screen-tab" type="button" data-screen="mySongsCarousel" aria-selected="false">我的選曲卡</button>
+        <button class="screen-tab" type="button" data-screen="memberSeasonCarousel" aria-selected="false">成員週狀態卡</button>
         <button class="screen-tab" type="button" data-screen="dailyPick" aria-selected="false">選曲對話</button>
         <button class="screen-tab" type="button" data-screen="dailySubmit" aria-selected="false">交歌對話</button>
         <button class="screen-tab" type="button" data-screen="dailyReflection" aria-selected="false">心得對話</button>
@@ -1919,8 +1922,8 @@
       };
     }
 
-    function seasonScheduleCarouselVariant_() {
-      const weeks = [
+    function seasonCarouselWeeks_() {
+      return [
         ["6/29–7/5", "W1", "Any language song", "Andrew"],
         ["7/6–7/12", "W2", "Any language song", "Olivia"],
         ["7/13–7/19", "W3", "A song about a new beginning", "Holly"],
@@ -1934,6 +1937,10 @@
         ["9/7–9/13", "W11", "A song for a quiet night", "Olivia"],
         ["9/14–9/20", "W12", "A song that marks the season", "Holly"]
       ];
+    }
+
+    function seasonScheduleCarouselVariant_() {
+      const weeks = seasonCarouselWeeks_();
       const cards = weeks.map(function (week, index) {
         const isCurrent = index === 7;
         const isSurprise = index === 8 || index === 9;
@@ -1975,6 +1982,119 @@
         altText: "♪ 2026 Q3 季程",
         message: "♪ 2026 Q3 季程",
         cards: cards,
+        actions: []
+      };
+    }
+
+    function seasonTopicsCarouselVariant_() {
+      const weeks = seasonCarouselWeeks_();
+      const cards = weeks.map(function (week, index) {
+        const isCurrent = index === 7;
+        const isSurprise = index === 8 || index === 9;
+        const editableBrief = index === 7;
+        return {
+          accent: "brand",
+          visualRole: isCurrent ? "progress" : "",
+          context: week[0] + "｜2026 Q3",
+          title: week[1],
+          descriptionLabel: "本週題目",
+          description: week[2],
+          statusLabel: "題目說明",
+          status: editableBrief ? "○ 等你填題目說明" : isSurprise ? "— 驚喜活動週" : "✓ 有題目說明",
+          statusTone: editableBrief ? "pending" : isSurprise ? "muted" : "done",
+          statusDetail: editableBrief ? "選曲截止前都能補充。" : isSurprise ? "玩法與配對請看活動狀態。" : "卡片內保留精簡說明，點入看完整內容。",
+          metaLabel: "輪值安排",
+          meta: isSurprise ? "全員互評" : "評審：" + week[3],
+          actionable: editableBrief,
+          action: editableBrief
+            ? messageAction("填題目說明", "出題說明")
+            : messageAction("查看 " + week[1] + " 題目", "本季題目 2026Q3 " + week[1])
+        };
+      });
+      cards.forEach(function (card, index) { card.eyebrow = "卡片 " + (index + 1) + "/" + cards.length; });
+      return {
+        contractId: "reply:season_topics_carousel:judge_editable",
+        audience: "personal_reply",
+        audienceLabel: "社員個人回覆",
+        trigger: "社員按【本季題目】或【主題一覽】",
+        deliveryNote: "每週一張；卡片 payload 明帶 season + week，不會跨季跳錯同號週。",
+        label: "12 週題目・本週評審可編輯｜12 張",
+        kind: "flex_carousel",
+        altText: "♪ 2026 Q3 本季題目",
+        message: "♪ 2026 Q3 本季題目",
+        cards: cards,
+        actions: []
+      };
+    }
+
+    function mySongsCarouselCards_(member, payloadPrefix) {
+      const weeks = seasonCarouselWeeks_();
+      const states = [
+        ["✓", "✓", "✓", "Eternal Flame - The Bangles"],
+        ["✓", "✓", "✓", "How Does A Moment Last Forever - Celine Dion"],
+        ["✓", "✓", "—", "A Million Dreams - P!nk"],
+        ["●", "●", "●", "評審週"],
+        ["✓", "✓", "✓", "Brave - Sara Bareilles"],
+        ["✓", "✓", "✓", "The Story - Brandi Carlile"],
+        ["✓", "✓", "✓", "Rewrite the Stars - Zac Efron, Zendaya"],
+        ["✓", "○", "○", "Vienna - Billy Joel"],
+        ["○", "○", "○", "活動玩法確定後開放"],
+        ["○", "○", "○", "W9–W10 合併任務"],
+        ["○", "○", "○", "尚未選曲"],
+        ["○", "○", "○", "尚未選曲"]
+      ];
+      return weeks.map(function (week, index) {
+        const status = states[index];
+        return {
+          eyebrow: "卡片 " + (index + 1) + "/" + weeks.length,
+          accent: "brand",
+          visualRole: index === 7 ? "progress" : "",
+          context: week[0] + "｜2026 Q3",
+          title: week[1],
+          descriptionLabel: "本週題目",
+          description: week[2],
+          statusLabel: "選曲／交歌／心得",
+          steps: [
+            { marker: status[0], label: "選曲", tone: status[0] === "✓" ? "done" : status[0] === "●" ? "progress" : "muted" },
+            { marker: status[1], label: "交歌", tone: status[1] === "✓" ? "done" : status[1] === "●" ? "progress" : "muted" },
+            { marker: status[2], label: "心得", tone: status[2] === "✓" ? "done" : status[2] === "●" ? "progress" : "muted" }
+          ],
+          metaLabel: member + " 的狀態",
+          meta: status[3],
+          actionable: false,
+          action: messageAction("查看 " + week[1] + " 詳情", payloadPrefix + " " + week[1])
+        };
+      });
+    }
+
+    function mySongsCarouselVariant_() {
+      return {
+        contractId: "reply:my_songs_carousel:current_season",
+        audience: "personal_reply",
+        audienceLabel: "社員個人回覆",
+        trigger: "社員按【我的選曲】、【我的這季】或【我的這一季】",
+        deliveryNote: "狀態直接沿用現行三燈判定；只有當週用深靛卡面。",
+        label: "我的 12 週狀態｜12 張",
+        kind: "flex_carousel",
+        altText: "♪ 我的選曲｜2026 Q3",
+        message: "♪ 我的選曲｜2026 Q3",
+        cards: mySongsCarouselCards_("我", "我的選曲 2026Q3"),
+        actions: []
+      };
+    }
+
+    function memberSeasonCarouselVariant_() {
+      return {
+        contractId: "reply:member_season_carousel:ophelia",
+        audience: "personal_reply",
+        audienceLabel: "社務成員狀態",
+        trigger: "在【成員狀態】選擇 Ophelia",
+        deliveryNote: "先回摘要，再回整季 Carousel；他人請假只顯示標準類別，不顯示自由文字原因。",
+        label: "Ophelia 本季 12 週狀態｜12 張",
+        kind: "flex_carousel",
+        altText: "♪ Ophelia 的本季狀況｜2026 Q3",
+        message: "♪ Ophelia 的本季狀況｜2026 Q3",
+        cards: mySongsCarouselCards_("Ophelia", "成員週狀態 Ophelia 2026Q3"),
         actions: []
       };
     }
@@ -2057,6 +2177,39 @@
         variants: {
           judgeEditable: seasonScheduleCarouselVariant_()
         }
+      },
+      seasonTopicsCarousel: {
+        title: "本季題目 Carousel｜每週一張",
+        note: "【本季題目】、【主題一覽】與手打【題目 季別】統一使用這組卡片。",
+        changes: [
+          "題目與說明分層顯示，不把長說明擠在 12 週長文字裡。",
+          "評審本人且仍可編輯時，直接進既有【出題說明】。",
+          "一般卡 payload 明帶 2026Q3 + Wn，不會查到當季同號週。",
+          "13 週季依 LINE 上限拆成 12＋1 兩則 Flex。"
+        ],
+        variants: { judgeEditable: seasonTopicsCarouselVariant_() }
+      },
+      mySongsCarousel: {
+        title: "我的選曲 Carousel｜整季週狀態",
+        note: "我的選曲、這一季與上一季共用同一個 builder，舊文字 formatter 保留作相容層。",
+        changes: [
+          "每張固定顯示題目、選曲／交歌／心得三燈與歌曲或狀態。",
+          "請假、評審週、放假與驚喜活動仍用既有業務 helper 判定。",
+          "當週使用深靛狀態卡，其餘維持炭黑＋紫色按鈕。",
+          "W9／W10 活動資料不完時 fail closed，不冒充兩份一般週任務。"
+        ],
+        variants: { current: mySongsCarouselVariant_() }
+      },
+      memberSeasonCarousel: {
+        title: "成員週狀態 Carousel｜社務查看",
+        note: "【成員狀態】的選人清單保留文字膠囊；選到人後改回摘要＋整季卡片。",
+        changes: [
+          "摘要保留已交作品、已選未交、請假次數與評審週數。",
+          "週狀態與本人頁共用三燈 helper，但他人請假不曝露自由文字原因。",
+          "卡片按鈕保留成員名、季別與週次，下鑽不會查錯人或錯週。",
+          "選人對話仍存活，可連續換一位查看。"
+        ],
+        variants: { ophelia: memberSeasonCarouselVariant_() }
       },
       dailyPick: {
         title: "日常選曲對話",
@@ -2346,6 +2499,9 @@
         myStatusCarousel: "default",
         activityVoteCarousel: "open",
         seasonScheduleCarousel: "judgeEditable",
+        seasonTopicsCarousel: "judgeEditable",
+        mySongsCarousel: "current",
+        memberSeasonCarousel: "ophelia",
         dailyPick: "open",
         dailySubmit: "chooseWeek",
         dailyReflection: "edit",
