@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<!-- Public design snapshot of reminder, command-reply, and admin-draft surfaces, published 2026-08-13. -->
+<!-- Public design snapshot of reminder, command-reply, admin-draft, and management-handoff surfaces, published 2026-08-14. -->
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark light">
   <meta name="robots" content="noindex, nofollow">
-  <meta name="description" content="英唱小幫手自動私訊、成員指令回覆與管理員群組草稿的完整情境預覽。">
+  <meta name="description" content="英唱小幫手自動私訊、成員指令回覆、管理員群組草稿與週五發布交接的完整情境預覽。">
   <title>英唱小幫手｜訊息情境完整預覽</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2310172b'/%3E%3Cpath d='M40 10v31.5a11 11 0 1 1-6-9.8V18l18-4v22.5a11 11 0 1 1-6-9.8V10z' fill='%2300f5d4'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -257,7 +257,7 @@
 
     .audience-map {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 8px;
       padding: 12px 16px;
       border-bottom: 1px solid var(--border-1);
@@ -288,6 +288,7 @@
 
     .audience-card[data-audience="group_draft"] strong { color: var(--accent-gold); }
     .audience-card[data-audience="personal_reply"] strong { color: var(--accent-pink); }
+    .audience-card[data-audience="management_push"] strong { color: var(--status-pass); }
 
     .screen-tab {
       min-height: var(--touch-min);
@@ -445,6 +446,11 @@
     .audience-badge[data-audience="group_draft"] {
       border-color: var(--accent-gold);
       color: var(--accent-gold);
+    }
+
+    .audience-badge[data-audience="management_push"] {
+      border-color: var(--status-pass);
+      color: var(--status-pass);
     }
 
     .trigger-meta {
@@ -955,12 +961,12 @@
       <section class="intro">
         <div>
           <h1 id="page-title">不用真的跑小幫手，也能一次檢查所有訊息狀態。</h1>
-          <p>每個畫面都標出真正收件人與觸發方式。尤其驚喜活動：投票提醒是逐位社員私訊；主揪群組稿只是選配，不會取代個人通知。</p>
+          <p>每個畫面都標出真正收件人與觸發方式。週五 08:00 只把正式【提醒Fri】預覽交給管理員與工程師，再由其中一人回公告群發布。</p>
         </div>
         <div class="design-stamp">溫暖，不灌雞湯<br>清楚，不像判決書</div>
       </section>
 
-      <section class="audience-map" aria-label="三種訊息表面說明">
+      <section class="audience-map" aria-label="四種訊息表面說明">
         <div class="audience-card" data-audience="personal">
           <strong>A / 個人自動私訊</strong>
           <span>排程逐位 push 給符合條件的社員；驚喜活動投票在這一類。</span>
@@ -972,6 +978,10 @@
         <div class="audience-card" data-audience="group_draft">
           <strong>C / 管理員群組草稿</strong>
           <span>管理員先私訊預覽，再到公告群手動觸發當則 reply；沒有排程群發，也沒有 Quick Reply。</span>
+        </div>
+        <div class="audience-card" data-audience="management_push">
+          <strong>D / 管理交接私訊</strong>
+          <span>每週五 08:00 只 push 管理員＋工程師各一則；內容就是正式【提醒Fri】Tag 預覽。</span>
         </div>
       </section>
 
@@ -1002,6 +1012,8 @@
         <span class="tab-group">C 管理員群組草稿</span>
         <button class="screen-tab" type="button" data-screen="groupDrafts" aria-selected="false">例行群組稿</button>
         <button class="screen-tab" type="button" data-screen="groupActivity" aria-selected="false">活動階段稿</button>
+        <span class="tab-group">D 管理交接私訊</span>
+        <button class="screen-tab" type="button" data-screen="fridayHandoff" aria-selected="false">週五發布交接</button>
       </nav>
 
       <section class="workspace">
@@ -2149,7 +2161,61 @@
       };
     }
 
+    function fridayReminderGroupFixture_(includeActivityVote) {
+      let message = "♪ 週五搶先看｜下週 W8\n\n" +
+        "🌈 Songs about travel\n\n" +
+        "🔍 找一首讓你想出發的歌\n\n" +
+        "🎯 這週輪到\n\n" +
+        "🎧 Andrew｜W8 題目與說明已完成\n\n" +
+        "🎶 先搶先贏\n\n" +
+        "尚無應選成員選曲，第一首就等你啦～\n\n" +
+        "🎧 Andrew W8 免選曲\n\n" +
+        "📆 選曲截止：8/18（二）23:59";
+      if (includeActivityVote) {
+        message += "\n\n♬ 驚喜活動投票\n\n" +
+          "還有 1 位尚未投票，麻煩點一下喔～\n" +
+          "📆 8/17（一）08:00 前\n" +
+          "👉 圖文選單 › 活動 › 玩不玩";
+      }
+      return message;
+    }
+
+    function fridayHandoffVariant_(contractId, label, includeActivityVote) {
+      const tagged = includeActivityVote ? "@Andrew @Bob" : "@Andrew";
+      return {
+        contractId: contractId,
+        audience: "management_push",
+        audienceLabel: "管理交接私訊",
+        trigger: "每週五 08:00｜只 push 管理員＋工程師各 1 則",
+        deliveryNote: "固定使用 2 則主動訊息額度；其中一人回公告群發布當則 reply，不按群組人數計主動訊息額度。",
+        label: label,
+        message: "♪ 週五群組預告待發布\n\n" +
+          "今天請由管理員或工程師其中一位回群組發布；看到群組已有同一則就不用重貼。\n\n" +
+          fridayReminderGroupFixture_(includeActivityVote) +
+          "\n\n━━━━━━━━━━━━━━\nTag 與發布\n━━━━━━━━━━━━━━\n" +
+          "會 tag：" + tagged + "\n\n" +
+          "手機：@英唱小幫手 提醒Fri\n" +
+          "電腦：小幫手 提醒Fri\n\n" +
+          "※ 真正發布時會再確認對象仍在群組；只使用當則 reply，不主動 push。",
+        actions: []
+      };
+    }
+
     Object.assign(screens, {
+      fridayHandoff: {
+        title: "週五 08:00 發布交接",
+        note: "同一份正式【提醒Fri】Tag 預覽只 push 給管理員與工程師。兩人看到後由其中一人回公告群觸發 reply，避免重貼；一般社員不會收到週五未選曲私訊。",
+        changes: [
+          "固定只使用管理員＋工程師兩則主動訊息額度。",
+          "正文直接沿用正式【提醒Fri】預覽，不另做一份會走鐘的文案。",
+          "活動投票截止前最後一個週末，正文加短提醒，只 tag 尚未投票者。",
+          "投票名單讀取不可信時整則 fail closed，不提供可發布指令。"
+        ],
+        variants: {
+          voteWeekend: fridayHandoffVariant_("management:friday_reminder_handoff:activity_vote", "含活動投票", true),
+          regular: fridayHandoffVariant_("management:friday_reminder_handoff:regular", "一般週五", false)
+        }
+      },
       groupDrafts: {
         title: "管理員例行群組草稿",
         note: "這 16 個 key 對應正式群組稿 registry。畫面只展示可複製正文；真正發布要由管理員在群組觸發當則 reply。",
@@ -2161,7 +2227,7 @@
         variants: {
           reminder: groupDraftVariant_("group:reminder", "提醒｜三天內", "提醒", "♪ 群組提醒草稿\n\n未來三天有 2 件待辦：\nW7 選曲｜8/10（一）23:59 前\nW6 評選｜8/16（日）23:59 前\n\n※ 主揪選配草稿；社員該收到的個人提醒仍由排程逐位私訊。"),
           reminder1: groupDraftVariant_("group:reminder_1", "提醒1｜24 小時", "提醒1", "♪ 24 小時內待辦草稿\n\nW7 還有 3 人尚未選曲。\n📆 8/10（一）23:59 前\n\n麻煩有空把歌選一選喔，沒選會記請假。"),
-          reminderFri: groupDraftVariant_("group:reminder_f", "提醒Fri｜下週預告", "提醒Fri", "♪ 星期五下週預告\n\n下週是 W7｜夏日公路歌\n選曲會在週一晚間截止。\n評審輪值請先確認題目與說明。"),
+          reminderFri: groupDraftVariant_("group:reminder_f", "提醒Fri｜下週預告＋活動催票", "提醒Fri", fridayReminderGroupFixture_(true)),
           reminderSun: groupDraftVariant_("group:reminder_s", "提醒Sun｜交歌收尾", "提醒Sun", "♪ 星期日交歌收尾\n\nW6 今天 23:59 截止。\n還沒完成的社員，麻煩把作品連結與心得補上喔。"),
           reminderMon: groupDraftVariant_("group:reminder_m", "提醒Mon｜選曲截止", "提醒Mon", "♪ 星期一選曲截止\n\nW7 今天 23:59 截止。\n還沒選的麻煩把歌選一選喔，沒選會記請假。"),
           judgeBrief: groupDraftVariant_("group:judge_brief", "評審出題", "評審出題", "🎧 評審出題提醒草稿\n\nW8 題目已填，說明尚未完成。\n麻煩輪值評審到圖文選單 評審 › 我輪值補上說明。"),
@@ -2283,6 +2349,7 @@
         dailyPick: "open",
         dailySubmit: "chooseWeek",
         dailyReflection: "edit",
+        fridayHandoff: "voteWeekend",
         groupDrafts: "reminder",
         groupActivity: "vote"
       }
@@ -2384,7 +2451,9 @@
       badge.dataset.audience = audience;
       badge.textContent = audienceLabel;
       document.getElementById("trigger-meta").textContent = "觸發：" + (variant.trigger || "未標示") + "｜" + (variant.deliveryNote || "");
-      document.getElementById("surface-title").textContent = audience === "group_draft" ? "管理員草稿預覽" : "英唱小幫手";
+      document.getElementById("surface-title").textContent = audience === "group_draft"
+        ? "管理員草稿預覽"
+        : (audience === "management_push" ? "週五發布交接" : "英唱小幫手");
       document.getElementById("surface-subtitle").textContent = audienceLabel;
       document.getElementById("text-bubble").hidden = isFlexCarousel;
       document.getElementById("flex-carousel").hidden = !isFlexCarousel;
@@ -2398,7 +2467,9 @@
       }).join("");
       document.getElementById("tap-result").textContent = audience === "group_draft"
         ? "※ 群組稿沒有 Quick Reply；實際請依觸發欄，到公告群手動觸發當則 reply。"
-        : "";
+        : (audience === "management_push"
+          ? "※ 這則沒有 Quick Reply；請回公告群依正文最下方指令發布。"
+          : "");
     }
 
     function render() {
