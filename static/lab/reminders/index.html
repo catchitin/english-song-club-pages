@@ -635,18 +635,18 @@
       flex: 0 0 238px;
       flex-direction: column;
       overflow: hidden;
-      border: 1px solid #83786b;
-      border-radius: 15px;
-      color: #28231f;
-      background: #d8cfc2;
+      border: 1px solid #303640;
+      border-radius: 10px;
+      color: #f7f8fa;
+      background: #111318;
       box-shadow: 0 8px 20px rgba(4, 6, 10, .22);
       scroll-snap-align: start;
     }
 
     .flex-card__header {
       padding: 15px 15px 13px;
-      border-bottom: 1px solid #83786b;
-      background: #d0c5b7;
+      border-bottom: 1px solid #303640;
+      background: #191c23;
     }
 
     .flex-card__eyebrow {
@@ -659,16 +659,16 @@
       line-height: 1.35;
     }
 
-    .flex-card__eyebrow strong { color: #594b63; }
+    .flex-card__eyebrow strong { color: #8b80f9; }
 
     .flex-card__context {
-      color: #534b44;
+      color: #b4bbc6;
       text-align: right;
     }
 
     .flex-card__title {
       margin-top: 9px;
-      color: #28231f;
+      color: #f7f8fa;
       font-size: 19px;
       line-height: 1.25;
     }
@@ -683,7 +683,7 @@
 
     .flex-card__label {
       display: block;
-      color: #534b44;
+      color: #7e8796;
       font-size: 10px;
       font-weight: 700;
       line-height: 1.35;
@@ -692,7 +692,7 @@
     .flex-card__value {
       display: block;
       margin-top: 5px;
-      color: #28231f;
+      color: #f7f8fa;
       font-size: 12px;
       line-height: 1.5;
       overflow-wrap: anywhere;
@@ -700,26 +700,26 @@
 
     .flex-card__status {
       padding: 11px;
-      border-radius: 10px;
-      background: #c9beaf;
+      border-radius: 8px;
+      background: #191c23;
     }
 
     .flex-card__status-value {
       display: block;
       margin-top: 6px;
-      color: #534b44;
+      color: #b4bbc6;
       font-size: 14px;
       font-weight: 700;
       line-height: 1.45;
     }
 
-    .flex-card__status-value[data-tone="pending"] { color: #3f2900; }
-    .flex-card__status-value[data-tone="done"] { color: #003626; }
+    .flex-card__status-value[data-tone="pending"] { color: #f0c66b; }
+    .flex-card__status-value[data-tone="done"] { color: #52d5a1; }
 
     .flex-card__status-detail {
       display: block;
       margin-top: 4px;
-      color: #534b44;
+      color: #b4bbc6;
       font-size: 10px;
       line-height: 1.4;
     }
@@ -733,15 +733,15 @@
 
     .flex-step {
       padding: 8px 4px;
-      border-radius: 9px;
-      color: #28231f;
-      background: #ddd5ca;
+      border-radius: 6px;
+      color: #f7f8fa;
+      background: #111318;
       text-align: center;
     }
 
     .flex-step strong {
       display: block;
-      color: #003626;
+      color: #b4bbc6;
       font-size: 15px;
       line-height: 1;
     }
@@ -756,8 +756,8 @@
 
     .flex-card__footer {
       padding: 10px;
-      border-top: 1px solid #83786b;
-      background: #c9bdaf;
+      border-top: 1px solid #303640;
+      background: #15181d;
     }
 
     .flex-card__button {
@@ -765,38 +765,35 @@
       min-height: 44px;
       padding: 8px 10px;
       border: 0;
-      border-radius: 999px;
-      color: #fffaf2;
-      background: #51425b;
+      border-radius: 7px;
+      color: #ffffff;
+      background: #6f63e8;
       font-size: 13px;
       font-weight: 700;
     }
 
-    /* 只有本週進度使用再沉一階的灰褐狀態層；其他卡維持燕麥米白。 */
+    /* 只有本週進度使用同色系的深靛紫狀態層；其他已完成／只讀卡不跟著灰化。 */
     .flex-card[data-role="progress"] {
-      border-color: #74685d;
-      background: #b7ab9d;
+      border-color: #4a426d;
+      background: #171526;
     }
 
     .flex-card[data-role="progress"] .flex-card__header {
-      border-color: #74685d;
-      background: #aa9d8e;
+      border-color: #4a426d;
+      background: #211d35;
     }
 
-    .flex-card[data-role="progress"] .flex-card__eyebrow strong { color: #3b2942; }
-    .flex-card[data-role="progress"] .flex-card__context,
-    .flex-card[data-role="progress"] .flex-card__label,
-    .flex-card[data-role="progress"] .flex-card__status-detail { color: #28231f; }
-    .flex-card[data-role="progress"] .flex-card__body { background: #b7ab9d; }
-    .flex-card[data-role="progress"] .flex-card__status { background: #a39789; }
-    .flex-card[data-role="progress"] .flex-step { background: #c3b8aa; }
+    .flex-card[data-role="progress"] .flex-card__eyebrow strong { color: #b5acff; }
+    .flex-card[data-role="progress"] .flex-card__body { background: #171526; }
+    .flex-card[data-role="progress"] .flex-card__status { background: #25203d; }
+    .flex-card[data-role="progress"] .flex-step { background: #13111f; }
 
     .flex-card[data-role="progress"] .flex-card__footer {
-      border-color: #74685d;
-      background: #a99c8d;
+      border-color: #4a426d;
+      background: #1b192c;
     }
 
-    .flex-card[data-role="progress"] .flex-card__button { background: #574a42; }
+    .flex-card[data-role="progress"] .flex-card__button { background: #554c92; }
 
     .message-time {
       margin-top: 4px;
