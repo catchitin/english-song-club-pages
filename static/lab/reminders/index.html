@@ -2027,6 +2027,24 @@
       };
     }
 
+    function operationsTopicPrepCarouselVariant_() {
+      const variant = seasonTopicsCarouselVariant_();
+      variant.contractId = "reply:operations_topic_prep_carousel:overview";
+      variant.audience = "operations_reply";
+      variant.audienceLabel = "管理員私訊回覆";
+      variant.trigger = "管理員按【季度排程】→【題目準備】";
+      variant.deliveryNote = "實際回覆會先給下季預備題已備／未備摘要，再附這組只讀週卡。";
+      variant.label = "管理員題目準備・只讀｜12 張";
+      variant.altText = "♪ 題目準備狀況｜2026 Q3";
+      variant.message = variant.altText;
+      variant.cards[7].status = "— 暫無詳細說明";
+      variant.cards[7].statusTone = "muted";
+      variant.cards[7].statusDetail = "本季題目已鎖定；這裡只讀查看。";
+      variant.cards[7].actionable = false;
+      variant.cards[7].action = messageAction("查看 W8 題目", "本季題目 2026Q3 W8");
+      return variant;
+    }
+
     function mySongsCarouselCards_(member, payloadPrefix) {
       const weeks = seasonCarouselWeeks_();
       const states = [
@@ -2187,7 +2205,10 @@
           "一般卡 payload 明帶 2026Q3 + Wn，不會查到當季同號週。",
           "13 週季依 LINE 上限拆成 12＋1 兩則 Flex。"
         ],
-        variants: { judgeEditable: seasonTopicsCarouselVariant_() }
+        variants: {
+          judgeEditable: seasonTopicsCarouselVariant_(),
+          operationsPrep: operationsTopicPrepCarouselVariant_()
+        }
       },
       mySongsCarousel: {
         title: "我的選曲 Carousel｜整季週狀態",
