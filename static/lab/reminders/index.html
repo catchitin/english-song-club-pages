@@ -995,6 +995,7 @@
         <button class="screen-tab" type="button" data-screen="judgeDutyCarousel" aria-selected="false">輪值卡片</button>
         <button class="screen-tab" type="button" data-screen="myStatusCarousel" aria-selected="false">我的狀態卡</button>
         <button class="screen-tab" type="button" data-screen="activityVoteCarousel" aria-selected="false">活動投票卡</button>
+        <button class="screen-tab" type="button" data-screen="seasonScheduleCarousel" aria-selected="false">季程卡片</button>
         <button class="screen-tab" type="button" data-screen="dailyPick" aria-selected="false">選曲對話</button>
         <button class="screen-tab" type="button" data-screen="dailySubmit" aria-selected="false">交歌對話</button>
         <button class="screen-tab" type="button" data-screen="dailyReflection" aria-selected="false">心得對話</button>
@@ -1906,6 +1907,66 @@
       };
     }
 
+    function seasonScheduleCarouselVariant_() {
+      const weeks = [
+        ["6/29–7/5", "W1", "Any language song", "Andrew"],
+        ["7/6–7/12", "W2", "Any language song", "Olivia"],
+        ["7/13–7/19", "W3", "A song about a new beginning", "Holly"],
+        ["7/20–7/26", "W4", "A song that makes you feel brave", "Lei"],
+        ["7/27–8/2", "W5", "Songs that spark a desire for change", "Ophelia"],
+        ["8/3–8/9", "W6", "A song that tells a story", "Vania"],
+        ["8/10–8/16", "W7", "Songs that mix 中文 and English", "Rhea"],
+        ["8/17–8/23", "W8", "A song that feels like home", "Andrew"],
+        ["8/24–8/30", "W9", "驚喜活動：交換／合唱", "全員互評"],
+        ["8/31–9/6", "W10", "驚喜活動：交換／合唱", "全員互評"],
+        ["9/7–9/13", "W11", "A song for a quiet night", "Olivia"],
+        ["9/14–9/20", "W12", "A song that marks the season", "Holly"]
+      ];
+      const cards = weeks.map(function (week, index) {
+        const isCurrent = index === 7;
+        const isSurprise = index === 8 || index === 9;
+        const isPast = index < 7;
+        const editableBrief = index === 7;
+        return {
+          accent: "brand",
+          visualRole: isCurrent ? "progress" : "",
+          context: week[0] + "｜2026 Q3",
+          title: week[1],
+          descriptionLabel: "本週主題",
+          description: week[2],
+          statusLabel: "週次狀態",
+          status: isCurrent ? "● 本週進行中" : isPast ? "✓ 已結束" : "○ 尚未開始",
+          statusTone: isCurrent ? "done" : isPast ? "muted" : "pending",
+          statusDetail: isSurprise ? "全員互評" : "評審：" + week[3],
+          metaLabel: "題目與輪值",
+          meta: editableBrief ? "○ 題目說明尚未填寫｜可修改至 8/17（一）23:59" :
+            isSurprise ? "驚喜活動週，全員互評" : "✓ 題目說明已填寫",
+          actionable: editableBrief,
+          action: editableBrief
+            ? messageAction("填題目說明", "出題說明")
+            : isSurprise
+              ? messageAction("查看活動狀態", "活動狀態")
+              : messageAction("查看 " + week[1] + " 詳情", "活動安排 " + week[1])
+        };
+      });
+      cards.forEach(function (card, index) {
+        card.eyebrow = "卡片 " + (index + 1) + "/" + cards.length;
+      });
+      return {
+        contractId: "reply:season_schedule_carousel:judge_editable",
+        audience: "personal_reply",
+        audienceLabel: "社員個人回覆",
+        trigger: "社員按【季程】→【活動安排】",
+        deliveryNote: "每週一張；本人輪值且說明仍可編輯時，按鈕直接進既有【出題說明】流程。",
+        label: "12 週季程・本週評審可編輯｜12 張",
+        kind: "flex_carousel",
+        altText: "♪ 2026 Q3 季程",
+        message: "♪ 2026 Q3 季程",
+        cards: cards,
+        actions: []
+      };
+    }
+
     Object.assign(screens, {
       taskCarousel: {
         title: "任務 Carousel｜請假與評審身分",
@@ -1969,6 +2030,20 @@
           open: activityVoteCarouselVariant_("open"),
           selected: activityVoteCarouselVariant_("selected"),
           closed: activityVoteCarouselVariant_("closed")
+        }
+      },
+      seasonScheduleCarousel: {
+        title: "季程 Carousel｜每週一張",
+        note: "正式【季程】仍是原本的導航首頁；進入【活動安排】後，改以每週一張的炭黑紫卡片瀏覽。",
+        changes: [
+          "W1–W12 依正式週次排序；目前週使用深靛紫狀態卡，其餘維持炭黑＋亮紫按鈕。",
+          "輪到本人且題目說明仍可編輯時，按鈕直接送【出題說明】，不另建一套寫入流程。",
+          "其他一般週送【活動安排 Wn】查看該週詳情；W9／W10 驚喜週送【活動狀態】。",
+          "LINE 單一 Carousel 最多 12 張；13 週季程會安全拆成 12＋1 兩則 Flex。",
+          "開季後主題本身維持鎖定；卡片所稱可填寫內容是既有的『題目說明』。"
+        ],
+        variants: {
+          judgeEditable: seasonScheduleCarouselVariant_()
         }
       },
       dailyPick: {
@@ -2204,6 +2279,7 @@
         judgeDutyCarousel: "previous",
         myStatusCarousel: "default",
         activityVoteCarousel: "open",
+        seasonScheduleCarousel: "judgeEditable",
         dailyPick: "open",
         dailySubmit: "chooseWeek",
         dailyReflection: "edit",
