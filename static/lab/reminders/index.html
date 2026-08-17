@@ -1182,6 +1182,12 @@
       "Mina",
       "Make you feel my love — Adele",
       "",
+      "📥 未選曲（8 人）",
+      "@Andrew、@Lei、@Vania",
+      "@Olivia、@Grace、@Linda",
+      "@Holly、@Rhea",
+      "想選曲的話，把握機會～",
+      "",
       "📆 選曲｜8/17（一）23:59 截止",
       "",
       "──────────",
@@ -2490,7 +2496,7 @@
           "所有 variant 明示管理員選配，不冒充自動通知。",
           "群組內【文字】不是 Quick Reply，因此預覽不畫假膠囊。",
           "提醒對象與日期由正式快照計算；此頁只放固定測試資料。",
-          "本週週報只 tag @All，不列未選曲名單；正文依評審＋MVP、本週題目、上週結算排列。"
+          "本週週報開頭 tag @All；未選曲名單改用 📥，成員在名單內直接 Tag，不重複英文名。"
         ],
         variants: {
           reminder: groupDraftVariant_("group:reminder", "提醒｜三天內", "提醒", "♪ 群組提醒草稿\n\n未來三天有 2 件待辦：\nW7 選曲｜8/10（一）23:59 前\nW6 評選｜8/16（日）23:59 前\n\n" + reminderLeaveFixture_("W7", "🏖️ 請假（選曲，1 人）：Claire") + "\n\n" + reminderLeaveFixture_("W6", "🏖️ 請假（評審任務，1 人）：Vania") + "\n\n※ 主揪選配草稿；社員該收到的個人提醒仍由排程逐位私訊。"),
@@ -2533,7 +2539,7 @@
 
     screens.groupDrafts.variants.weeklyDigest.audienceLabel = "自動整合週報";
     screens.groupDrafts.variants.weeklyDigest.trigger = "每週一 08:00｜額度與資料完整性通過後自動貼群";
-    screens.groupDrafts.variants.weeklyDigest.deliveryNote = "週報是全社廣播，正文開頭只 Tag @All；不列未選曲名單，也不逐一 Tag 評審或 MVP。額度不足時改交管理員與工程師手貼。";
+    screens.groupDrafts.variants.weeklyDigest.deliveryNote = "週報是全社廣播，正文開頭 Tag @All；未選曲成員在 📥 名單內直接 Tag，不重複英文名。評審與 MVP 不另外 Tag；額度不足時改交管理員與工程師手貼。";
 
     function addPersonalMeta_(screenKey, variantKey, contractId, trigger) {
       const variant = screens[screenKey].variants[variantKey];
