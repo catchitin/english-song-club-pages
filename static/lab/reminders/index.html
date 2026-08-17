@@ -2340,7 +2340,9 @@
         changes: [
           "有多週可交時，週次本身就是可按膠囊。",
           "直接貼連結是文字輸入，不偽裝成按鈕。",
-          "已完成後保留換連結、刪連結、心得與預先交歌。"
+          "已完成後保留換連結、刪連結、心得與預先交歌。",
+          "App 短網址解析成功時，回覆已準備網頁版。",
+          "暫時無法確認時仍保存投稿，並告知評審前會再檢查。"
         ],
         variants: {
           chooseWeek: fixedReplyVariant_(
@@ -2356,6 +2358,16 @@
           done: fixedReplyVariant_(
             "daily:submit:done", "交歌與心得完成", "社員重開【交歌】查看已儲存狀態",
             "♪ 交歌 W6\n\n✅ 選曲　Yellow - Coldplay\n✅ 交歌\n🔗 https://youtu.be/example\n✅ 心得\n💚 心得內容\n\n🌐 評審看到的作品頁\n\n━━━━━━━━━━━━━━\n其他動作\n━━━━━━━━━━━━━━\n\n➤【換連結】貼上新的覆蓋\n➤【刪連結】只刪連結，選曲留著\n➤【心得】查看／修改\n➤【預先交歌】預交未來週\n\n────────────\n➤【收起】結束對話（已存的不變）",
+            [messageAction("換連結", "換連結"), messageAction("刪連結", "刪連結"), messageAction("心得", "心得"), messageAction("預先交歌", "預先交歌"), messageAction("收起", "收起")]
+          ),
+          savedBrowserSafe: fixedReplyVariant_(
+            "daily:submit:saved_browser_safe", "App 短網址已準備網頁版", "社員貼上已支援的 App 短網址；投稿先儲存，再完成相容性檢查",
+            "✓ 連結已儲存\n已準備網頁可開啟版本\n\n♪ 交歌 W6\n\n✅ 選曲　Yellow - Coldplay\n✅ 交歌\n🔗 https://starmaker.onelink.me/v4ei/example\n✅ 心得\n💚 心得內容\n\n🌐 評審看到的作品頁\n\n━━━━━━━━━━━━━━\n其他動作\n━━━━━━━━━━━━━━\n\n➤【換連結】貼上新的覆蓋\n➤【刪連結】只刪連結，選曲留著\n➤【心得】查看／修改\n➤【預先交歌】預交未來週\n\n────────────\n➤【收起】結束對話（已存的不變）",
+            [messageAction("換連結", "換連結"), messageAction("刪連結", "刪連結"), messageAction("心得", "心得"), messageAction("預先交歌", "預先交歌"), messageAction("收起", "收起")]
+          ),
+          savedCheckWarning: fixedReplyVariant_(
+            "daily:submit:saved_check_warning", "相容性暫時待確認", "社員貼上未知或暫時解析失敗的 App 短網址；不阻擋交歌",
+            "※ 網頁相容性暫無法確認\n連結已儲存，不影響交歌。\n評審前會再自動檢查。\n\n♪ 交歌 W6\n\n✅ 選曲　Yellow - Coldplay\n✅ 交歌\n🔗 https://new-karaoke.onelink.me/example\n✅ 心得\n💚 心得內容\n\n🌐 評審看到的作品頁\n\n━━━━━━━━━━━━━━\n其他動作\n━━━━━━━━━━━━━━\n\n➤【換連結】貼上新的覆蓋\n➤【刪連結】只刪連結，選曲留著\n➤【心得】查看／修改\n➤【預先交歌】預交未來週\n\n────────────\n➤【收起】結束對話（已存的不變）",
             [messageAction("換連結", "換連結"), messageAction("刪連結", "刪連結"), messageAction("心得", "心得"), messageAction("預先交歌", "預先交歌"), messageAction("收起", "收起")]
           ),
           changeLink: fixedReplyVariant_(
