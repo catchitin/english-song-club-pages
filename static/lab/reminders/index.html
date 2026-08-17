@@ -944,8 +944,8 @@
 <body>
   <main class="app">
     <aside class="publication-notice" role="note" aria-label="發布版本說明">
-      <strong>MESSAGE LAB · 2026-08-17</strong>
-      <span>下方完整分開自動私訊、成員指令回覆與管理員群組草稿；這是固定假資料測試台，不會連到 LINE、不讀社員資料，也不會真的發訊息。<a class="lab-link" href="../carousel-themes/">開啟四種配色比較</a></span>
+      <strong>固定示意資料，不是正式名單 · 2026-08-17</strong>
+      <span>Andrew、Ophelia、週次、題目與名單都只是固定測試情境，不能拿來判斷本週真實輪值或繳交狀態。本頁不連 LINE、不讀社員資料，也不會真的發訊息。<a class="lab-link" href="../carousel-themes/">開啟四種配色比較</a></span>
     </aside>
 
     <section class="window" aria-labelledby="page-title">
@@ -960,7 +960,7 @@
       <section class="intro">
         <div>
           <h1 id="page-title">不用真的跑小幫手，也能一次檢查所有訊息狀態。</h1>
-          <p>每個畫面都標出真正收件人與觸發方式。週一 08:00 自動發布整合週報；完整評審結果與 MVP 直接放進同一則，名字出現時就地 Tag。</p>
+          <p>每個畫面都標出真正收件人與觸發方式。週一 08:00 自動發布整合週報；當週未選曲者、完整評審結果與 MVP 都在姓名出現時就地 Tag，請假者不 Tag。</p>
         </div>
         <div class="design-stamp">溫暖，不灌雞湯<br>清楚，不像判決書</div>
       </section>
@@ -1118,7 +1118,7 @@
   <script>
     const exampleSong = "Die With A Smile - Lady Gaga & Bruno Mars";
     const announcementBody = "★ W5 MVP 公告 🤖\n\n🌈 抒情歌\n\n🎧 評審：Ophelia\n\n恭喜 Mina、Ivy 獲選本週 MVP 🎉\n\n🎖️ MVP 1：Mina｜Blue Moon - Aira\n⭐ 情緒層次很完整，讓人想重聽。\n\n🎖️ MVP 2：Ivy｜Nocturne - Mella\n⭐ 副歌很有感染力。\n\n感謝大家的參與 ♪ ✨";
-    const integratedWeeklyDigestBody = "各位早安上班辛苦了～週報來囉～\n──────────\n♪ W8 開跑　8/17-8/23\n──────────\n\n🌈 自由題目\n\n──────────\n🎶 選曲現況\n──────────\n✅ 已選曲（5人）\n❌ 未選曲（2 人）：Irene、Claire\n📆 選曲 8/17（一）23:59 截止\n\n──────────\n🏁 上週結算（W7）\n──────────\n其餘應交成員 8 位完成 ✓\n\n──────────\n🎀 W6 評審結果\n──────────\n🌈 Songs with interesting MV\n\n🎧 評審：Linda @Linda\n✓ 評審判定：8 件通過、0 件未通過\n🏖️ 請假（選曲，2 人）：Claire、Vania\n🏖️ 請假（交歌，1 人）：Ivy\n🏖️ 請假（心得，1 人）：Grace\n\n恭喜 Olivia、Mina 獲選本週 MVP 🎉\n\n🎖️ MVP 1：Olivia @Olivia｜Neon Lights - Artist A\n⭐ MV 的敘事和歌曲情緒互相加分，完整度很高。\n\n🎖️ MVP 2：Mina @Mina｜Midnight Film - Artist B\n⭐ 畫面概念鮮明，歌曲與影像的反差很有記憶點。\n\n📝 評審感言／遺珠：\n八件作品都通過；這次以 MV 概念、歌曲貼合度與整體完成度選出兩位。\n\n感謝大家的參與 ♪ ✨";
+    const integratedWeeklyDigestBody = "各位早安上班辛苦了～週報來囉～\n──────────\n♪ W8 開跑　8/17-8/23\n──────────\n\n🌈 自由題目\n\n──────────\n🎶 選曲現況\n──────────\n✅ 已選曲（5人）\n❌ 未選曲（2 人）：Irene @Irene、Claire @Claire\n📆 選曲 8/17（一）23:59 截止\n\n──────────\n🏁 上週結算（W7）\n──────────\n其餘應交成員 8 位完成 ✓\n\n──────────\n🎀 W6 評審結果\n──────────\n🌈 Songs with interesting MV\n\n🎧 評審：Linda @Linda\n✓ 評審判定：8 件通過、0 件未通過\n🏖️ 請假（選曲，2 人）：Claire、Vania\n🏖️ 請假（交歌，1 人）：Ivy\n🏖️ 請假（心得，1 人）：Grace\n\n恭喜 Olivia、Mina 獲選本週 MVP 🎉\n\n🎖️ MVP 1：Olivia @Olivia｜Neon Lights - Artist A\n⭐ MV 的敘事和歌曲情緒互相加分，完整度很高。\n\n🎖️ MVP 2：Mina @Mina｜Midnight Film - Artist B\n⭐ 畫面概念鮮明，歌曲與影像的反差很有記憶點。\n\n📝 評審感言／遺珠：\n八件作品都通過；這次以 MV 概念、歌曲貼合度與整體完成度選出兩位。\n\n感謝大家的參與 ♪ ✨";
     const reviewPacketSummary = "符合評選條件的 6 件作品：\n1　Mina｜Blue Moon - Aira\n2　Ivy｜Nocturne - Mella\n3　Cara｜Gravity - Sara Bareilles\n4　Lena｜Easy On Me - Adele\n5　Vania｜All I Ask - Adele\n6　Eloise｜The Scientist - Coldplay";
 
     function messageAction(label, payload, route) {
@@ -2408,7 +2408,7 @@
           reminder1: groupDraftVariant_("group:reminder_1", "提醒1｜24 小時", "提醒1", "♪ 24 小時內待辦草稿\n\nW7 還有 3 人尚未選曲。\n📆 8/10（一）23:59 前\n\n" + reminderLeaveFixture_("W7", "🏖️ 請假（選曲，1 人）：Claire") + "\n\n把握機會～"),
           reminderFri: groupDraftVariant_("group:reminder_f", "提醒Fri｜下週預告＋活動催票", "提醒Fri", fridayReminderGroupFixture_(true)),
           reminderSun: groupDraftVariant_("group:reminder_s", "提醒Sun｜交歌收尾", "提醒Sun", "♪ 星期日交歌收尾\n\nW6 今天 23:59 截止。\n📭 未交歌＋未填心得（3 人）：Mina、Ivy、Lena\n" + reminderLeaveFixture_("W6", "🏖️ 請假（交歌，2 人）：Claire、Vania") + "\n\n這則只是提醒，這週有要參加的再交就好～\n\n※ 缺連結或缺心得會記請假、不送評審"),
-          reminderMon: groupDraftVariant_("group:reminder_m", "提醒Mon｜選曲截止", "提醒Mon", "♪ 星期一選曲截止\n\nW7 今天 23:59 截止。\n" + reminderLeaveFixture_("W7", "🏖️ 請假（選曲，1 人）：Claire") + "\n\n這則只是提醒，這週有要參加的再選就好～\n\n※ 未選曲會記請假。"),
+          reminderMon: groupDraftVariant_("group:reminder_m", "週一選曲截止", "週一選曲截止", "♪ 星期一選曲截止\n\nW7 今天 23:59 截止。\n" + reminderLeaveFixture_("W7", "🏖️ 請假（選曲，1 人）：Claire") + "\n\n這則只是提醒，這週有要參加的再選就好～\n\n※ 未選曲會記請假。"),
           judgeBrief: groupDraftVariant_("group:judge_brief", "評審出題", "評審出題", "🎧 評審出題提醒草稿\n\nW8 題目已填，說明尚未完成。\n麻煩輪值評審到圖文選單 評審 › 我輪值補上說明。"),
           judgeReview: groupDraftVariant_("group:judge_review", "評審評選", "評審評選", "🎧 評審評選提醒草稿\n\nW6 作品評選進行中。\n麻煩輪值評審在期限前完成判定與 MVP。"),
           mvp: groupDraftVariant_("group:mvp", "MVP 標記", "MVP標記", "★ W5 MVP 公告\n\n🎖️ MVP 1：Mina｜Yellow - Coldplay\n🎖️ MVP 2：Ivy｜Gravity - Sara Bareilles\n\n感謝大家的參與 ♪"),
@@ -2416,7 +2416,7 @@
           theme: groupDraftVariant_("group:theme", "本週主題", "主題草稿", "♪ W6 本週主題\n\n🌈 自由題目\n這週想唱什麼都可以，選一首你真的想唱的歌。"),
           submit: groupDraftVariant_("group:submit", "交件名單", "交件名單", "♪ W6 交件名單\n\n✓ 已完成：Mina、Ivy、Cara\n○ 尚未完成：2 人\n\n※ 進入最後倒數才會列名。"),
           leave: groupDraftVariant_("group:leave", "本週請假", "請假草稿", "🏖️ W6 本週請假\n\n請假（選曲，1 人）：Lena\n請假（心得，1 人）：Vania\n\n請假只是休息一週的紀錄，下週想唱再回來就好。"),
-          weeklyDigest: groupDraftVariant_("group:weekly_digest", "本週整合週報｜文中就地 Tag", "本週週報", integratedWeeklyDigestBody),
+          weeklyDigest: groupDraftVariant_("group:weekly_digest", "管理 1／管理 2 共用｜本週週報", "本週週報", integratedWeeklyDigestBody),
           nextDigest: groupDraftVariant_("group:next_digest", "下週週報", "下週週報", "♪ W7 下週預告\n\n主題：夏日公路歌\n選曲截止：8/10（一）23:59\n交歌截止：8/16（日）23:59"),
           seasonPrep: groupDraftVariant_("group:season_prep", "開季準備", "開季準備", "♪ 2026 Q4 開季準備\n\n輪值評審請先完成預備題目與說明。\n開季時未準備的週次會改成自由題目。"),
           activity: groupDraftVariant_("group:activity", "活動草稿｜目前階段", "活動草稿", "♬ 驚喜活動群組草稿\n\n目前階段：玩法投票\n社員會各自收到投票私訊；這份只是主揪想在群組補充時可用的選配稿。\n\n※ 不會自動群發，也不取代個人私訊。")
