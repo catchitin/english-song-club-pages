@@ -2365,9 +2365,9 @@
             "✓ 連結已儲存\n已準備網頁可開啟版本\n\n♪ 交歌 W6\n\n✅ 選曲　Yellow - Coldplay\n✅ 交歌\n🔗 https://starmaker.onelink.me/v4ei/example\n✅ 心得\n💚 心得內容\n\n🌐 評審看到的作品頁\n\n━━━━━━━━━━━━━━\n其他動作\n━━━━━━━━━━━━━━\n\n➤【換連結】貼上新的覆蓋\n➤【刪連結】只刪連結，選曲留著\n➤【心得】查看／修改\n➤【預先交歌】預交未來週\n\n────────────\n➤【收起】結束對話（已存的不變）",
             [messageAction("換連結", "換連結"), messageAction("刪連結", "刪連結"), messageAction("心得", "心得"), messageAction("預先交歌", "預先交歌"), messageAction("收起", "收起")]
           ),
-          savedCheckWarning: fixedReplyVariant_(
-            "daily:submit:saved_check_warning", "相容性暫時待確認", "社員貼上未知或暫時解析失敗的 App 短網址；不阻擋交歌",
-            "※ 網頁相容性暫無法確認\n連結已儲存，不影響交歌。\n評審前會再自動檢查。\n\n♪ 交歌 W6\n\n✅ 選曲　Yellow - Coldplay\n✅ 交歌\n🔗 https://new-karaoke.onelink.me/example\n✅ 心得\n💚 心得內容\n\n🌐 評審看到的作品頁\n\n━━━━━━━━━━━━━━\n其他動作\n━━━━━━━━━━━━━━\n\n➤【換連結】貼上新的覆蓋\n➤【刪連結】只刪連結，選曲留著\n➤【心得】查看／修改\n➤【預先交歌】預交未來週\n\n────────────\n➤【收起】結束對話（已存的不變）",
+          savedCheckSilent: fixedReplyVariant_(
+            "daily:submit:saved_check_silent", "技術異常不打擾社員", "社員貼上未知或暫時解析失敗的 App 短網址；成員端只確認已儲存，異常交由評審前工程師告警",
+            "✓ 連結已儲存\n\n♪ 交歌 W6\n\n✅ 選曲　Yellow - Coldplay\n✅ 交歌\n🔗 https://new-karaoke.onelink.me/example\n✅ 心得\n💚 心得內容\n\n🌐 評審看到的作品頁\n\n━━━━━━━━━━━━━━\n其他動作\n━━━━━━━━━━━━━━\n\n➤【換連結】貼上新的覆蓋\n➤【刪連結】只刪連結，選曲留著\n➤【心得】查看／修改\n➤【預先交歌】預交未來週\n\n────────────\n➤【收起】結束對話（已存的不變）",
             [messageAction("換連結", "換連結"), messageAction("刪連結", "刪連結"), messageAction("心得", "心得"), messageAction("預先交歌", "預先交歌"), messageAction("收起", "收起")]
           ),
           changeLink: fixedReplyVariant_(
@@ -2533,7 +2533,7 @@
 
     screens.groupDrafts.variants.weeklyDigest.audienceLabel = "自動整合週報";
     screens.groupDrafts.variants.weeklyDigest.trigger = "每週一 08:00｜額度與資料完整性通過後自動貼群";
-    screens.groupDrafts.variants.weeklyDigest.deliveryNote = "未選曲者、評審與 MVP 得主直接在正文姓名旁 Tag；不另加文末 Tag 區。額度不足時改交管理員與工程師手貼。";
+    screens.groupDrafts.variants.weeklyDigest.deliveryNote = "週報是全社廣播，正文開頭只 Tag @All；不列未選曲名單，也不逐一 Tag 評審或 MVP。額度不足時改交管理員與工程師手貼。";
 
     function addPersonalMeta_(screenKey, variantKey, contractId, trigger) {
       const variant = screens[screenKey].variants[variantKey];
