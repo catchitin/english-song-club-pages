@@ -2467,6 +2467,7 @@
     function fridayExchangeWishGroupFixture_() {
       return "♪ 週五搶先看｜下週 W9\n\n" +
         "🌈 驚喜活動：交換歌曲\n\n" +
+        reminderLeaveFixture_("W9", "🏖️ 請假（活動，1 人）：Claire") + "\n\n" +
         "♬ 交換歌曲準備\n\n" +
         "參加交換：6 人\n" +
         "✓ 已完成 2 人\n" +
@@ -2590,7 +2591,7 @@
 
     screens.groupDrafts.variants.weeklyDigest.audienceLabel = "自動整合週報";
     screens.groupDrafts.variants.weeklyDigest.trigger = "每週一 08:00｜額度與資料完整性通過後自動貼群";
-    screens.groupDrafts.variants.weeklyDigest.deliveryNote = "週報是全社廣播，正文開頭 Tag @All。原定週一 08:00 只自動嘗試一次；資料、額度或送達失敗後不自動重跑，改交工程師從同一份【本週週報】預覽人工發布。";
+    screens.groupDrafts.variants.weeklyDigest.deliveryNote = "週報是全社廣播，正文開頭 Tag @All；未選曲成員會在 📥 名單內直接 Tag。原定週一 08:00 只自動嘗試一次；資料、額度或送達失敗後不自動重跑，改交工程師從同一份【本週週報】預覽人工發布。";
 
     function addPersonalMeta_(screenKey, variantKey, contractId, trigger) {
       const variant = screens[screenKey].variants[variantKey];
