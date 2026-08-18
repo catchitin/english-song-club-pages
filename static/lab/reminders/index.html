@@ -1380,7 +1380,7 @@
           auto: {
             label: "草稿自動完成",
             message: "✓ W5｜評選已完成\n\n你先前存下的評選內容，\n已在期限到時轉為正式結果。\n\n🎖️ MVP：Mina、Ivy\n🏖️ 這次沒有記請假\n\n不用再補送或重做。\n下次記得按「確認送出」就好～\n\n📣 群組公告\n這裡不會立刻發群組。\n預計 8/11（二）08:00 隨週報公布。\n可以先看群組會收到的內容。\n\n※ 評選送出後已鎖定\n錯字或想補充講評：直接在群組補充。\n要更換 MVP 人選：請聯絡群主或工程師協助。\n\n➤【公告預覽】先看公告\n➤【評選結果】查看結果",
-            actions: [messageAction("公告預覽", "公告預覽 2026Q3 W5", "announcementPreview"), messageAction("評選結果", "評選結果 2026Q3 W5", "judgeResult")]
+            actions: [messageAction("公告預覽", "公告預覽 2026 Season 3 W5", "announcementPreview"), messageAction("評選結果", "評選結果 2026 Season 3 W5", "judgeResult")]
           },
           missed: {
             label: "評審未完成",
@@ -1396,34 +1396,34 @@
           "時間與結果通知共用同一個排程 resolver。",
           "正文與真正群推共用 mvpAnnouncementText。",
           "群組正式發布會保留社團英文名，緊接 LINE 標記、不加括號；本頁不讀取真實帳號。",
-          "預覽 payload 綁定 2026Q3 W5，不找最新週。",
+          "預覽 payload 綁定 2026 Season 3 W5，不找最新週。",
           "完整結果隨週報發布；管理員仍可單獨使用【MVP標記】。"
         ],
         variants: {
           scheduled: {
             label: "預計隨週報公布",
             message: "♪ W5｜群組公告預覽\n\n📣 預計 8/11（二）08:00 隨週報公布\n以下是管理員單獨使用【MVP標記】時的內容：\n\n────────────\n" + announcementBody + "\n────────────\n\n※ 這只是預覽，現在不會發群組。\n\n➤【評選結果】回看正式結果",
-            actions: [messageAction("評選結果", "評選結果 2026Q3 W5", "judgeResult")]
+            actions: [messageAction("評選結果", "評選結果 2026 Season 3 W5", "judgeResult")]
           },
           announced: {
             label: "已經公告",
             message: "♪ W5｜群組公告預覽\n\n✓ 已於 8/11（二）08:00 發布\n以下是群組收到的內容：\n\n────────────\n" + announcementBody + "\n────────────\n\n➤【評選結果】回看正式結果",
-            actions: [messageAction("評選結果", "評選結果 2026Q3 W5", "judgeResult")]
+            actions: [messageAction("評選結果", "評選結果 2026 Season 3 W5", "judgeResult")]
           },
           manual_handoff: {
             label: "管理端接手",
             message: "♪ W5｜群組公告預覽\n\n○ 這次改由群主／工程師接手\n自動群發沒有送出；同一份公告已交給管理端。\n目前沒有新的自動發布時間，你不用另外處理。\n\n────────────\n" + announcementBody + "\n────────────\n\n※ 這只是預覽，評選結果仍然有效。\n\n➤【評選結果】回看正式結果",
-            actions: [messageAction("評選結果", "評選結果 2026Q3 W5", "judgeResult")]
+            actions: [messageAction("評選結果", "評選結果 2026 Season 3 W5", "judgeResult")]
           },
           disabled: {
             label: "自動公告關閉",
             message: "♪ W5｜群組公告預覽\n\n○ 自動群組公告目前未開啟\n這週會由群主或工程師決定後續發布，\n你不用重做評選。\n\n────────────\n" + announcementBody + "\n────────────\n\n※ 這只是預覽，現在不會發群組。\n\n➤【評選結果】回看正式結果",
-            actions: [messageAction("評選結果", "評選結果 2026Q3 W5", "judgeResult")]
+            actions: [messageAction("評選結果", "評選結果 2026 Season 3 W5", "judgeResult")]
           },
           unknown: {
             label: "時間未排定",
             message: "♪ W5｜群組公告預覽\n\n○ 公告時間尚未排定\n目前讀不到可靠的發布窗口。\n系統不會猜日期，已交由工程師確認。\n\n────────────\n" + announcementBody + "\n────────────\n\n※ 這只是預覽，評選結果仍然有效。\n\n➤【評選結果】回看正式結果",
-            actions: [messageAction("評選結果", "評選結果 2026Q3 W5", "judgeResult")]
+            actions: [messageAction("評選結果", "評選結果 2026 Season 3 W5", "judgeResult")]
           }
         }
       },
@@ -1561,7 +1561,7 @@
     screens.judgeResult.variants.manual = {
       label: "手動確認送出",
       message: "✓ W5｜評選已完成\n\n🎖️ MVP：Mina、Ivy\n\n📣 群組公告\n這裡不會立刻發群組。\n預計 8/11（二）08:00 隨週報公布。\n可以先看群組會收到的內容。\n\n※ 評選送出後已鎖定\n錯字或想補充講評：直接在群組補充。\n要更換 MVP 人選：請聯絡群主或工程師協助。\n\n➤【公告預覽】先看公告\n➤【評選結果】查看結果",
-      actions: [messageAction("公告預覽", "公告預覽 2026Q3 W5", "announcementPreview"), messageAction("評選結果", "評選結果 2026Q3 W5", "judgeResult")]
+      actions: [messageAction("公告預覽", "公告預覽 2026 Season 3 W5", "announcementPreview"), messageAction("評選結果", "評選結果 2026 Season 3 W5", "judgeResult")]
     };
 
     function fixedReplyVariant_(contractId, label, trigger, message, actions) {
@@ -1857,7 +1857,7 @@
           statusLabel: "目前狀態", status: "✓ 送評作品判定已完成", statusTone: "done",
           statusDetail: "合格 6 件・不合格 0 件",
           metaLabel: "請假（未送評）", meta: "6 人\n明細：請假（選曲）6 人", actionable: false,
-          action: messageAction("查看完整評選結果", "輪值回顧 2026Q3 W5")
+          action: messageAction("查看完整評選結果", "輪值回顧 2026 Season 3 W5")
         }];
         label = "評選已完成｜2 張";
         trigger = "社員按【我輪值】；本人最近一週評選已完成";
@@ -2105,7 +2105,7 @@
           actionable: editableBrief,
           action: editableBrief
             ? messageAction("填題目說明", "出題說明")
-            : messageAction("查看 " + week[1] + " 題目", "本季題目 2026Q3 " + week[1])
+            : messageAction("查看 " + week[1] + " 題目", "本季題目 2026 Season 3 " + week[1])
         };
       });
       cards.forEach(function (card, index) { card.eyebrow = "卡片 " + (index + 1) + "/" + cards.length; });
@@ -2138,7 +2138,7 @@
       variant.cards[7].statusTone = "muted";
       variant.cards[7].statusDetail = "本季題目已鎖定；這裡只讀查看。";
       variant.cards[7].actionable = false;
-      variant.cards[7].action = messageAction("查看 W8 題目", "本季題目 2026Q3 W8");
+      variant.cards[7].action = messageAction("查看 W8 題目", "本季題目 2026 Season 3 W8");
       return variant;
     }
 
@@ -2193,7 +2193,7 @@
         kind: "flex_carousel",
         altText: "♪ 我的選曲｜2026 Q3",
         message: "♪ 我的選曲｜2026 Q3",
-        cards: mySongsCarouselCards_("我", "我的選曲 2026Q3"),
+        cards: mySongsCarouselCards_("我", "我的選曲 2026 Season 3"),
         actions: []
       };
     }
@@ -2209,7 +2209,7 @@
         kind: "flex_carousel",
         altText: "♪ Ophelia 的本季狀況｜2026 Q3",
         message: "♪ Ophelia 的本季狀況｜2026 Q3",
-        cards: mySongsCarouselCards_("Ophelia", "成員週狀態 Ophelia 2026Q3"),
+        cards: mySongsCarouselCards_("Ophelia", "成員週狀態 Ophelia 2026 Season 3"),
         actions: []
       };
     }
@@ -2299,7 +2299,7 @@
         changes: [
           "題目與說明分層顯示，不把長說明擠在 12 週長文字裡。",
           "評審本人且仍可編輯時，直接進既有【出題說明】。",
-          "一般卡 payload 明帶 2026Q3 + Wn，不會查到當季同號週。",
+          "一般卡 payload 明帶 2026 Season 3 + Wn，不會查到當季同號週。",
           "13 週季依 LINE 上限拆成 12＋1 兩則 Flex。"
         ],
         variants: {
