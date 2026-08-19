@@ -2593,25 +2593,25 @@
           weeklyDigest: groupDraftVariant_("group:weekly_digest", "管理 1／管理 2 共用｜本週週報", "本週週報", integratedWeeklyDigestBody),
           nextDigest: groupDraftVariant_("group:next_digest", "下週週報", "下週週報", "♪ W7 下週預告\n\n主題：夏日公路歌\n選曲截止：8/10（一）23:59\n交歌截止：8/16（日）23:59"),
           seasonPrep: groupDraftVariant_("group:season_prep", "開季準備", "開季準備", "♪ 2026 Q4 開季準備\n\n輪值評審請先完成預備題目與說明。\n開季時未準備的週次會改成自由題目。"),
-          activity: groupDraftVariant_("group:activity", "活動草稿｜目前階段", "活動草稿", "♬ 驚喜活動群組草稿\n\n目前階段：玩法投票\n社員會各自收到投票私訊；這份只是主揪想在群組補充時可用的選配稿。\n\n※ 不會自動群發，也不取代個人私訊。")
+          activity: groupDraftVariant_("group:activity", "驚喜活動公告｜目前階段", "驚喜活動公告", "♬ 驚喜活動公告\n\n目前階段：玩法投票\n正式發布時會 Tag @All，但仍只使用當則 reply，不會主動 push。")
         }
       },
       groupActivity: {
         title: "驚喜活動七階段群組草稿",
-        note: "同一個【活動草稿】指令會依正式活動 state 產生不同正文。每一階段都只是主揪選配，不是社員任務的主要入口。",
+        note: "同一個【驚喜活動公告】指令會依正式活動 state 產生不同正文。正式發布固定 Tag @All；公告內的【驚喜出題】可直接開啟填歌流程。",
         changes: [
           "投票、合唱應變、配對與活動評選仍由系統逐位私訊。",
           "群組稿只補共同脈絡，不承擔個人選擇或寫入。",
           "七個正式 phase 都能在這裡離線檢查。"
         ],
         variants: {
-          vote: groupDraftVariant_("group:activity:vote", "1｜玩法投票", "活動草稿", "♬ 驚喜活動｜玩法投票中\n\n社員會各自收到交換歌曲／合唱／不參加配對的私訊選項。\n📆 8/17（一）08:00 前\n\n※ 這是主揪選配群組稿；沒有貼也不影響個人投票私訊。"),
-          exchangeWish: groupDraftVariant_("group:activity:exchange_wish", "2｜交換出題", "活動草稿", "♬ 驚喜活動｜交換歌曲出題中\n\n參加者各推薦 2 首：歌曲＋推薦原因必填，YouTube 連結選填。\n📆 交換出題：8/24（一）23:59\nW9 星期二 08:00 由系統配對、公布結果並私訊參加者。\n\n※ 逾期未完成只是不參加配對，不另外記請假。"),
-          exchangeActive: groupDraftVariant_("group:activity:exchange_active", "3｜交換進行中", "活動草稿", "♬ 驚喜活動｜交換任務已配對\n\n參加者已各自收到兩首候選歌與推薦原因，從中完成 1 首完整長度翻唱。\nW9／W10 是同一份活動任務。"),
-          freeActive: groupDraftVariant_("group:activity:free_active", "4｜非配對自由唱", "活動草稿", "♬ 驚喜活動｜自由參加方式\n\n這次沒有進入配對的社員，W9／W10 仍可依非配對方式完成一份作品；不會因活動投票本身被記請假。"),
-          duetConsent: groupDraftVariant_("group:activity:duet_consent", "5｜合唱單數偏好", "活動草稿", "♬ 驚喜活動｜合唱玩法確定\n\n若參加人數為單數，系統會逐位私訊詢問是否願意自行應變。\n📆 8/18（二）08:00 前\n\n※ 個人偏好只在私訊選擇，群組稿不代填。"),
-          duetActive: groupDraftVariant_("group:activity:duet_active", "6｜合唱進行中", "活動草稿", "♬ 驚喜活動｜合唱安排已完成\n\n參加者已逐位收到夥伴或單數安排，請私下討論曲目與分工，完成 1 首完整長度作品。"),
-          judged: groupDraftVariant_("group:activity:judged", "7｜活動評選", "活動草稿", "♬ 驚喜活動｜一起欣賞與選 MVP\n\n每人最多選 2 位；作品滿 3 讚就是 MVP，不限人數。\n社員的個人評選頁會逐位私訊；沒投不記請假。")
+          vote: groupDraftVariant_("group:activity:vote", "1｜玩法投票", "驚喜活動公告", "♬ 驚喜活動｜玩法投票中\n\n社員會各自收到交換歌曲／合唱／不參加配對的私訊選項。\n📆 8/17（一）08:00 前"),
+          exchangeWish: groupDraftVariant_("group:activity:exchange_wish", "2｜交換出題", "驚喜活動公告", "♬ W9/W10 驚喜活動｜2026 Q3\n\n各位上班辛苦了～這季的驚喜活動正式開跑囉！\n\n這次玩「交換歌曲」：每個人都可以當一次神祕出題者，交兩首想聽別人 cover 的歌和推薦原因。\n\n⚠️交換出題截止：8/24（一）23:59⚠️\nW9 星期二 08:00 由系統配對，結果會私訊給參加者。\n\n怎麼參加：\n1. 打開圖文選單\n2. 進入「活動」\n3. 按「驚喜出題」\n\n➐【驚喜出題】現在就來出題\n\nTag：@All"),
+          exchangeActive: groupDraftVariant_("group:activity:exchange_active", "3｜交換進行中", "驚喜活動公告", "♬ 驚喜活動｜交換任務已配對\n\n參加者已各自收到兩首候選歌與推薦原因，從中完成 1 首完整長度翻唱。"),
+          freeActive: groupDraftVariant_("group:activity:free_active", "4｜非配對自由唱", "驚喜活動公告", "♬ 驚喜活動｜自由參加方式\n\n這次沒有進入配對的社員，W9／W10 仍可依非配對方式完成一份作品；不會因活動投票本身被記請假。"),
+          duetConsent: groupDraftVariant_("group:activity:duet_consent", "5｜合唱單數偏好", "驚喜活動公告", "♬ 驚喜活動｜合唱玩法確定\n\n若參加人數為單數，系統會逐位私訊詢問是否願意自行應變。\n📆 8/18（二）08:00 前\n\n※ 個人偏好只在私訊選擇，群組稿不代填。"),
+          duetActive: groupDraftVariant_("group:activity:duet_active", "6｜合唱進行中", "驚喜活動公告", "♬ 驚喜活動｜合唱安排已完成\n\n參加者已逐位收到夥伴或單數安排，請私下討論曲目與分工，完成 1 首完整長度作品。"),
+          judged: groupDraftVariant_("group:activity:judged", "7｜活動評選", "驚喜活動公告", "♬ 驚喜活動｜一起欣賞與選 MVP\n\n每人最多選 2 位；作品滿 3 讚就是 MVP，不限人數。\n社員的個人評選頁會逐位私訊；沒投不記請假。")
         }
       }
     });
