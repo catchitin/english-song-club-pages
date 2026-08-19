@@ -1718,6 +1718,32 @@
       return cards;
     }
 
+    function taskCarouselWishVariant_() {
+      const variant = taskCarouselVariant_(false);
+      variant.cards.push({
+        accent: "brand",
+        context: "W9–W10｜2026 Q3",
+        title: "驚喜活動選曲",
+        descriptionLabel: "交換推薦",
+        description: "填兩首想聽別人翻唱的歌，供交換配對。",
+        statusLabel: "目前狀態",
+        status: "○ 尚未完成兩首推薦",
+        statusTone: "pending",
+        metaLabel: "出題期限",
+        meta: "8/17（一）23:59",
+        actionable: true,
+        action: messageAction("填兩首歌", "驚喜出題")
+      });
+      variant.cards.forEach(function (card, index) {
+        card.eyebrow = "卡片 " + (index + 1) + "/" + variant.cards.length;
+      });
+      variant.contractId = "reply:task_carousel:activity_wish";
+      variant.trigger = "社員按【任務】；本人參加交換歌曲且尚未完成兩首推薦";
+      variant.deliveryNote = "社員操作後立即 reply；完成兩首推薦後這張待辦會消失。";
+      variant.label = "交換選曲未完成｜6 張";
+      return variant;
+    }
+
     function taskJudgeCarouselVariant_(role) {
       const nextPick = taskCarouselVariant_(false).cards[4];
       const activityVote = taskCarouselVariant_(true).cards[5];
@@ -2228,6 +2254,7 @@
         variants: {
           leaveVoted: taskCarouselVariant_(false),
           leaveUnvoted: taskCarouselVariant_(true),
+          activityWish: taskCarouselWishVariant_(),
           judgePrevious: taskJudgeCarouselVariant_("previous"),
           judgeFuture: taskJudgeCarouselVariant_("future"),
           judgeCurrent: taskJudgeCarouselVariant_("current")
