@@ -14,10 +14,8 @@ function Show-MirrorAlert([string]$Message) {
     try {
         [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType=WindowsRuntime] | Out-Null
         [Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom.XmlDocument, ContentType=WindowsRuntime] | Out-Null
-        $app = Get-StartApps | Where-Object Name -eq 'Windows PowerShell' | Select-Object -First 1
-        if (!$app) { throw 'PowerShell notification identity unavailable' }
-        $notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier($app.AppID)
-        if ([string]$notifier.Setting -ne 'Enabled') { throw 'Windows notifications disabled' }
+        $notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('EnglishSongClub.PagesWatchdog')
+        if ([string]$notifier.get_Setting() -ne 'Enabled') { throw 'Windows notifications disabled' }
         $escaped = [Security.SecurityElement]::Escape($Message)
         $xml = New-Object Windows.Data.Xml.Dom.XmlDocument
         $xml.LoadXml("<toast><visual><binding template='ToastGeneric'><text>英文歌社團網站同步異常</text><text>$escaped</text></binding></visual></toast>")

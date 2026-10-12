@@ -1,4 +1,5 @@
 ﻿$ErrorActionPreference = 'Stop'
+& (Join-Path $PSScriptRoot 'install-notification.ps1')
 $scriptPath = Join-Path $PSScriptRoot 'watch-mirror.ps1'
 $action = New-ScheduledTaskAction -Execute "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -Argument "-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$scriptPath`""
 $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(10) -RepetitionInterval (New-TimeSpan -Hours 1)
