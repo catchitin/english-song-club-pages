@@ -34,21 +34,8 @@ jobs:
       - name: Fetch pages from GAS
         run: |
           set -e
-          mkdir -p raw out
-          views="home songs board appreciate top themes hall rules more leave"
-          for v in $views; do
-            ok=0
-            for try in 1 2 3; do
-              if curl -sL --max-time 120 -A "$UA" -o "raw/$v.html" "$EXEC?p=$v"; then
-                # /exec 回的是 Google sandbox 外殼（真內容 escape 在 userHtml）；節流/錯誤頁很小
-                size=$(wc -c < "raw/$v.html")
-                if [ "$size" -gt 20000 ] && grep -q 'userHtml' "raw/$v.html"; then ok=1; break; fi
-              fi
-              echo "retry $try for $v"; sleep 20
-            done
-            [ "$ok" = 1 ] || { echo "FAILED to fetch $v"; exit 1; }
-            echo "fetched $v ($(wc -c < raw/$v.html) bytes)"
-          done
+          python3 -m unittest discover -s tests
+          python3 scripts/fetch_mirror.py views
       - name: Extract userHtml (strip Google wrapper)
         run: |
           set -e
@@ -63,19 +50,11 @@ jobs:
           python3 -c "import re, json; s = open('out/songs.html', encoding='utf-8').read(); print('\n'.join(json.loads(re.search(r',MEMBERS=(\[[^\]]*\])', s).group(1))))" > members.txt
           [ -s members.txt ] || { echo 'no members found'; exit 1; }
           cat members.txt
+          python3 scripts/fetch_mirror.py members
           while read -r name; do
             [ -n "$name" ] || continue
             # 檔名用 encodeURIComponent 同款編碼，跟 GAS 端 staticMeUrl_ 對齊
             enc=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1], safe=\"!'()*-._~\"))" "$name")
-            ok=0
-            for try in 1 2 3; do
-              if curl -sL --max-time 120 -A "$UA" -o "raw/me-$enc.html" "$EXEC?p=me&m=$enc"; then
-                size=$(wc -c < "raw/me-$enc.html")
-                if [ "$size" -gt 20000 ] && grep -q 'userHtml' "raw/me-$enc.html"; then ok=1; break; fi
-              fi
-              echo "retry $try for me/$name"; sleep 20
-            done
-            [ "$ok" = 1 ] || { echo "FAILED to fetch me/$name"; exit 1; }
             python3 scripts/extract_userhtml.py "raw/me-$enc.html" "out/me-$enc.html"
             echo "me/$name ok ($(wc -c < out/me-$enc.html) bytes)"
           done < members.txt
