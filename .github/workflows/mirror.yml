@@ -22,6 +22,7 @@ concurrency:
 jobs:
   mirror:
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -91,7 +92,7 @@ jobs:
         run: |
           set -e
           cp -R static/. out/
-      - name: Upload artifact
+      - name: Record public sync evidence
         # The public marker lets the independent watchdog detect stale CDN content.
         run: |
           python3 - <<'PY'
@@ -108,6 +109,7 @@ jobs:
         uses: actions/deploy-pages@v4
   keepalive:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     permissions:
       contents: write
     steps:
