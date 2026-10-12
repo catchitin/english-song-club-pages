@@ -92,6 +92,14 @@ jobs:
           set -e
           cp -R static/. out/
       - name: Upload artifact
+        # The public marker lets the independent watchdog detect stale CDN content.
+        run: |
+          python3 - <<'PY'
+          import json, os, datetime
+          with open('out/sync-status.json', 'w') as f:
+              json.dump({'published_at': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'source_commit': os.environ['GITHUB_SHA'], 'run_id': os.environ['GITHUB_RUN_ID']}, f)
+          PY
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: out
