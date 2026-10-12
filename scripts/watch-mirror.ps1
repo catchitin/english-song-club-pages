@@ -38,8 +38,8 @@ try {
     }
     if ($age -gt 4) { throw "Public mirror has not updated for $([Math]::Round($age,1)) hours; recovery requested." }
     if ($success.Count -eq 0) { throw 'No successful mirror workflow among recent runs.' }
-    $home = Invoke-WebRequest -UseBasicParsing -Uri 'https://catchitin.github.io/english-song-club-pages/' -TimeoutSec 40
-    if ($home.StatusCode -ne 200 -or $home.Content -notmatch '(?i)<!doctype html') { throw 'Public home page failed validation.' }
+    $homeResponse = Invoke-WebRequest -UseBasicParsing -Uri 'https://catchitin.github.io/english-song-club-pages/' -TimeoutSec 40
+    if ($homeResponse.StatusCode -ne 200 -or $homeResponse.Content -notmatch '(?i)<!doctype html') { throw 'Public home page failed validation.' }
     @{ checked_at=$now.ToString('o'); status='ok'; age_hours=[Math]::Round($age,2); run_id=$marker.run_id; workflow_state='active' } | ConvertTo-Json | Set-Content -LiteralPath "$runtime/status.json"
     exit 0
 } catch {
