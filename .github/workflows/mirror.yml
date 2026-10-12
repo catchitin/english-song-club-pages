@@ -98,3 +98,23 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+  keepalive:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Record monthly scheduler heartbeat
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .github/health
+          date -u +%Y-%m > .github/health/scheduler-month.txt
+          git add .github/health/scheduler-month.txt
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'chore: record monthly mirror scheduler heartbeat'
+          git push origin HEAD:main
