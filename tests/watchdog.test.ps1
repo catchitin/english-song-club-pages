@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
 $testRoot = Join-Path 'G:\My Coding\english-song-club-local\pages-watchdog-tests' ([guid]::NewGuid().ToString())
 New-Item -ItemType Directory -Path $testRoot -Force | Out-Null
 $source = Get-Content -LiteralPath (Join-Path $PSScriptRoot '..\scripts\watch-mirror.ps1') -Raw

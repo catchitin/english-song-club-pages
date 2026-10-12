@@ -1,4 +1,4 @@
-param([switch]$NoNotify)
+﻿param([switch]$NoNotify)
 $ErrorActionPreference = 'Stop'
 $repo = 'catchitin/english-song-club-pages'
 $gh = 'C:\Program Files\GitHub CLI\gh.exe'
