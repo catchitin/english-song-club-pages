@@ -22,8 +22,12 @@ try {
     $runs = Invoke-Gh @('api', "repos/$repo/actions/workflows/mirror.yml/runs?per_page=20") | ConvertFrom-Json
     $success = @($runs.workflow_runs | Where-Object conclusion -eq 'success' | Select-Object -First 1)
     $inFlight = @($runs.workflow_runs | Where-Object { $_.status -in @('queued','in_progress','waiting','pending','requested') })
-    $marker = Invoke-RestMethod -Uri "https://catchitin.github.io/english-song-club-pages/sync-status.json?t=$($now.ToUnixTimeSeconds())" -TimeoutSec 40
-    $age = ($now - [DateTimeOffset]::Parse($marker.published_at)).TotalHours
+    $age = [double]::PositiveInfinity
+    $marker = $null
+    try {
+        $marker = Invoke-RestMethod -Uri "https://catchitin.github.io/english-song-club-pages/sync-status.json?t=$($now.ToUnixTimeSeconds())" -TimeoutSec 40
+        $age = ($now - [DateTimeOffset]::Parse($marker.published_at)).TotalHours
+    } catch { } # Missing/unreachable marker must still reach the recovery path.
     $repairFile = "$runtime/last-dispatch.txt"
     $repairDue = !(Test-Path -LiteralPath $repairFile)
     if (!$repairDue) { $repairDue = ($now - [DateTimeOffset]::Parse((Get-Content -LiteralPath $repairFile -Raw))).TotalHours -ge 1 }
