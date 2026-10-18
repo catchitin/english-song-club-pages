@@ -6,6 +6,12 @@ name: Mirror GAS pages to GitHub Pages
 # GAS 端零改動、零 token；抓不到（GAS 節流/冷啟動）就讓 job 失敗，Pages 保留上一版，不會發半套。
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'static/decluttering/**'
+      - 'static/decluttering-host/**'
+      - '.github/workflows/mirror.yml'
   schedule:
     - cron: '17 * * * *'   # 每小時；GitHub cron 有幾分鐘漂移屬正常
   workflow_dispatch:
